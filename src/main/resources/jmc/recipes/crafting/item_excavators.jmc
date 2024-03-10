@@ -1,0 +1,104 @@
+new recipes(item_wooden_excavator) {
+   "type": "minecraft:crafting_shaped",
+   "pattern": [
+       "###",
+       " / ",
+       " / "
+   ],
+   "key": {
+       "#": {
+           "item": "minecraft:wooden_shovel"
+       },
+       "/": {
+           "item": "minecraft:stick"
+       }
+   },
+   "result": {
+       "item": "moretools:wooden_excavator",
+       "count": 1
+   }
+}
+
+new recipes(item_stone_excavator) {
+   "type": "minecraft:crafting_shaped",
+   "pattern": [
+       "###",
+       " / ",
+       " / "
+   ],
+   "key": {
+       "#": {
+           "item": "minecraft:stone_shovel"
+       },
+       "/": {
+           "item": "minecraft:stick"
+       }
+   },
+   "result": {
+       "item": "moretools:stone_excavator",
+       "count": 1
+   }
+}
+
+new recipes(item_iron_excavator) {
+   "type": "minecraft:crafting_shaped",
+   "pattern": [
+       "###",
+       " / ",
+       " / "
+   ],
+   "key": {
+       "#": {
+           "item": "minecraft:iron_shovel"
+       },
+       "/": {
+           "item": "minecraft:stick"
+       }
+   },
+   "result": {
+       "item": "moretools:iron_excavator",
+       "count": 1
+   }
+}
+
+new recipes(item_golden_excavator) {
+   "type": "minecraft:crafting_shaped",
+   "pattern": [
+       "###",
+       " / ",
+       " / "
+   ],
+   "key": {
+       "#": {
+           "item": "minecraft:golden_shovel"
+       },
+       "/": {
+           "item": "minecraft:stick"
+       }
+   },
+   "result": {
+       "item": "moretools:golden_excavator",
+       "count": 1
+   }
+}
+
+new recipes(item_diamond_excavator) {
+   "type": "minecraft:crafting_shaped",
+   "pattern": [
+       "###",
+       " / ",
+       " / "
+   ],
+   "key": {
+       "#": {
+           "item": "minecraft:diamond_shovel"
+       },
+       "/": {
+           "item": "minecraft:stick"
+       }
+   },
+   "result": {
+       "item": "moretools:diamond_excavator",
+       "count": 1
+   }
+}

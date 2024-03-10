@@ -1,0 +1,16 @@
+new recipes(item_netherite_hammer) {
+    "type": "smithing_transform",
+    "base": {
+        "item": "moretools:diamond_hammer"
+    },
+    "addition": {
+        "item": "minecraft:netherite_ingot"
+    },
+    "template": {
+        "item": "minecraft:netherite_upgrade_smithing_template"
+    },
+    "result": {
+        "item": "moretools:netherite_hammer",
+        "count": 1
+    }
+}

@@ -1,0 +1,4 @@
+accessWidener v2 named
+
+accessible field net/minecraft/item/MiningToolItem miningSpeed F
+mutable field net/minecraft/item/MiningToolItem miningSpeed F

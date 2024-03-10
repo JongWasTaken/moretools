@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"id": "moretools",
+	"version": "${version}",
+	"name": "More Tools (Polymer)",
+	"description": "Adds more tools while staying server-side using Polymer!",
+	"authors": [
+		"JongWasTaken"
+	],
+	"contact": {
+		"homepage": "https://mc.smto.pw/",
+		"sources": "https://github.com/JongWasTaken/moretools"
+	},
+	"license": "MIT",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+          "pw.smto.MoreTools"
+		]
+	},
+	"mixins": [
+      "moretools.mixins.json"
+	],
+	"accessWidener" : "moretools.accesswidener",
+	"depends": {
+		"fabricloader": ">=0.14.21",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*"
+	}
+}

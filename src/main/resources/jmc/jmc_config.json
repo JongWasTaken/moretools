@@ -1,0 +1,7 @@
+{
+    "namespace": "moretools",
+    "description": "MoreTools Recipes Datapack",
+    "pack_format": "15",
+    "target": "main.jmc",
+    "output": ".."
+}
