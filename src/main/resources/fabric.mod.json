@@ -12,6 +12,7 @@
 		"sources": "https://github.com/JongWasTaken/moretools"
 	},
 	"license": "MIT",
+	"icon": "icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [

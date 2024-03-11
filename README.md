@@ -5,8 +5,7 @@ A simple, server-side fabric mod which adds some more tools.
 Just like every other fabric mod.  
 
 ### Building
-Server-side resources (also known as "datapacks") are generated at runtime using [ARRP](https://github.com/Devan-Kerman/ARRP).  
-Some resources are generated at compile-time using [JMC](https://jmc.wingedseal.com/).  
+Resources are generated at compile-time using [JMC](https://jmc.wingedseal.com/).  
 The Linux version of JMC is included, but if you are on Windows,  
 you will have to download the Windows version yourself and put it in `src/main/resources/jmc/`.
 You might have to adjust the IDEA tasks as well, since JMC runs as a pre-build task.  
