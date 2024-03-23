@@ -1,6 +1,7 @@
 package pw.smto;
 
 import eu.pb4.polymer.core.api.item.PolymerItem;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.*;
@@ -21,7 +22,7 @@ public class HammerToolItem extends MiningToolItem implements PolymerItem, MoreT
     private boolean actAsPickaxe = false;
 
     public HammerToolItem(PickaxeItem base) {
-        super(base.getAttackDamage(), 1, base.getMaterial(), BlockTags.PICKAXE_MINEABLE, new Item.Settings());
+        super(base.getAttackDamage()-4, -3.0f, base.getMaterial(), BlockTags.PICKAXE_MINEABLE, new Item.Settings());
         this.base = base;
         this.baseSpeed = super.miningSpeed;
     }
@@ -49,19 +50,36 @@ public class HammerToolItem extends MiningToolItem implements PolymerItem, MoreT
         if (this.actAsPickaxe) {
             return;
         }
-
         BlockBox selection = Structure.getSurroundingBlocks(pos,player,1, 35);
-        BlockPos blockBoxSelection;
+        BlockState blockBoxSelection;
+        BlockPos blockBoxSelectionPos;
         for(var y = selection.getMinY(); y < selection.getMaxY()+1; y++)
         {
             for(var z = selection.getMinZ(); z < selection.getMaxZ()+1; z++)
             {
                 for(var x = selection.getMinX(); x < selection.getMaxX()+1; x++)
                 {
-                    blockBoxSelection = new BlockPos(x,y,z);
-                    if (world.getBlockState(blockBoxSelection).isIn(BlockTags.PICKAXE_MINEABLE))
-                    {
-                        world.breakBlock(blockBoxSelection, !player.isCreative());
+                    blockBoxSelectionPos = new BlockPos(x,y,z);
+                    blockBoxSelection = world.getBlockState(blockBoxSelectionPos);
+                    if (!blockBoxSelectionPos.equals(pos)) {
+                        if (blockBoxSelection.isIn(BlockTags.PICKAXE_MINEABLE))
+                        {
+                            blockBoxSelection.getBlock().onBreak(world, pos, blockBoxSelection, player);
+                            //boolean bl = world.removeBlock(pos, false);
+                            boolean bl = world.breakBlock(blockBoxSelectionPos, false);
+                            if (bl) {
+                                blockBoxSelection.getBlock().onBroken(world, pos, blockBoxSelection);
+                            }
+                            if (!player.isCreative()) {
+                                ItemStack itemStack = player.getMainHandStack();
+                                ItemStack itemStack2 = itemStack.copy();
+                                boolean bl2 = player.canHarvest(blockBoxSelection);
+                                itemStack.postMine(world, blockBoxSelection, pos, player);
+                                if (bl && bl2) {
+                                    blockBoxSelection.getBlock().afterBreak(world, player, pos, blockBoxSelection, world.getBlockEntity(blockBoxSelectionPos), itemStack2);
+                                }
+                            }
+                        }
                     }
                 }
             }
