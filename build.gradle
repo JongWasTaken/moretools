@@ -8,11 +8,6 @@ group = project.maven_group
 
 base {
 	archivesName = project.archives_base_name
-	file("src/main/java/pw/smto/BuildProperties.java").text =
-			"""|package pw.smto;
-               |public class BuildProperties {
-               |    public static String getVersion() { return "${project.mod_version}"; }
-               |}""".stripMargin()
 }
 
 repositories {

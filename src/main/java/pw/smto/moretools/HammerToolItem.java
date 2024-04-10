@@ -1,17 +1,14 @@
-package pw.smto;
+package pw.smto.moretools;
 
 import eu.pb4.polymer.core.api.item.PolymerItem;
-import eu.pb4.polymer.resourcepack.api.PolymerResourcePackUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.*;
-import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -19,13 +16,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class ExcavatorToolItem extends MiningToolItem implements PolymerItem, MoreTools$CustomMiningToolItem {
-    private final ShovelItem base;
+public class HammerToolItem extends MiningToolItem implements PolymerItem, MoreTools$CustomMiningToolItem {
+    private final PickaxeItem base;
     private final float baseSpeed;
-    private boolean actAsShovel = false;
+    private boolean actAsPickaxe = false;
 
-    public ExcavatorToolItem(ShovelItem base) {
-        super(base.getAttackDamage()-4, -3.0f, base.getMaterial(), BlockTags.SHOVEL_MINEABLE, new Settings());
+    public HammerToolItem(PickaxeItem base) {
+        super(base.getAttackDamage()-4, -3.0f, base.getMaterial(), BlockTags.PICKAXE_MINEABLE, new Item.Settings());
         this.base = base;
         this.baseSpeed = super.miningSpeed;
     }
@@ -34,23 +31,25 @@ public class ExcavatorToolItem extends MiningToolItem implements PolymerItem, Mo
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
         if (selected)
         {
-            if (entity.isSneaking())
-            {
-                super.miningSpeed = this.baseSpeed;
-                this.actAsShovel = true;
-            }
-            else {
-                super.miningSpeed = this.baseSpeed - 3.0F;
-                if (super.miningSpeed < 1.0F) {
-                    super.miningSpeed = 1.1F;
+            if (entity instanceof ServerPlayerEntity serverPlayerEntity) {
+                if (serverPlayerEntity.isSneaking())
+                {
+                    super.miningSpeed = this.baseSpeed;
+                    this.actAsPickaxe = true;
                 }
-                this.actAsShovel = false;
+                else {
+                    super.miningSpeed = this.baseSpeed - 3.0F;
+                    if (super.miningSpeed < 1.0F) {
+                        super.miningSpeed = 1.1F;
+                    }
+                    this.actAsPickaxe = false;
+                }
             }
         }
     }
 
     public void breakBlocks(BlockPos pos, ServerPlayerEntity player, ServerWorld world) {
-        if (this.actAsShovel) {
+        if (this.actAsPickaxe) {
             return;
         }
         BlockBox selection = Structure.getSurroundingBlocks(pos,player,1, 35);
@@ -65,7 +64,7 @@ public class ExcavatorToolItem extends MiningToolItem implements PolymerItem, Mo
                     blockBoxSelectionPos = new BlockPos(x,y,z);
                     blockBoxSelection = world.getBlockState(blockBoxSelectionPos);
                     if (!blockBoxSelectionPos.equals(pos)) {
-                        if (blockBoxSelection.isIn(BlockTags.SHOVEL_MINEABLE))
+                        if (blockBoxSelection.isIn(BlockTags.PICKAXE_MINEABLE))
                         {
                             blockBoxSelection.getBlock().onBreak(world, pos, blockBoxSelection, player);
                             //boolean bl = world.removeBlock(pos, false);
@@ -96,17 +95,16 @@ public class ExcavatorToolItem extends MiningToolItem implements PolymerItem, Mo
 
     @Override
     public int getPolymerCustomModelData(ItemStack itemStack, @Nullable ServerPlayerEntity player) {
-        //return PolymerResourcePackUtils.requestModel(this.base, new Identifier(MoreTools.MOD_ID, Registries.ITEM.getId(this.base).getPath().replace("shovel", "excavator"))).value();
         return MoreTools.MAGIC_NUMBER;
     }
-
     @Override
     public Text getName(ItemStack stack) {
-        return Text.of(this.base.getName().getString().replace("Shovel", "Excavator"));
+        return Text.of(this.base.getName().getString().replace("Pickaxe", "Hammer"));
     }
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         TooltipHelper.setGimmickItemText(tooltip,null, "Allows breaking blocks in a 3x3 radius.");
     }
+
 }

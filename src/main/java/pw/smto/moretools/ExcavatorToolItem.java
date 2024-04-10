@@ -1,4 +1,4 @@
-package pw.smto;
+package pw.smto.moretools;
 
 import eu.pb4.polymer.core.api.item.PolymerItem;
 import net.minecraft.block.BlockState;
@@ -16,13 +16,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class HammerToolItem extends MiningToolItem implements PolymerItem, MoreTools$CustomMiningToolItem {
-    private final PickaxeItem base;
+public class ExcavatorToolItem extends MiningToolItem implements PolymerItem, MoreTools$CustomMiningToolItem {
+    private final ShovelItem base;
     private final float baseSpeed;
-    private boolean actAsPickaxe = false;
+    private boolean actAsShovel = false;
 
-    public HammerToolItem(PickaxeItem base) {
-        super(base.getAttackDamage()-4, -3.0f, base.getMaterial(), BlockTags.PICKAXE_MINEABLE, new Item.Settings());
+    public ExcavatorToolItem(ShovelItem base) {
+        super(base.getAttackDamage()-4, -3.0f, base.getMaterial(), BlockTags.SHOVEL_MINEABLE, new Settings());
         this.base = base;
         this.baseSpeed = super.miningSpeed;
     }
@@ -31,23 +31,25 @@ public class HammerToolItem extends MiningToolItem implements PolymerItem, MoreT
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
         if (selected)
         {
-            if (entity.isSneaking())
-            {
-                super.miningSpeed = this.baseSpeed;
-                this.actAsPickaxe = true;
-            }
-            else {
-                super.miningSpeed = this.baseSpeed - 3.0F;
-                if (super.miningSpeed < 1.0F) {
-                    super.miningSpeed = 1.1F;
+            if (entity instanceof ServerPlayerEntity serverPlayerEntity) {
+                if (serverPlayerEntity.isSneaking())
+                {
+                    super.miningSpeed = this.baseSpeed;
+                    this.actAsShovel = true;
                 }
-                this.actAsPickaxe = false;
+                else {
+                    super.miningSpeed = this.baseSpeed - 3.0F;
+                    if (super.miningSpeed < 1.0F) {
+                        super.miningSpeed = 1.1F;
+                    }
+                    this.actAsShovel = false;
+                }
             }
         }
     }
 
     public void breakBlocks(BlockPos pos, ServerPlayerEntity player, ServerWorld world) {
-        if (this.actAsPickaxe) {
+        if (this.actAsShovel) {
             return;
         }
         BlockBox selection = Structure.getSurroundingBlocks(pos,player,1, 35);
@@ -62,7 +64,7 @@ public class HammerToolItem extends MiningToolItem implements PolymerItem, MoreT
                     blockBoxSelectionPos = new BlockPos(x,y,z);
                     blockBoxSelection = world.getBlockState(blockBoxSelectionPos);
                     if (!blockBoxSelectionPos.equals(pos)) {
-                        if (blockBoxSelection.isIn(BlockTags.PICKAXE_MINEABLE))
+                        if (blockBoxSelection.isIn(BlockTags.SHOVEL_MINEABLE))
                         {
                             blockBoxSelection.getBlock().onBreak(world, pos, blockBoxSelection, player);
                             //boolean bl = world.removeBlock(pos, false);
@@ -93,16 +95,17 @@ public class HammerToolItem extends MiningToolItem implements PolymerItem, MoreT
 
     @Override
     public int getPolymerCustomModelData(ItemStack itemStack, @Nullable ServerPlayerEntity player) {
+        //return PolymerResourcePackUtils.requestModel(this.base, new Identifier(MoreTools.MOD_ID, Registries.ITEM.getId(this.base).getPath().replace("shovel", "excavator"))).value();
         return MoreTools.MAGIC_NUMBER;
     }
+
     @Override
     public Text getName(ItemStack stack) {
-        return Text.of(this.base.getName().getString().replace("Pickaxe", "Hammer"));
+        return Text.of(this.base.getName().getString().replace("Shovel", "Excavator"));
     }
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         TooltipHelper.setGimmickItemText(tooltip,null, "Allows breaking blocks in a 3x3 radius.");
     }
-
 }

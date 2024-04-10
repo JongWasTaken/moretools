@@ -1,4 +1,4 @@
-package pw.smto;
+package pw.smto.moretools;
 
 import eu.pb4.polymer.resourcepack.api.PolymerResourcePackUtils;
 import net.fabricmc.api.ModInitializer;

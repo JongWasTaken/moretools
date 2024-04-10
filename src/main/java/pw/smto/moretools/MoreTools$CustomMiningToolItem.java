@@ -1,4 +1,4 @@
-package pw.smto;
+package pw.smto.moretools;
 
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;

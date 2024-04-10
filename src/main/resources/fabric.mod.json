@@ -16,7 +16,7 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-          "pw.smto.MoreTools"
+          "pw.smto.moretools.MoreTools"
 		]
 	},
 	"mixins": [

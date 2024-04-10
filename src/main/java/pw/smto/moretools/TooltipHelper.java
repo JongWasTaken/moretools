@@ -1,4 +1,4 @@
-package pw.smto;
+package pw.smto.moretools;
 
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
