@@ -2,7 +2,8 @@ package pw.smto.moretools;
 
 import eu.pb4.polymer.core.api.item.PolymerItem;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.item.TooltipContext;
+import net.minecraft.client.item.TooltipType;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.*;
 import net.minecraft.registry.tag.BlockTags;
@@ -22,9 +23,15 @@ public class HammerToolItem extends MiningToolItem implements PolymerItem, MoreT
     private boolean actAsPickaxe = false;
 
     public HammerToolItem(PickaxeItem base) {
-        super(base.getAttackDamage()-4, -3.0f, base.getMaterial(), BlockTags.PICKAXE_MINEABLE, new Item.Settings());
+        super(base.getMaterial(), BlockTags.PICKAXE_MINEABLE, new Item.Settings().attributeModifiers(
+                MiningToolItem.createAttributeModifiers(
+                        base.getMaterial(),
+                        base.getMaterial().getAttackDamage()-4,
+                        -3.0f
+                )
+        ));
         this.base = base;
-        this.baseSpeed = super.miningSpeed;
+        this.baseSpeed = base.getMaterial().getMiningSpeedMultiplier();
     }
 
     @Override
@@ -34,15 +41,16 @@ public class HammerToolItem extends MiningToolItem implements PolymerItem, MoreT
             if (entity instanceof ServerPlayerEntity serverPlayerEntity) {
                 if (serverPlayerEntity.isSneaking())
                 {
-                    super.miningSpeed = this.baseSpeed;
+                    stack.get(DataComponentTypes.TOOL).defaultMiningSpeed = this.baseSpeed;
                     this.actAsPickaxe = true;
                 }
                 else {
-                    super.miningSpeed = this.baseSpeed - 3.0F;
-                    if (super.miningSpeed < 1.0F) {
-                        super.miningSpeed = 1.1F;
+                    stack.get(DataComponentTypes.TOOL).defaultMiningSpeed = this.baseSpeed - 3.0F;
+                    if (stack.get(DataComponentTypes.TOOL).defaultMiningSpeed() < 1.0F) {
+                        stack.get(DataComponentTypes.TOOL).defaultMiningSpeed = 1.1F;
                     }
                     this.actAsPickaxe = false;
+
                 }
             }
         }
@@ -103,8 +111,7 @@ public class HammerToolItem extends MiningToolItem implements PolymerItem, MoreT
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+    public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
         TooltipHelper.setGimmickItemText(tooltip,null, "Allows breaking blocks in a 3x3 radius.");
     }
-
 }

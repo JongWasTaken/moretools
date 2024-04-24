@@ -2,7 +2,8 @@ package pw.smto.moretools;
 
 import eu.pb4.polymer.core.api.item.PolymerItem;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.item.TooltipContext;
+import net.minecraft.client.item.TooltipType;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.*;
 import net.minecraft.registry.tag.BlockTags;
@@ -22,10 +23,17 @@ public class ExcavatorToolItem extends MiningToolItem implements PolymerItem, Mo
     private boolean actAsShovel = false;
 
     public ExcavatorToolItem(ShovelItem base) {
-        super(base.getAttackDamage()-4, -3.0f, base.getMaterial(), BlockTags.SHOVEL_MINEABLE, new Settings());
+        super(base.getMaterial(), BlockTags.SHOVEL_MINEABLE, new Item.Settings().attributeModifiers(
+                MiningToolItem.createAttributeModifiers(
+                        base.getMaterial(),
+                        base.getMaterial().getAttackDamage()-4,
+                        -3.0f
+                ))
+        );
         this.base = base;
-        this.baseSpeed = super.miningSpeed;
+        this.baseSpeed = base.getMaterial().getMiningSpeedMultiplier();
     }
+
 
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
@@ -34,13 +42,13 @@ public class ExcavatorToolItem extends MiningToolItem implements PolymerItem, Mo
             if (entity instanceof ServerPlayerEntity serverPlayerEntity) {
                 if (serverPlayerEntity.isSneaking())
                 {
-                    super.miningSpeed = this.baseSpeed;
+                    stack.get(DataComponentTypes.TOOL).defaultMiningSpeed = this.baseSpeed;
                     this.actAsShovel = true;
                 }
                 else {
-                    super.miningSpeed = this.baseSpeed - 3.0F;
-                    if (super.miningSpeed < 1.0F) {
-                        super.miningSpeed = 1.1F;
+                    stack.get(DataComponentTypes.TOOL).defaultMiningSpeed = this.baseSpeed - 3.0F;
+                    if (stack.get(DataComponentTypes.TOOL).defaultMiningSpeed() < 1.0F) {
+                        stack.get(DataComponentTypes.TOOL).defaultMiningSpeed = 1.1F;
                     }
                     this.actAsShovel = false;
                 }
@@ -105,7 +113,7 @@ public class ExcavatorToolItem extends MiningToolItem implements PolymerItem, Mo
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+    public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
         TooltipHelper.setGimmickItemText(tooltip,null, "Allows breaking blocks in a 3x3 radius.");
     }
 }

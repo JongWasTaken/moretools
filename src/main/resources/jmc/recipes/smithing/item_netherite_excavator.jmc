@@ -10,7 +10,7 @@ new recipes(item_netherite_excavator) {
         "item": "minecraft:netherite_upgrade_smithing_template"
     },
     "result": {
-        "item": "moretools:netherite_excavator",
+        "id": "moretools:netherite_excavator",
         "count": 1
     }
 }

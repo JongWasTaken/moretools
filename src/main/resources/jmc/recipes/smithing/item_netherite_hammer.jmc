@@ -10,7 +10,7 @@ new recipes(item_netherite_hammer) {
         "item": "minecraft:netherite_upgrade_smithing_template"
     },
     "result": {
-        "item": "moretools:netherite_hammer",
+        "id": "moretools:netherite_hammer",
         "count": 1
     }
 }
