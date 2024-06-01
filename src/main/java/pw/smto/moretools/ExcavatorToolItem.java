@@ -1,15 +1,18 @@
 package pw.smto.moretools;
 
 import eu.pb4.polymer.core.api.item.PolymerItem;
+import eu.pb4.polymer.resourcepack.api.PolymerResourcePackUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.*;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -103,8 +106,7 @@ public class ExcavatorToolItem extends MiningToolItem implements PolymerItem, Mo
 
     @Override
     public int getPolymerCustomModelData(ItemStack itemStack, @Nullable ServerPlayerEntity player) {
-        //return PolymerResourcePackUtils.requestModel(this.base, new Identifier(MoreTools.MOD_ID, Registries.ITEM.getId(this.base).getPath().replace("shovel", "excavator"))).value();
-        return MoreTools.MAGIC_NUMBER;
+        return PolymerResourcePackUtils.requestModel(this.base, new Identifier(MoreTools.MOD_ID, "item/" + Registries.ITEM.getId(this.base).getPath().replace("shovel", "excavator"))).value();
     }
 
     @Override
