@@ -11,7 +11,6 @@ import net.minecraft.util.Identifier;
 import org.slf4j.LoggerFactory;
 
 public class MoreTools implements ModInitializer {
-	public static final int MAGIC_NUMBER = 1320151512;
 	public static final String MOD_ID = "moretools";
 
 	@Override
