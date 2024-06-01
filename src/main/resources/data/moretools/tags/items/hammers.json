@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "moretools:wooden_hammer",
+    "moretools:stone_hammer",
+    "moretools:iron_hammer",
+    "moretools:golden_hammer",
+    "moretools:diamond_hammer",
+    "moretools:netherite_hammer"
+  ]
+}

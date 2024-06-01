@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "###",
+        " / ",
+        " / "
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:stone_shovel"
+        },
+        "/": {
+            "item": "minecraft:stick"
+        }
+    },
+    "result": {
+        "item": "moretools:stone_excavator",
+        "count": 1
+    }
+}
