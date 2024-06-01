@@ -1,6 +1,6 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "item/mt_wooden_excavator"
+    "layer0": "moretools:item/mt_golden_excavator"
   }
 }
