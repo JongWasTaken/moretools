@@ -38,7 +38,3 @@ hs_err_*.log
 replay_*.log
 *.hprof
 *.jfr
-/src/main/resources/data/*
-/src/main/resources/data/
-/src/main/resources/reference/*
-/src/main/resources/reference/
