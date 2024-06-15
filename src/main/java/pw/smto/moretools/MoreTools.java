@@ -18,20 +18,20 @@ public class MoreTools implements ModInitializer {
 		PolymerResourcePackUtils.addModAssets(MOD_ID);
 		PolymerResourcePackUtils.markAsRequired();
 
-		Registry.register(Registries.ITEM, new Identifier(MOD_ID,"wooden_hammer"), Items.WOODEN_HAMMER);
-		Registry.register(Registries.ITEM, new Identifier(MOD_ID,"stone_hammer"), Items.STONE_HAMMER);
-		Registry.register(Registries.ITEM, new Identifier(MOD_ID,"iron_hammer"), Items.IRON_HAMMER);
-		Registry.register(Registries.ITEM, new Identifier(MOD_ID,"golden_hammer"), Items.GOLDEN_HAMMER);
-		Registry.register(Registries.ITEM, new Identifier(MOD_ID,"diamond_hammer"), Items.DIAMOND_HAMMER);
-		Registry.register(Registries.ITEM, new Identifier(MOD_ID,"netherite_hammer"), Items.NETHERITE_HAMMER);
-		Registry.register(Registries.ITEM, new Identifier(MOD_ID,"wooden_excavator"), Items.WOODEN_EXCAVATOR);
-		Registry.register(Registries.ITEM, new Identifier(MOD_ID,"stone_excavator"), Items.STONE_EXCAVATOR);
-		Registry.register(Registries.ITEM, new Identifier(MOD_ID,"iron_excavator"), Items.IRON_EXCAVATOR);
-		Registry.register(Registries.ITEM, new Identifier(MOD_ID,"golden_excavator"), Items.GOLDEN_EXCAVATOR);
-		Registry.register(Registries.ITEM, new Identifier(MOD_ID,"diamond_excavator"), Items.DIAMOND_EXCAVATOR);
-		Registry.register(Registries.ITEM, new Identifier(MOD_ID,"netherite_excavator"), Items.NETHERITE_EXCAVATOR);
+		Registry.register(Registries.ITEM, Identifier.of(MOD_ID,"wooden_hammer"), Items.WOODEN_HAMMER);
+		Registry.register(Registries.ITEM, Identifier.of(MOD_ID,"stone_hammer"), Items.STONE_HAMMER);
+		Registry.register(Registries.ITEM, Identifier.of(MOD_ID,"iron_hammer"), Items.IRON_HAMMER);
+		Registry.register(Registries.ITEM, Identifier.of(MOD_ID,"golden_hammer"), Items.GOLDEN_HAMMER);
+		Registry.register(Registries.ITEM, Identifier.of(MOD_ID,"diamond_hammer"), Items.DIAMOND_HAMMER);
+		Registry.register(Registries.ITEM, Identifier.of(MOD_ID,"netherite_hammer"), Items.NETHERITE_HAMMER);
+		Registry.register(Registries.ITEM, Identifier.of(MOD_ID,"wooden_excavator"), Items.WOODEN_EXCAVATOR);
+		Registry.register(Registries.ITEM, Identifier.of(MOD_ID,"stone_excavator"), Items.STONE_EXCAVATOR);
+		Registry.register(Registries.ITEM, Identifier.of(MOD_ID,"iron_excavator"), Items.IRON_EXCAVATOR);
+		Registry.register(Registries.ITEM, Identifier.of(MOD_ID,"golden_excavator"), Items.GOLDEN_EXCAVATOR);
+		Registry.register(Registries.ITEM, Identifier.of(MOD_ID,"diamond_excavator"), Items.DIAMOND_EXCAVATOR);
+		Registry.register(Registries.ITEM, Identifier.of(MOD_ID,"netherite_excavator"), Items.NETHERITE_EXCAVATOR);
 
-		Registry.register(Registries.ITEM_GROUP, new Identifier(MOD_ID,"items"), FabricItemGroup.builder()
+		Registry.register(Registries.ITEM_GROUP, Identifier.of(MOD_ID,"items"), FabricItemGroup.builder()
 				.icon(() -> new ItemStack(Items.DIAMOND_HAMMER))
 				.displayName(Text.of("More Tools"))
 				.entries((context, entries) -> {
