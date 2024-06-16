@@ -24,9 +24,9 @@
 	],
 	"accessWidener" : "moretools.accesswidener",
 	"depends": {
-		"fabricloader": ">=0.15.10",
-		"minecraft": "~1.20.5",
+		"fabricloader": ">=${loader_version}",
+		"minecraft": "~${minecraft_version}",
 		"java": ">=21",
-		"fabric-api": "*"
+		"fabric-api": ">=${fabric_version}"
 	}
 }

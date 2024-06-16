@@ -12,15 +12,17 @@ import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class HammerToolItem extends MiningToolItem implements PolymerItem, MoreTools$CustomMiningToolItem {
+public class HammerToolItem extends MiningToolItem implements PolymerItem, MoreTools$CustomMiningToolItem.MoreTools$Interface {
     private final PickaxeItem base;
     private final float baseSpeed;
     private boolean actAsPickaxe = false;
@@ -59,11 +61,11 @@ public class HammerToolItem extends MiningToolItem implements PolymerItem, MoreT
         }
     }
 
-    public void breakBlocks(BlockPos pos, ServerPlayerEntity player, ServerWorld world) {
+    public void postBlockBreak(BlockState state, BlockPos pos, Direction d, ServerPlayerEntity player, World world) {
         if (this.actAsPickaxe) {
             return;
         }
-        BlockBox selection = Structure.getSurroundingBlocks(pos,player,1, 35);
+        BlockBox selection = BlockBoxUtils.getSurroundingBlocks(pos, d, 1);
         BlockState blockBoxSelection;
         BlockPos blockBoxSelectionPos;
         for(var y = selection.getMinY(); y < selection.getMaxY()+1; y++)
@@ -115,6 +117,6 @@ public class HammerToolItem extends MiningToolItem implements PolymerItem, MoreT
 
     @Override
     public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
-        TooltipHelper.setGimmickItemText(tooltip,null, "Allows breaking blocks in a 3x3 radius.");
+        tooltip.add(Text.literal("Allows breaking blocks in a 3x3 radius.").formatted(Formatting.GOLD));
     }
 }

@@ -30,6 +30,12 @@ public class MoreTools implements ModInitializer {
 		Registry.register(Registries.ITEM, new Identifier(MOD_ID,"golden_excavator"), Items.GOLDEN_EXCAVATOR);
 		Registry.register(Registries.ITEM, new Identifier(MOD_ID,"diamond_excavator"), Items.DIAMOND_EXCAVATOR);
 		Registry.register(Registries.ITEM, new Identifier(MOD_ID,"netherite_excavator"), Items.NETHERITE_EXCAVATOR);
+		Registry.register(Registries.ITEM, new Identifier(MOD_ID,"wooden_saw"), Items.WOODEN_SAW);
+		Registry.register(Registries.ITEM, new Identifier(MOD_ID,"stone_saw"), Items.STONE_SAW);
+		Registry.register(Registries.ITEM, new Identifier(MOD_ID,"iron_saw"), Items.IRON_SAW);
+		Registry.register(Registries.ITEM, new Identifier(MOD_ID,"golden_saw"), Items.GOLDEN_SAW);
+		Registry.register(Registries.ITEM, new Identifier(MOD_ID,"diamond_saw"), Items.DIAMOND_SAW);
+		Registry.register(Registries.ITEM, new Identifier(MOD_ID,"netherite_saw"), Items.NETHERITE_SAW);
 
 		Registry.register(Registries.ITEM_GROUP, new Identifier(MOD_ID,"items"), FabricItemGroup.builder()
 				.icon(() -> new ItemStack(Items.DIAMOND_HAMMER))
@@ -47,6 +53,12 @@ public class MoreTools implements ModInitializer {
 					entries.add(Items.GOLDEN_EXCAVATOR);
 					entries.add(Items.DIAMOND_EXCAVATOR);
 					entries.add(Items.NETHERITE_EXCAVATOR);
+					entries.add(Items.WOODEN_SAW);
+					entries.add(Items.STONE_SAW);
+					entries.add(Items.IRON_SAW);
+					entries.add(Items.GOLDEN_SAW);
+					entries.add(Items.DIAMOND_SAW);
+					entries.add(Items.NETHERITE_SAW);
 				}).build());
 
 		Logger.info("MoreTools loaded!");
@@ -65,6 +77,12 @@ public class MoreTools implements ModInitializer {
 		public static final Item GOLDEN_EXCAVATOR = new ExcavatorToolItem((ShovelItem) net.minecraft.item.Items.GOLDEN_SHOVEL);
 		public static final Item DIAMOND_EXCAVATOR = new ExcavatorToolItem((ShovelItem) net.minecraft.item.Items.DIAMOND_SHOVEL);
 		public static final Item NETHERITE_EXCAVATOR = new ExcavatorToolItem((ShovelItem) net.minecraft.item.Items.NETHERITE_SHOVEL);
+		public static final Item WOODEN_SAW = new SawToolItem((AxeItem) net.minecraft.item.Items.WOODEN_AXE);
+		public static final Item STONE_SAW = new SawToolItem((AxeItem) net.minecraft.item.Items.STONE_AXE);
+		public static final Item IRON_SAW = new SawToolItem((AxeItem) net.minecraft.item.Items.IRON_AXE);
+		public static final Item GOLDEN_SAW = new SawToolItem((AxeItem) net.minecraft.item.Items.GOLDEN_AXE);
+		public static final Item DIAMOND_SAW = new SawToolItem((AxeItem) net.minecraft.item.Items.DIAMOND_AXE);
+		public static final Item NETHERITE_SAW = new SawToolItem((AxeItem) net.minecraft.item.Items.NETHERITE_AXE);
 	}
 
 	public static class Logger {
