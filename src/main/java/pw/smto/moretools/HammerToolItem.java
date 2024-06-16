@@ -3,10 +3,10 @@ package pw.smto.moretools;
 import eu.pb4.polymer.core.api.item.PolymerItem;
 import eu.pb4.polymer.resourcepack.api.PolymerResourcePackUtils;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.item.TooltipType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.*;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -106,7 +106,7 @@ public class HammerToolItem extends MiningToolItem implements PolymerItem, MoreT
 
     @Override
     public int getPolymerCustomModelData(ItemStack itemStack, @Nullable ServerPlayerEntity player) {
-        return PolymerResourcePackUtils.requestModel(this.base, new Identifier(MoreTools.MOD_ID, "item/" + Registries.ITEM.getId(this.base).getPath().replace("pickaxe", "hammer"))).value();
+        return PolymerResourcePackUtils.requestModel(this.base, Identifier.of(MoreTools.MOD_ID, "item/" + Registries.ITEM.getId(this.base).getPath().replace("pickaxe", "hammer"))).value();
     }
     @Override
     public Text getName(ItemStack stack) {
