@@ -31,7 +31,7 @@ public class HammerToolItem extends MiningToolItem implements PolymerItem, MoreT
         super(base.getMaterial(), BlockTags.PICKAXE_MINEABLE, new Item.Settings().attributeModifiers(
                 MiningToolItem.createAttributeModifiers(
                         base.getMaterial(),
-                        base.getMaterial().getAttackDamage()-4,
+                        Math.max(base.getMaterial().getAttackDamage()-4, 1.0F),
                         -3.0f
                 )
         ));

@@ -31,7 +31,7 @@ public class ExcavatorToolItem extends MiningToolItem implements PolymerItem, Mo
         super(base.getMaterial(), BlockTags.SHOVEL_MINEABLE, new Item.Settings().attributeModifiers(
                 MiningToolItem.createAttributeModifiers(
                         base.getMaterial(),
-                        base.getMaterial().getAttackDamage()-4,
+                        Math.max(base.getMaterial().getAttackDamage()-4, 1.0F),
                         -3.0f
                 ))
         );
