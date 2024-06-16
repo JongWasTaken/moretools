@@ -12,15 +12,17 @@ import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class ExcavatorToolItem extends MiningToolItem implements PolymerItem, MoreTools$CustomMiningToolItem {
+public class ExcavatorToolItem extends MiningToolItem implements PolymerItem, MoreTools$CustomMiningToolItem.MoreTools$Interface {
     private final ShovelItem base;
     private final float baseSpeed;
     private boolean actAsShovel = false;
@@ -29,7 +31,7 @@ public class ExcavatorToolItem extends MiningToolItem implements PolymerItem, Mo
         super(base.getMaterial(), BlockTags.SHOVEL_MINEABLE, new Item.Settings().attributeModifiers(
                 MiningToolItem.createAttributeModifiers(
                         base.getMaterial(),
-                        base.getMaterial().getAttackDamage()-4,
+                        Math.max(base.getMaterial().getAttackDamage()-4, 1.0F),
                         -3.0f
                 ))
         );
@@ -59,11 +61,32 @@ public class ExcavatorToolItem extends MiningToolItem implements PolymerItem, Mo
         }
     }
 
-    public void breakBlocks(BlockPos pos, ServerPlayerEntity player, ServerWorld world) {
+    @Override
+    public Item getPolymerItem(ItemStack itemStack, @Nullable ServerPlayerEntity player) {
+        return this.base;
+    }
+
+    @Override
+    public int getPolymerCustomModelData(ItemStack itemStack, @Nullable ServerPlayerEntity player) {
+        return PolymerResourcePackUtils.requestModel(this.base, Identifier.of(MoreTools.MOD_ID, "item/" + Registries.ITEM.getId(this.base).getPath().replace("shovel", "excavator"))).value();
+    }
+
+    @Override
+    public Text getName(ItemStack stack) {
+        return Text.of(this.base.getName().getString().replace("Shovel", "Excavator"));
+    }
+
+    @Override
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
+        tooltip.add(Text.literal("Allows breaking blocks in a 3x3 radius.").formatted(Formatting.GOLD));
+    }
+
+    @Override
+    public void postBlockBreak(BlockState state, BlockPos pos, Direction d, ServerPlayerEntity player, World world) {
         if (this.actAsShovel) {
             return;
         }
-        BlockBox selection = Structure.getSurroundingBlocks(pos,player,1, 35);
+        BlockBox selection = BlockBoxUtils.getSurroundingBlocks(pos, d, 1);
         BlockState blockBoxSelection;
         BlockPos blockBoxSelectionPos;
         for(var y = selection.getMinY(); y < selection.getMaxY()+1; y++)
@@ -97,25 +120,6 @@ public class ExcavatorToolItem extends MiningToolItem implements PolymerItem, Mo
                 }
             }
         }
-    }
 
-    @Override
-    public Item getPolymerItem(ItemStack itemStack, @Nullable ServerPlayerEntity player) {
-        return this.base;
-    }
-
-    @Override
-    public int getPolymerCustomModelData(ItemStack itemStack, @Nullable ServerPlayerEntity player) {
-        return PolymerResourcePackUtils.requestModel(this.base, Identifier.of(MoreTools.MOD_ID, "item/" + Registries.ITEM.getId(this.base).getPath().replace("shovel", "excavator"))).value();
-    }
-
-    @Override
-    public Text getName(ItemStack stack) {
-        return Text.of(this.base.getName().getString().replace("Shovel", "Excavator"));
-    }
-
-    @Override
-    public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
-        TooltipHelper.setGimmickItemText(tooltip,null, "Allows breaking blocks in a 3x3 radius.");
     }
 }
