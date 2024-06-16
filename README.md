@@ -1,6 +1,6 @@
 # MoreTools
 A simple, server-side fabric mod which adds some more tools.  
-Currently being maintained for 1.20.1, 1.20.4 and 1.20.6.
+Currently being maintained for 1.20.1, 1.20.6 and 1.21.
 
 ### Usage
 Throw it into the `mods` folder.  
