@@ -1,6 +1,7 @@
 package pw.smto.moretools;
 
 import eu.pb4.polymer.core.api.item.PolymerItem;
+import eu.pb4.polymer.resourcepack.api.PolymerModelData;
 import eu.pb4.polymer.resourcepack.api.PolymerResourcePackUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.DataComponentTypes;
@@ -26,6 +27,7 @@ public class ExcavatorToolItem extends MiningToolItem implements PolymerItem, Mo
     private final ShovelItem base;
     private final float baseSpeed;
     private boolean actAsShovel = false;
+    private final PolymerModelData model;
 
     public ExcavatorToolItem(ShovelItem base) {
         super(base.getMaterial(), BlockTags.SHOVEL_MINEABLE, new Item.Settings().attributeModifiers(
@@ -37,6 +39,9 @@ public class ExcavatorToolItem extends MiningToolItem implements PolymerItem, Mo
         );
         this.base = base;
         this.baseSpeed = base.getMaterial().getMiningSpeedMultiplier();
+        this.model = PolymerResourcePackUtils.requestModel(base, Identifier.of(MoreTools.MOD_ID,
+                "item/" + Registries.ITEM.getId(this.base).getPath().replace("shovel", "excavator")));
+
     }
 
 
@@ -63,12 +68,12 @@ public class ExcavatorToolItem extends MiningToolItem implements PolymerItem, Mo
 
     @Override
     public Item getPolymerItem(ItemStack itemStack, @Nullable ServerPlayerEntity player) {
-        return this.base;
+        return this.model.item();
     }
 
     @Override
     public int getPolymerCustomModelData(ItemStack itemStack, @Nullable ServerPlayerEntity player) {
-        return PolymerResourcePackUtils.requestModel(this.base, Identifier.of(MoreTools.MOD_ID, "item/" + Registries.ITEM.getId(this.base).getPath().replace("shovel", "excavator"))).value();
+        return this.model.value();
     }
 
     @Override

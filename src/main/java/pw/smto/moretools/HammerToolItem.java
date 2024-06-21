@@ -1,6 +1,7 @@
 package pw.smto.moretools;
 
 import eu.pb4.polymer.core.api.item.PolymerItem;
+import eu.pb4.polymer.resourcepack.api.PolymerModelData;
 import eu.pb4.polymer.resourcepack.api.PolymerResourcePackUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.DataComponentTypes;
@@ -26,6 +27,8 @@ public class HammerToolItem extends MiningToolItem implements PolymerItem, MoreT
     private final float baseSpeed;
     private boolean actAsPickaxe = false;
 
+    private final PolymerModelData model;
+
     public HammerToolItem(PickaxeItem base) {
         super(base.getMaterial(), BlockTags.PICKAXE_MINEABLE, new Item.Settings().attributeModifiers(
                 MiningToolItem.createAttributeModifiers(
@@ -36,6 +39,8 @@ public class HammerToolItem extends MiningToolItem implements PolymerItem, MoreT
         ));
         this.base = base;
         this.baseSpeed = base.getMaterial().getMiningSpeedMultiplier();
+        this.model = PolymerResourcePackUtils.requestModel(base, Identifier.of(MoreTools.MOD_ID,
+                "item/" + Registries.ITEM.getId(this.base).getPath().replace("pickaxe", "hammer")));
     }
 
     @Override
@@ -102,12 +107,12 @@ public class HammerToolItem extends MiningToolItem implements PolymerItem, MoreT
 
     @Override
     public Item getPolymerItem(ItemStack itemStack, @Nullable ServerPlayerEntity player) {
-        return this.base;
+        return this.model.item();
     }
 
     @Override
     public int getPolymerCustomModelData(ItemStack itemStack, @Nullable ServerPlayerEntity player) {
-        return PolymerResourcePackUtils.requestModel(this.base, Identifier.of(MoreTools.MOD_ID, "item/" + Registries.ITEM.getId(this.base).getPath().replace("pickaxe", "hammer"))).value();
+        return this.model.value();
     }
     @Override
     public Text getName(ItemStack stack) {
