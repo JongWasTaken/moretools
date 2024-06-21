@@ -1,6 +1,7 @@
 package pw.smto.moretools;
 
 import eu.pb4.polymer.core.api.item.PolymerItem;
+import eu.pb4.polymer.resourcepack.api.PolymerModelData;
 import eu.pb4.polymer.resourcepack.api.PolymerResourcePackUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
@@ -9,7 +10,6 @@ import net.minecraft.item.*;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
@@ -25,12 +25,16 @@ public class ExcavatorToolItem extends MiningToolItem implements PolymerItem, Mo
     private final ShovelItem base;
     private final float baseSpeed;
     private boolean actAsShovel = false;
+    private final PolymerModelData model;
 
     public ExcavatorToolItem(ShovelItem base) {
         super(Math.max(base.getAttackDamage()-4, 1.0F), -3.0f, base.getMaterial(), BlockTags.SHOVEL_MINEABLE, new Settings());
         this.base = base;
-        this.baseSpeed = super.miningSpeed;
+        this.baseSpeed = super.miningSpeed;        this.model = PolymerResourcePackUtils.requestModel(base, Identifier.of(MoreTools.MOD_ID,
+                "item/" + Registries.ITEM.getId(this.base).getPath().replace("shovel", "excavator")));
+
     }
+
 
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
@@ -55,12 +59,12 @@ public class ExcavatorToolItem extends MiningToolItem implements PolymerItem, Mo
 
     @Override
     public Item getPolymerItem(ItemStack itemStack, @Nullable ServerPlayerEntity player) {
-        return this.base;
+        return this.model.item();
     }
 
     @Override
     public int getPolymerCustomModelData(ItemStack itemStack, @Nullable ServerPlayerEntity player) {
-        return PolymerResourcePackUtils.requestModel(this.base, new Identifier(MoreTools.MOD_ID, "item/" + Registries.ITEM.getId(this.base).getPath().replace("shovel", "excavator"))).value();
+        return this.model.value();
     }
 
     @Override

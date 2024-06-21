@@ -1,6 +1,7 @@
 package pw.smto.moretools;
 
 import eu.pb4.polymer.core.api.item.PolymerItem;
+import eu.pb4.polymer.resourcepack.api.PolymerModelData;
 import eu.pb4.polymer.resourcepack.api.PolymerResourcePackUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
@@ -26,11 +27,15 @@ public class SawToolItem extends MiningToolItem implements PolymerItem, MoreTool
     private final AxeItem base;
     private final float baseSpeed;
     private boolean actAsAxe = false;
+    private final PolymerModelData model;
 
     public SawToolItem(AxeItem base) {
         super(Math.max(base.getAttackDamage()-7, 2.0F), -3.0f, base.getMaterial(), BlockTags.AXE_MINEABLE, new Item.Settings());
         this.base = base;
         this.baseSpeed = base.getMaterial().getMiningSpeedMultiplier();
+        this.model = PolymerResourcePackUtils.requestModel(base, Identifier.of(MoreTools.MOD_ID,
+                "item/" + Registries.ITEM.getId(this.base).getPath().replace("axe", "saw")));
+
     }
 
 
@@ -57,12 +62,12 @@ public class SawToolItem extends MiningToolItem implements PolymerItem, MoreTool
 
     @Override
     public Item getPolymerItem(ItemStack itemStack, @Nullable ServerPlayerEntity player) {
-        return this.base;
+        return this.model.item();
     }
 
     @Override
     public int getPolymerCustomModelData(ItemStack itemStack, @Nullable ServerPlayerEntity player) {
-        return PolymerResourcePackUtils.requestModel(this.base, new Identifier(MoreTools.MOD_ID, "item/" + Registries.ITEM.getId(this.base).getPath().replace("axe", "saw"))).value();
+        return this.model.value();
     }
 
     @Override
