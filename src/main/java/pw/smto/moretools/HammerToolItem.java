@@ -30,7 +30,8 @@ public class HammerToolItem extends MiningToolItem implements PolymerItem, MoreT
     private final PolymerModelData model;
 
     public HammerToolItem(PickaxeItem base) {
-        super(base.getMaterial(), BlockTags.PICKAXE_MINEABLE, new Item.Settings().attributeModifiers(
+        super(new CustomMaterial(base.getMaterial(), base.getDefaultStack().getMaxDamage() * 3),
+                BlockTags.PICKAXE_MINEABLE, new Item.Settings().attributeModifiers(
                 MiningToolItem.createAttributeModifiers(
                         base.getMaterial(),
                         Math.max(base.getMaterial().getAttackDamage()-4, 1.0F),

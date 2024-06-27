@@ -30,7 +30,8 @@ public class ExcavatorToolItem extends MiningToolItem implements PolymerItem, Mo
     private final PolymerModelData model;
 
     public ExcavatorToolItem(ShovelItem base) {
-        super(base.getMaterial(), BlockTags.SHOVEL_MINEABLE, new Item.Settings().attributeModifiers(
+        super(new CustomMaterial(base.getMaterial(), base.getDefaultStack().getMaxDamage() * 3),
+                BlockTags.SHOVEL_MINEABLE, new Item.Settings().attributeModifiers(
                 MiningToolItem.createAttributeModifiers(
                         base.getMaterial(),
                         Math.max(base.getMaterial().getAttackDamage()-4, 1.0F),
