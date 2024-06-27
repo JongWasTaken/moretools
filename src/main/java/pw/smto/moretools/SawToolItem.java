@@ -37,7 +37,8 @@ public class SawToolItem extends MiningToolItem implements PolymerItem, MoreTool
     private final PolymerModelData model;
 
     public SawToolItem(AxeItem base) {
-        super(base.getMaterial(), BlockTags.AXE_MINEABLE, new Settings().attributeModifiers(
+        super(new CustomMaterial(base.getMaterial(), base.getDefaultStack().getMaxDamage() * 3),
+                BlockTags.AXE_MINEABLE, new Settings().attributeModifiers(
                 MiningToolItem.createAttributeModifiers(
                         base.getMaterial(),
                         Math.max(base.getMaterial().getAttackDamage()-4, 1.0F),
