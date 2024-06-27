@@ -28,13 +28,21 @@ public class ExcavatorToolItem extends MiningToolItem implements PolymerItem, Mo
     private final PolymerModelData model;
 
     public ExcavatorToolItem(ShovelItem base) {
-        super(Math.max(base.getAttackDamage()-4, 1.0F), -3.0f, base.getMaterial(), BlockTags.SHOVEL_MINEABLE, new Settings());
+        super(Math.max(base.getAttackDamage()-4, 1.0F),
+                -3.0f,
+                base.getMaterial(),
+                BlockTags.SHOVEL_MINEABLE,
+                new Settings().maxDamage(base.getMaxDamage() * 3));
         this.base = base;
-        this.baseSpeed = super.miningSpeed;        this.model = PolymerResourcePackUtils.requestModel(base, Identifier.of(MoreTools.MOD_ID,
+        this.baseSpeed = super.miningSpeed;
+        this.model = PolymerResourcePackUtils.requestModel(base, Identifier.of(MoreTools.MOD_ID,
                 "item/" + Registries.ITEM.getId(this.base).getPath().replace("shovel", "excavator")));
-
     }
 
+    @Override
+    public void modifyClientTooltip(List<Text> tooltip, ItemStack stack, @Nullable ServerPlayerEntity player) {
+        tooltip.add(Text.literal("True Durability: " + (this.getMaxDamage() - stack.getDamage()) + " / " + this.getMaxDamage()).formatted(Formatting.WHITE));
+    }
 
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {

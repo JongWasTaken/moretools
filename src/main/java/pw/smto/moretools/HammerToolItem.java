@@ -29,10 +29,16 @@ public class HammerToolItem extends MiningToolItem implements PolymerItem, MoreT
     private final PolymerModelData model;
 
     public HammerToolItem(PickaxeItem base) {
-        super(Math.max(base.getAttackDamage()-4, 1.0F), -3.0f, base.getMaterial(), BlockTags.PICKAXE_MINEABLE, new Item.Settings());
+        super(Math.max(base.getAttackDamage()-4, 1.0F), -3.0f, base.getMaterial(), BlockTags.PICKAXE_MINEABLE, new Item.Settings().maxDamage(base.getMaxDamage() * 3));
         this.base = base;
-        this.baseSpeed = super.miningSpeed;        this.model = PolymerResourcePackUtils.requestModel(base, Identifier.of(MoreTools.MOD_ID,
+        this.baseSpeed = super.miningSpeed;
+        this.model = PolymerResourcePackUtils.requestModel(base, Identifier.of(MoreTools.MOD_ID,
                 "item/" + Registries.ITEM.getId(this.base).getPath().replace("pickaxe", "hammer")));
+    }
+
+    @Override
+    public void modifyClientTooltip(List<Text> tooltip, ItemStack stack, @Nullable ServerPlayerEntity player) {
+        tooltip.add(Text.literal("True Durability: " + (this.getMaxDamage() - stack.getDamage()) + " / " + this.getMaxDamage()).formatted(Formatting.WHITE));
     }
 
     @Override

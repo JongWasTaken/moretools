@@ -30,14 +30,17 @@ public class SawToolItem extends MiningToolItem implements PolymerItem, MoreTool
     private final PolymerModelData model;
 
     public SawToolItem(AxeItem base) {
-        super(Math.max(base.getAttackDamage()-7, 2.0F), -3.0f, base.getMaterial(), BlockTags.AXE_MINEABLE, new Item.Settings());
+        super(Math.max(base.getAttackDamage()-7, 2.0F), -3.0f, base.getMaterial(), BlockTags.AXE_MINEABLE, new Item.Settings().maxDamage(base.getMaxDamage() * 3));
         this.base = base;
         this.baseSpeed = base.getMaterial().getMiningSpeedMultiplier();
         this.model = PolymerResourcePackUtils.requestModel(base, Identifier.of(MoreTools.MOD_ID,
                 "item/" + Registries.ITEM.getId(this.base).getPath().replace("axe", "saw")));
-
     }
 
+    @Override
+    public void modifyClientTooltip(List<Text> tooltip, ItemStack stack, @Nullable ServerPlayerEntity player) {
+        tooltip.add(Text.literal("True Durability: " + (this.getMaxDamage() - stack.getDamage()) + " / " + this.getMaxDamage()).formatted(Formatting.WHITE));
+    }
 
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
