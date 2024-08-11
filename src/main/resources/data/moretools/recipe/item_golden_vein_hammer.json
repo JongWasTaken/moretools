@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "###",
+        "M/M",
+        " / "
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:golden_pickaxe"
+        },
+        "M": {
+            "item": "minecraft:gold_ingot"
+        },
+        "/": {
+            "item": "minecraft:stick"
+        }
+    },
+    "result": {
+        "id": "moretools:golden_vein_hammer",
+        "count": 1
+    }
+}

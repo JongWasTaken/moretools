@@ -1,5 +1,6 @@
 package pw.smto.moretools;
 
+import eu.pb4.polymer.core.api.item.PolymerItemGroupUtils;
 import eu.pb4.polymer.resourcepack.api.PolymerResourcePackUtils;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
@@ -9,35 +10,34 @@ import net.minecraft.registry.Registry;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.slf4j.LoggerFactory;
+import pw.smto.moretools.item.ExcavatorToolItem;
+import pw.smto.moretools.item.HammerToolItem;
+import pw.smto.moretools.item.SawToolItem;
+import pw.smto.moretools.item.VeinHammerToolItem;
+
+import java.lang.reflect.Field;
+import java.util.*;
 
 public class MoreTools implements ModInitializer {
 	public static final String MOD_ID = "moretools";
+	public static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	@Override
 	public void onInitialize() {
 		PolymerResourcePackUtils.addModAssets(MOD_ID);
 		PolymerResourcePackUtils.markAsRequired();
 
-		Registry.register(Registries.ITEM, Identifier.of(MOD_ID,"wooden_hammer"), Items.WOODEN_HAMMER);
-		Registry.register(Registries.ITEM, Identifier.of(MOD_ID,"stone_hammer"), Items.STONE_HAMMER);
-		Registry.register(Registries.ITEM, Identifier.of(MOD_ID,"iron_hammer"), Items.IRON_HAMMER);
-		Registry.register(Registries.ITEM, Identifier.of(MOD_ID,"golden_hammer"), Items.GOLDEN_HAMMER);
-		Registry.register(Registries.ITEM, Identifier.of(MOD_ID,"diamond_hammer"), Items.DIAMOND_HAMMER);
-		Registry.register(Registries.ITEM, Identifier.of(MOD_ID,"netherite_hammer"), Items.NETHERITE_HAMMER);
-		Registry.register(Registries.ITEM, Identifier.of(MOD_ID,"wooden_excavator"), Items.WOODEN_EXCAVATOR);
-		Registry.register(Registries.ITEM, Identifier.of(MOD_ID,"stone_excavator"), Items.STONE_EXCAVATOR);
-		Registry.register(Registries.ITEM, Identifier.of(MOD_ID,"iron_excavator"), Items.IRON_EXCAVATOR);
-		Registry.register(Registries.ITEM, Identifier.of(MOD_ID,"golden_excavator"), Items.GOLDEN_EXCAVATOR);
-		Registry.register(Registries.ITEM, Identifier.of(MOD_ID,"diamond_excavator"), Items.DIAMOND_EXCAVATOR);
-		Registry.register(Registries.ITEM, Identifier.of(MOD_ID,"netherite_excavator"), Items.NETHERITE_EXCAVATOR);
-		Registry.register(Registries.ITEM, Identifier.of(MOD_ID,"wooden_saw"), Items.WOODEN_SAW);
-		Registry.register(Registries.ITEM, Identifier.of(MOD_ID,"stone_saw"), Items.STONE_SAW);
-		Registry.register(Registries.ITEM, Identifier.of(MOD_ID,"iron_saw"), Items.IRON_SAW);
-		Registry.register(Registries.ITEM, Identifier.of(MOD_ID,"golden_saw"), Items.GOLDEN_SAW);
-		Registry.register(Registries.ITEM, Identifier.of(MOD_ID,"diamond_saw"), Items.DIAMOND_SAW);
-		Registry.register(Registries.ITEM, Identifier.of(MOD_ID,"netherite_saw"), Items.NETHERITE_SAW);
+		// Register all items
+		for (Field field : Items.class.getFields()) {
+            try {
+				Registry.register(Registries.ITEM, Identifier.of(MOD_ID, field.getName().toLowerCase(Locale.ROOT)), (Item)field.get(null));
+            } catch (Exception ignored) {
+				LOGGER.error("Failed to register item: " + field.getName());
+			}
+        }
 
-		Registry.register(Registries.ITEM_GROUP, Identifier.of(MOD_ID,"items"), FabricItemGroup.builder()
+		// Create an item group with all items
+		PolymerItemGroupUtils.registerPolymerItemGroup(Identifier.of(MOD_ID,"items"), PolymerItemGroupUtils.builder()
 				.icon(() -> new ItemStack(Items.DIAMOND_HAMMER))
 				.displayName(Text.of("More Tools"))
 				.entries((context, entries) -> {
@@ -59,9 +59,15 @@ public class MoreTools implements ModInitializer {
 					entries.add(Items.GOLDEN_SAW);
 					entries.add(Items.DIAMOND_SAW);
 					entries.add(Items.NETHERITE_SAW);
+					entries.add(Items.WOODEN_VEIN_HAMMER);
+					entries.add(Items.STONE_VEIN_HAMMER);
+					entries.add(Items.IRON_VEIN_HAMMER);
+					entries.add(Items.GOLDEN_VEIN_HAMMER);
+					entries.add(Items.DIAMOND_VEIN_HAMMER);
+					entries.add(Items.NETHERITE_VEIN_HAMMER);
 				}).build());
 
-		Logger.info("MoreTools loaded!");
+		LOGGER.info("MoreTools loaded!");
 	}
 
 	public static class Items {
@@ -83,18 +89,11 @@ public class MoreTools implements ModInitializer {
 		public static final Item GOLDEN_SAW = new SawToolItem((AxeItem) net.minecraft.item.Items.GOLDEN_AXE);
 		public static final Item DIAMOND_SAW = new SawToolItem((AxeItem) net.minecraft.item.Items.DIAMOND_AXE);
 		public static final Item NETHERITE_SAW = new SawToolItem((AxeItem) net.minecraft.item.Items.NETHERITE_AXE);
-	}
-
-	public static class Logger {
-		private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-		public static void info(String s, Object... objects) {
-			LOGGER.info(s, objects);
-		}
-		public static void warn(String s, Object... objects) {
-			LOGGER.warn(s, objects);
-		}
-		public static void error(String s, Object... objects) {
-			LOGGER.error(s, objects);
-		}
+		public static final Item WOODEN_VEIN_HAMMER = new VeinHammerToolItem((PickaxeItem) net.minecraft.item.Items.WOODEN_PICKAXE);
+		public static final Item STONE_VEIN_HAMMER = new VeinHammerToolItem((PickaxeItem) net.minecraft.item.Items.STONE_PICKAXE);
+		public static final Item IRON_VEIN_HAMMER = new VeinHammerToolItem((PickaxeItem) net.minecraft.item.Items.IRON_PICKAXE);
+		public static final Item GOLDEN_VEIN_HAMMER = new VeinHammerToolItem((PickaxeItem) net.minecraft.item.Items.GOLDEN_PICKAXE);
+		public static final Item DIAMOND_VEIN_HAMMER = new VeinHammerToolItem((PickaxeItem) net.minecraft.item.Items.DIAMOND_PICKAXE);
+		public static final Item NETHERITE_VEIN_HAMMER = new VeinHammerToolItem((PickaxeItem) net.minecraft.item.Items.NETHERITE_PICKAXE);
 	}
 }

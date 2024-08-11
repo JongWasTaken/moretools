@@ -1,5 +1,34 @@
 {
+  "item.moretools.wooden_hammer": "Wooden Hammer",
+  "item.moretools.stone_hammer": "Stone Hammer",
+  "item.moretools.iron_hammer": "Iron Hammer",
+  "item.moretools.golden_hammer": "Golden Hammer",
+  "item.moretools.diamond_hammer": "Diamond Hammer",
+  "item.moretools.netherite_hammer": "Netherite Hammer",
+
+  "item.moretools.wooden_vein_hammer": "Wooden Vein Hammer",
+  "item.moretools.stone_vein_hammer": "Stone Vein Hammer",
+  "item.moretools.iron_vein_hammer": "Iron Vein Hammer",
+  "item.moretools.golden_vein_hammer": "Golden Vein Hammer",
+  "item.moretools.diamond_vein_hammer": "Diamond Vein Hammer",
+  "item.moretools.netherite_vein_hammer": "Netherite Vein Hammer",
+
+  "item.moretools.wooden_excavator": "Wooden Excavator",
+  "item.moretools.stone_excavator": "Stone Excavator",
+  "item.moretools.iron_excavator": "Iron Excavator",
+  "item.moretools.golden_excavator": "Golden Excavator",
+  "item.moretools.diamond_excavator": "Diamond Excavator",
+  "item.moretools.netherite_excavator": "Netherite Excavator",
+
+  "item.moretools.wooden_saw": "Wooden Saw",
+  "item.moretools.stone_saw": "Stone Saw",
+  "item.moretools.iron_saw": "Iron Saw",
+  "item.moretools.golden_saw": "Golden Saw",
+  "item.moretools.diamond_saw": "Diamond Saw",
+  "item.moretools.netherite_saw": "Netherite Saw",
+
   "tag.item.moretools.hammers": "Moretools Hammers",
+  "tag.item.moretools.vein_hammers": "Moretools Vein Hammers",
   "tag.item.moretools.excavators": "Moretools Excavators",
   "tag.item.moretools.saws": "Moretools Saws"
 }

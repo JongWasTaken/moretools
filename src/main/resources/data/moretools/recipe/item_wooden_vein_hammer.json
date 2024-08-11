@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "###",
+        "M/M",
+        " / "
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:wooden_pickaxe"
+        },
+        "M": {
+            "tag": "minecraft:planks"
+        },
+        "/": {
+            "item": "minecraft:stick"
+        }
+    },
+    "result": {
+        "id": "moretools:wooden_vein_hammer",
+        "count": 1
+    }
+}

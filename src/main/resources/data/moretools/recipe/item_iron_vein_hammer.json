@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "###",
+        "M/M",
+        " / "
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:iron_pickaxe"
+        },
+        "M": {
+            "item": "minecraft:iron_ingot"
+        },
+        "/": {
+            "item": "minecraft:stick"
+        }
+    },
+    "result": {
+        "id": "moretools:iron_vein_hammer",
+        "count": 1
+    }
+}

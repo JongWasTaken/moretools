@@ -1,14 +1,18 @@
-package pw.smto.moretools;
+package pw.smto.moretools.util;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
+import pw.smto.moretools.MoreTools;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 // Taken from IndexLib, my shared library I am currently working on
 public class BlockBoxUtils {
@@ -94,6 +98,44 @@ public class BlockBoxUtils {
                 firstCorner.getX(), firstCorner.getY(), firstCorner.getZ(),
                 secondCorner.getX(), secondCorner.getY(), secondCorner.getZ()
         );
+    }
+
+    public static List<BlockPos> getBlockCluster(Block toFind, BlockPos pos, World world, int limit) {
+        Set<BlockPos> connectedBlocks = new HashSet<>();
+        Set<BlockPos> visited = new HashSet<>();
+        freeDfs(world, pos, toFind, connectedBlocks, visited, EnumSet.allOf(Direction.class), 0, limit);
+        return sortBlockSet(pos, connectedBlocks);
+    }
+
+    private static void freeDfs(World world, BlockPos currentPos, Block pickBlock, Set<BlockPos> connectedBlocks, Set<BlockPos> visited, Set<Direction> sides, int depth, int limit) {
+        if (!visited.contains(currentPos) && depth < limit) {
+            visited.add(currentPos);
+            // Check if the current block matches the origin block type
+            if (depth == 0 || world.getBlockState(currentPos).getBlock().equals(pickBlock)) {
+                connectedBlocks.add(currentPos);
+                for (Direction direction : sides) {
+                    BlockPos neighborPos = currentPos.offset(direction);
+                    freeDfs(world, neighborPos, pickBlock, connectedBlocks, visited, sides, depth + 1, limit);
+                }
+            }
+        }
+    }
+
+    private static List<BlockPos> sortBlockSet(BlockPos origin, Set<BlockPos> list) {
+        List<BlockPos> sortedBlockPositionList = new ArrayList<>(list.stream().toList());
+        sortedBlockPositionList.sort(new Comparator<BlockPos>() {
+            private double distanceTo(BlockPos o1, BlockPos origin) {
+                return Math.sqrt(Math.pow(o1.getX() - origin.getX(), 2) + Math.pow(origin.getY() - origin.getY(), 2) + Math.pow(origin.getZ() - origin.getZ(), 2));
+            }
+
+            public int compare(BlockPos o1, BlockPos o2) {
+                double dist1 = distanceTo(o1, origin);
+                double dist2 = distanceTo(o2, origin);
+                return Double.compare(dist1, dist2);
+            }
+        });
+
+        return sortedBlockPositionList;
     }
 
     public static class IterableBlockBox extends BlockBox implements Iterable<BlockPos> {

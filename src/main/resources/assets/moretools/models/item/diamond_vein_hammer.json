@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "moretools:item/mt_diamond_vein_hammer"
+  }
+}

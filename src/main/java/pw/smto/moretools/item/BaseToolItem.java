@@ -1,0 +1,82 @@
+package pw.smto.moretools.item;
+
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
+import eu.pb4.polymer.core.api.item.PolymerItem;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.*;
+import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.registry.tag.TagKey;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
+import pw.smto.moretools.util.MutableMaterial;
+
+import java.util.List;
+import java.util.Map;
+
+public class BaseToolItem extends MiningToolItem {
+    private final float baseSpeed;
+    public BaseToolItem(MiningToolItem baseItem, TagKey<Block> targetBlocks) {
+        super(
+                // durability gets tripled
+                MutableMaterial.of(baseItem.getMaterial()).setDurability(baseItem.getDefaultStack().getMaxDamage() * 3),
+                // derive target blocks from baseItem
+                targetBlocks,
+                // damage and mining speed get nerfed
+                new Item.Settings().attributeModifiers(
+                        MiningToolItem.createAttributeModifiers(
+                                baseItem.getMaterial(),
+                                Math.max(baseItem.getMaterial().getAttackDamage()-4, 1.0F),
+                                -3.0f
+                        )
+                )
+        );
+        this.baseSpeed = baseItem.getMaterial().getMiningSpeedMultiplier();
+    }
+
+    private boolean actAsBaseTool = false;
+    @Override
+    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+        if (selected)
+        {
+            if (entity instanceof ServerPlayerEntity serverPlayerEntity) {
+                if (serverPlayerEntity.isSneaking())
+                {
+                    stack.get(DataComponentTypes.TOOL).defaultMiningSpeed = this.baseSpeed;
+                    this.actAsBaseTool = true;
+                }
+                else {
+                    stack.get(DataComponentTypes.TOOL).defaultMiningSpeed = this.baseSpeed - 3.0F;
+                    if (stack.get(DataComponentTypes.TOOL).defaultMiningSpeed() < 1.0F) {
+                        stack.get(DataComponentTypes.TOOL).defaultMiningSpeed = 1.1F;
+                    }
+                    this.actAsBaseTool = false;
+                }
+            }
+        }
+    }
+
+    public String getGimmickText() {
+        return "";
+    }
+    @Override
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
+        tooltip.add(Text.literal(getGimmickText()).formatted(Formatting.GOLD));
+    }
+
+    public void postBlockBreak(BlockState state, BlockPos pos, Direction d, ServerPlayerEntity player, World world) {
+        if (this.actAsBaseTool) return;
+        doToolPower(state, pos, d, player, world);
+    }
+
+    public void doToolPower(BlockState state, BlockPos pos, Direction d, ServerPlayerEntity player, World world) {}
+}
