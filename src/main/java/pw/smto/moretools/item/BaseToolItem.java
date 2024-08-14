@@ -24,7 +24,7 @@ public class BaseToolItem extends MiningToolItem {
         float speed = m.getMiningSpeedMultiplier() * multiplier;
         return new ToolComponent(
                 // 0.1F applies to all non-target blocks, e.g. grass for a hammer
-                List.of(ToolComponent.Rule.ofNeverDropping(m.getInverseTag()), ToolComponent.Rule.ofAlwaysDropping(tag, speed)), 0.1F, 1
+                List.of(ToolComponent.Rule.ofNeverDropping(m.getInverseTag()), ToolComponent.Rule.ofAlwaysDropping(tag, speed)), 0.3F, 1
         );
     }
 
