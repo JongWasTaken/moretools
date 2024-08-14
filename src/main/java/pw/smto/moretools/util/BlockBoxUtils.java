@@ -6,6 +6,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import pw.smto.moretools.MoreTools;
@@ -100,25 +101,65 @@ public class BlockBoxUtils {
         );
     }
 
-    public static List<BlockPos> getBlockCluster(Block toFind, BlockPos pos, World world, int limit) {
+    public static List<BlockPos> getBlockCluster(Block toFind, BlockPos pos, World world, int limit, boolean useVanillaDirections) {
         Set<BlockPos> connectedBlocks = new HashSet<>();
         Set<BlockPos> visited = new HashSet<>();
-        freeDfs(world, pos, toFind, connectedBlocks, visited, EnumSet.allOf(Direction.class), 0, limit);
+        freeDfs(world, pos, toFind, connectedBlocks, visited, 0, limit, useVanillaDirections);
         return sortBlockSet(pos, connectedBlocks);
     }
 
-    private static void freeDfs(World world, BlockPos currentPos, Block pickBlock, Set<BlockPos> connectedBlocks, Set<BlockPos> visited, Set<Direction> sides, int depth, int limit) {
+    private static final List<Vec3i> DIRECTIONS = new ArrayList<>() {{
+        // Vanilla directions
+        add(new Vec3i(0, -1, 0)); // DOWN
+        add(new Vec3i(0, 1, 0)); // UP
+        add(new Vec3i(-1, 0, 0)); // WEST
+        add(new Vec3i(1, 0, 0)); // EAST
+        add(new Vec3i(0, 0, -1)); // SOUTH
+        add(new Vec3i(0, 0, 1)); // NORTH
+        // Corners
+        add(new Vec3i(0, -1, 1)); // DOWN + NORTH
+        add(new Vec3i(1, -1, 0)); // DOWN + EAST
+        add(new Vec3i(0, -1, -1)); // DOWN + SOUTH
+        add(new Vec3i(-1, -1, 0)); // DOWN + WEST
+        add(new Vec3i(0, 1, 1)); // UP + NORTH
+        add(new Vec3i(1, 1, 0)); // UP + EAST
+        add(new Vec3i(0, 1, -1)); // UP + SOUTH
+        add(new Vec3i(-1, 1, 0)); // UP + WEST
+        // Corners of corners
+        add(new Vec3i(1, -1, 1)); // DOWN + NORTH + EAST
+        add(new Vec3i(-1, -1, 1)); // DOWN + NORTH + WEST
+        add(new Vec3i(1, -1, -1)); // DOWN + SOUTH + EAST
+        add(new Vec3i(-1, -1, -1)); // DOWN + SOUTH + WEST
+        add(new Vec3i(1, 1, 1)); // UP + NORTH + EAST
+        add(new Vec3i(-1, 1, 1)); // UP + NORTH + WEST
+        add(new Vec3i(1, 1, -1)); // UP + SOUTH + EAST
+        add(new Vec3i(-1, 1, -1)); // UP + SOUTH + WEST
+
+    }};
+
+    private static void freeDfs(World world, BlockPos currentPos, Block pickBlock, Set<BlockPos> connectedBlocks, Set<BlockPos> visited, int depth, int limit, boolean useVanillaDirections) {
         if (!visited.contains(currentPos) && depth < limit) {
             visited.add(currentPos);
             // Check if the current block matches the origin block type
             if (depth == 0 || world.getBlockState(currentPos).getBlock().equals(pickBlock)) {
                 connectedBlocks.add(currentPos);
-                for (Direction direction : sides) {
-                    BlockPos neighborPos = currentPos.offset(direction);
-                    freeDfs(world, neighborPos, pickBlock, connectedBlocks, visited, sides, depth + 1, limit);
+                if (useVanillaDirections) {
+                    for (Direction direction : EnumSet.allOf(Direction.class)) {
+                        BlockPos neighborPos = currentPos.offset(direction);
+                        freeDfs(world, neighborPos, pickBlock, connectedBlocks, visited, depth + 1, limit, useVanillaDirections);
+                    }
+                } else {
+                    for (Vec3i direction : DIRECTIONS) {
+                        BlockPos neighborPos = offset(currentPos, direction);
+                        freeDfs(world, neighborPos, pickBlock, connectedBlocks, visited, depth + 1, limit, useVanillaDirections);
+                    }
                 }
             }
         }
+    }
+
+    private static BlockPos offset(BlockPos pos, Vec3i direction) {
+        return pos.add(direction);
     }
 
     private static List<BlockPos> sortBlockSet(BlockPos origin, Set<BlockPos> list) {
@@ -166,6 +207,12 @@ public class BlockBoxUtils {
                     }
                 }
             }
+        }
+
+        public List<BlockPos> toList() {
+            var x = new ArrayList<BlockPos>();
+            this.forEach(x::add);
+            return x;
         }
     }
 }

@@ -17,6 +17,9 @@
 	"entrypoints": {
 		"main": [
           "pw.smto.moretools.MoreTools"
+		],
+		"client": [
+			"pw.smto.moretools.MoreToolsClient"
 		]
 	},
 	"mixins": [

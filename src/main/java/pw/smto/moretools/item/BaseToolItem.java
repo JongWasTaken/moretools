@@ -11,12 +11,16 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import pw.smto.moretools.MoreTools;
+import pw.smto.moretools.util.BlockBoxUtils;
 import pw.smto.moretools.util.MutableMaterial;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BaseToolItem extends MiningToolItem {
@@ -80,6 +84,10 @@ public class BaseToolItem extends MiningToolItem {
     public void postBlockBreak(BlockState state, BlockPos pos, Direction d, ServerPlayerEntity player, World world) {
         if (this.actAsBaseTool) return;
         doToolPower(state, pos, d, player, world);
+    }
+
+    public List<BlockPos> getAffectedArea(@Nullable World world, BlockPos pos, @Nullable Direction d, @Nullable Block target) {
+        return new ArrayList<BlockPos>() {{ add(pos); }};
     }
 
     public void doToolPower(BlockState state, BlockPos pos, Direction d, ServerPlayerEntity player, World world) {}

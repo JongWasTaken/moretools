@@ -1,8 +1,11 @@
 package pw.smto.moretools.item;
 
 import eu.pb4.polymer.core.api.item.PolymerItem;
+import eu.pb4.polymer.core.api.utils.PolymerClientDecoded;
+import eu.pb4.polymer.core.api.utils.PolymerKeepModel;
 import eu.pb4.polymer.resourcepack.api.PolymerModelData;
 import eu.pb4.polymer.resourcepack.api.PolymerResourcePackUtils;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.Entity;
@@ -21,11 +24,13 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import pw.smto.moretools.MoreTools;
+import pw.smto.moretools.util.BlockBoxUtils;
 import pw.smto.moretools.util.MutableMaterial;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class SawToolItem extends BaseToolItem implements PolymerItem {
+public class SawToolItem extends BaseToolItem implements PolymerItem, PolymerKeepModel, PolymerClientDecoded {
     private final PolymerModelData model;
 
     public SawToolItem(AxeItem base) {
@@ -36,6 +41,9 @@ public class SawToolItem extends BaseToolItem implements PolymerItem {
 
     @Override
     public Item getPolymerItem(ItemStack itemStack, @Nullable ServerPlayerEntity player) {
+        if (MoreTools.PLAYERS_WITH_CLIENT.contains(player)) {
+            return this;
+        }
         return this.model.item();
     }
 
@@ -50,17 +58,32 @@ public class SawToolItem extends BaseToolItem implements PolymerItem {
     }
 
     @Override
+    public List<BlockPos> getAffectedArea(@Nullable World world, BlockPos pos, @Nullable Direction d, @Nullable Block target) {
+        var list = new ArrayList<BlockPos>() {{ add(pos); }};
+
+        BlockPos.Mutable up = pos.mutableCopy();
+        int limit = 0;
+        while (world.getBlockState(up.move(Direction.UP)).isIn(BlockTags.LOGS) && limit < 127) {
+            list.add(up.toImmutable());
+            limit++;
+        }
+
+        return list;
+    }
+
+    @Override
     public void doToolPower(BlockState state, BlockPos pos, Direction d, ServerPlayerEntity player, World world) {
         if (state.isIn(BlockTags.LOGS)) {
             int damage = 1;
 
             final int maxDamage = Math.abs(player.getMainHandStack().getMaxDamage() - player.getMainHandStack().getDamage());
 
-            BlockPos.Mutable up = pos.mutableCopy();
-            while (world.getBlockState(up.move(Direction.UP)).isIn(BlockTags.LOGS) && damage < maxDamage) {
-                world.breakBlock(up, !player.isCreative());
+            for (BlockPos blockPos : getAffectedArea(world, pos, d, state.getBlock())) {
+                if (damage >= maxDamage-1) break;
+                world.breakBlock(blockPos, !player.isCreative());
                 damage++;
             }
+
             if (!player.isCreative()) {
                 if (player.getActiveHand() == Hand.MAIN_HAND) {
                     player.getMainHandStack().damage(damage, player, EquipmentSlot.MAINHAND);

@@ -4,9 +4,21 @@ import eu.pb4.polymer.core.api.item.PolymerItemGroupUtils;
 import eu.pb4.polymer.resourcepack.api.PolymerResourcePackUtils;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
+import net.minecraft.network.RegistryByteBuf;
+import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayNetworkHandler;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.slf4j.LoggerFactory;
@@ -21,6 +33,7 @@ import java.util.*;
 public class MoreTools implements ModInitializer {
 	public static final String MOD_ID = "moretools";
 	public static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+	public static final List<ServerPlayerEntity> PLAYERS_WITH_CLIENT = new ArrayList<>();
 
 	@Override
 	public void onInitialize() {
@@ -67,6 +80,23 @@ public class MoreTools implements ModInitializer {
 					entries.add(Items.NETHERITE_VEIN_HAMMER);
 				}).build());
 
+		ServerPlayConnectionEvents.JOIN.register((ServerPlayNetworkHandler handler, PacketSender sender, MinecraftServer server) -> {
+			sender.sendPacket(new Payloads.S2CHandshake(true));
+		});
+		PayloadTypeRegistry.playS2C().register(Payloads.S2CHandshake.ID, Payloads.S2CHandshake.CODEC);
+		PayloadTypeRegistry.playC2S().register(Payloads.C2SHandshakeCallback.ID, Payloads.C2SHandshakeCallback.CODEC);
+		ServerPlayNetworking.registerGlobalReceiver(Payloads.C2SHandshakeCallback.ID, (payload, context) -> {
+			context.player().server.execute(() -> {
+				LOGGER.info("Enabling client-side enhancements for player: " + context.player().getDisplayName().getString());
+				PLAYERS_WITH_CLIENT.add(context.player());
+				context.player().getInventory().markDirty();
+			});
+		});
+
+		ServerPlayConnectionEvents.DISCONNECT.register((ServerPlayNetworkHandler handler, MinecraftServer server) -> {
+			PLAYERS_WITH_CLIENT.remove(handler.player);
+		});
+
 		LOGGER.info("MoreTools loaded!");
 	}
 
@@ -95,5 +125,27 @@ public class MoreTools implements ModInitializer {
 		public static final Item GOLDEN_VEIN_HAMMER = new VeinHammerToolItem((PickaxeItem) net.minecraft.item.Items.GOLDEN_PICKAXE, 6);
 		public static final Item DIAMOND_VEIN_HAMMER = new VeinHammerToolItem((PickaxeItem) net.minecraft.item.Items.DIAMOND_PICKAXE, 6);
 		public static final Item NETHERITE_VEIN_HAMMER = new VeinHammerToolItem((PickaxeItem) net.minecraft.item.Items.NETHERITE_PICKAXE, 7);
+	}
+
+	public static class Payloads {
+		public record S2CHandshake(boolean value) implements CustomPayload {
+			public static final CustomPayload.Id<S2CHandshake> ID = new CustomPayload.Id<>(Identifier.of(MOD_ID, "s2c_handshake"));
+			public static final PacketCodec<RegistryByteBuf, S2CHandshake> CODEC = PacketCodec.tuple(PacketCodecs.BOOL, S2CHandshake::value, S2CHandshake::new);
+
+			@Override
+			public Id<? extends CustomPayload> getId() {
+				return ID;
+			}
+		}
+
+		public record C2SHandshakeCallback(boolean value) implements CustomPayload {
+			public static final CustomPayload.Id<C2SHandshakeCallback> ID = new CustomPayload.Id<>(Identifier.of(MOD_ID, "c2s_handshake_callback"));
+			public static final PacketCodec<RegistryByteBuf, C2SHandshakeCallback> CODEC = PacketCodec.tuple(PacketCodecs.BOOL, C2SHandshakeCallback::value, C2SHandshakeCallback::new);
+
+			@Override
+			public Id<? extends CustomPayload> getId() {
+				return ID;
+			}
+		}
 	}
 }
