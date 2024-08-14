@@ -13,7 +13,6 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-import pw.smto.moretools.Config;
 import pw.smto.moretools.MoreTools;
 import pw.smto.moretools.util.MutableMaterial;
 
@@ -24,7 +23,7 @@ public class BaseToolItem extends MiningToolItem {
     public BaseToolItem(MiningToolItem baseItem, TagKey<Block> targetBlocks) {
         super(
                 // durability gets tripled
-                MutableMaterial.of(baseItem.getMaterial()).setDurability((int) (baseItem.getDefaultStack().getMaxDamage() * Config.Data.DURABILITY_MULTIPLIER)),
+                MutableMaterial.of(baseItem.getMaterial()).setDurability((int) (baseItem.getDefaultStack().getMaxDamage() * 3)),
                 // derive target blocks from baseItem
                 targetBlocks,
                 // damage and mining speed get nerfed
