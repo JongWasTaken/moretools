@@ -21,8 +21,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import pw.smto.moretools.item.BaseToolItem;
 
-import java.util.Set;
-
 @Environment(EnvType.CLIENT)
 public class MoreToolsClient implements ClientModInitializer {
     @Override
@@ -40,8 +38,6 @@ public class MoreToolsClient implements ClientModInitializer {
             PlayerEntity player = context.gameRenderer().getClient().player;
             if(player == null) return true;
             if (player.isSneaking()) return true;
-            float colorR = 0, colorG = 0, colorB = 0;
-
             if (player.getWorld().getBlockState(rtr.getBlockPos()).isAir()) return true;
 
             ItemStack tool = convertPolymerStack(player.getMainHandStack());
@@ -59,7 +55,7 @@ public class MoreToolsClient implements ClientModInitializer {
                             context.matrixStack(),
                             context.consumers().getBuffer(RenderLayer.getLines()),
                             new Box(block).offset(-d0, -d1, -d2),
-                            colorR, colorG, colorB, 0.4F
+                            1, 1, 1, 0.4F
                     );
                 }
                 return false;

@@ -2,18 +2,15 @@ package pw.smto.moretools.util;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
-import pw.smto.moretools.MoreTools;
 
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 // Taken from IndexLib, my shared library I am currently working on
 public class BlockBoxUtils {
