@@ -6,7 +6,6 @@ import eu.pb4.polymer.resourcepack.api.PolymerResourcePackUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.PickaxeItem;
@@ -25,11 +24,17 @@ import java.util.List;
 
 public class VeinHammerToolItem extends BaseToolItem implements PolymerItem {
     private final PolymerModelData model;
+    private final int range;
 
-    public VeinHammerToolItem(PickaxeItem base) {
+    public VeinHammerToolItem(PickaxeItem base, int range) {
         super(base, BlockTags.PICKAXE_MINEABLE);
         this.model = PolymerResourcePackUtils.requestModel(base, Identifier.of(MoreTools.MOD_ID,
                 "item/" + Registries.ITEM.getId(base).getPath().replace("pickaxe", "vein_hammer")));
+        this.range = range;
+    }
+
+    public VeinHammerToolItem(PickaxeItem base) {
+        this(base, 3);
     }
 
     @Override
@@ -43,12 +48,23 @@ public class VeinHammerToolItem extends BaseToolItem implements PolymerItem {
     }
     @Override
     public String getGimmickText() {
-        return "Allows breaking ore veins in one hit.";
+        return "Allows breaking ore veins quickly.";
     }
 
     public void doToolPower(BlockState state, BlockPos pos, Direction d, ServerPlayerEntity player, World world) {
         Block toFind = state.getBlock();
-        List<BlockPos> selection = BlockBoxUtils.getBlockCluster(toFind, pos, world, 3);
+        int range = 3;
+        if (state.isIn(BlockTags.COAL_ORES) ||
+            state.isIn(BlockTags.COPPER_ORES) ||
+            state.isIn(BlockTags.IRON_ORES) ||
+            state.isIn(BlockTags.GOLD_ORES) ||
+            state.isIn(BlockTags.DIAMOND_ORES) ||
+            state.isIn(BlockTags.EMERALD_ORES) ||
+            state.isIn(BlockTags.LAPIS_ORES) ||
+            state.isIn(BlockTags.REDSTONE_ORES) ||
+            state.getBlock().equals(Blocks.NETHER_QUARTZ_ORE) ||
+            state.getBlock().equals(Blocks.ANCIENT_DEBRIS)) range = this.range;
+        List<BlockPos> selection = BlockBoxUtils.getBlockCluster(toFind, pos, world, range);
         BlockState blockBoxSelection;
         for (BlockPos blockBoxSelectionPos : selection) {
 
