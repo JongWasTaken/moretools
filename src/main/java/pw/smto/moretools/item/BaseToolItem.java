@@ -41,7 +41,7 @@ public class BaseToolItem extends MiningToolItem {
     private boolean actAsBaseTool = false;
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
-        MoreTools.LOGGER.warn(String.valueOf(stack.get(DataComponentTypes.TOOL).defaultMiningSpeed()));
+        //MoreTools.LOGGER.warn(String.valueOf(stack.get(DataComponentTypes.TOOL).defaultMiningSpeed()));
         if (selected)
         {
             if (entity instanceof ServerPlayerEntity serverPlayerEntity) {
