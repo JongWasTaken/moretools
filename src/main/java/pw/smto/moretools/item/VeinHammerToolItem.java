@@ -11,9 +11,12 @@ import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.PickaxeItem;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -52,31 +55,27 @@ public class VeinHammerToolItem extends BaseToolItem implements PolymerItem, Pol
     public int getPolymerCustomModelData(ItemStack itemStack, @Nullable ServerPlayerEntity player) {
         return this.model.value();
     }
+
     @Override
-    public String getGimmickText() {
-        return "Allows breaking ore veins quickly.";
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
+        tooltip.add(Text.translatable("item.moretools.vein_hammer.tooltip").formatted(Formatting.GOLD));
     }
 
     @Override
-    public List<BlockPos> getAffectedArea(@Nullable World world, BlockPos pos, @Nullable Direction d, @Nullable Block target) {
+    public List<BlockPos> getAffectedArea(@Nullable World world, BlockPos pos, BlockState state, @Nullable Direction d, @Nullable Block target) {
         int range = 3;
-        var state = target.getDefaultState();
+        var targetState = target.getDefaultState();
         boolean useVanillaDirections = true;
-        if (state.isIn(BlockTags.COAL_ORES) ||
-                state.isIn(BlockTags.COPPER_ORES) ||
-                state.isIn(BlockTags.IRON_ORES) ||
-                state.isIn(BlockTags.GOLD_ORES) ||
-                state.isIn(BlockTags.DIAMOND_ORES) ||
-                state.isIn(BlockTags.EMERALD_ORES) ||
-                state.isIn(BlockTags.LAPIS_ORES) ||
-                state.isIn(BlockTags.REDSTONE_ORES) ||
-                state.getBlock().equals(Blocks.NETHER_QUARTZ_ORE) ||
-                state.getBlock().equals(Blocks.ANCIENT_DEBRIS)) {
+        if (targetState.isIn(MoreTools.BlockTags.VEIN_HAMMER_APPLICABLE)) {
             range = this.range;
             useVanillaDirections = false;
         }
 
-        var result = BlockBoxUtils.getBlockCluster(target, pos, world, range, useVanillaDirections);
+        List<BlockPos> result;
+        if (useVanillaDirections) {
+            result = BlockBoxUtils.getBlockCluster(target, pos, world, range, BlockBoxUtils.DirectionSets.CARDINAL);
+        } else result = BlockBoxUtils.getBlockCluster(target, pos, world, range, BlockBoxUtils.DirectionSets.EXTENDED);
+
         var list = new ArrayList<BlockPos>();
         for (BlockPos blockPos : result) {
             if (world.getBlockState(blockPos).isIn(BlockTags.PICKAXE_MINEABLE)) {
@@ -88,7 +87,7 @@ public class VeinHammerToolItem extends BaseToolItem implements PolymerItem, Pol
 
     public void doToolPower(BlockState state, BlockPos pos, Direction d, ServerPlayerEntity player, World world) {
         Block toFind = state.getBlock();
-        List<BlockPos> selection = getAffectedArea(world, pos, d, toFind);
+        List<BlockPos> selection = getAffectedArea(world, pos, state, d, toFind);
         BlockState blockBoxSelection;
         for (BlockPos blockBoxSelectionPos : selection) {
             blockBoxSelection = world.getBlockState(blockBoxSelectionPos);

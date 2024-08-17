@@ -37,13 +37,14 @@ public class MoreToolsClient implements ClientModInitializer {
             if (rtr.isInsideBlock()) return true;
             PlayerEntity player = context.gameRenderer().getClient().player;
             if(player == null) return true;
+            if (player.isSpectator()) return true;
             if (player.isSneaking()) return true;
             if (player.getWorld().getBlockState(rtr.getBlockPos()).isAir()) return true;
 
             ItemStack tool = convertPolymerStack(player.getMainHandStack());
             if(tool.isEmpty()) return true;
             if (tool.getItem() instanceof BaseToolItem t) {
-                var blocks = t.getAffectedArea(player.getWorld(), rtr.getBlockPos(), rtr.getSide(), player.getWorld().getBlockState(rtr.getBlockPos()).getBlock());
+                var blocks = t.getAffectedArea(player.getWorld(), rtr.getBlockPos(), player.getWorld().getBlockState(rtr.getBlockPos()), rtr.getSide(), player.getWorld().getBlockState(rtr.getBlockPos()).getBlock());
                 if(blocks == null || blocks.isEmpty()) return true;
 
                 double d0 = player.lastRenderX + (player.getX() - player.lastRenderX) * context.tickCounter().getTickDelta(false);

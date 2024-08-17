@@ -7,6 +7,8 @@ import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.block.Block;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.*;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
@@ -14,11 +16,14 @@ import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.lwjgl.glfw.GLFW;
 import org.slf4j.LoggerFactory;
 import pw.smto.moretools.item.ExcavatorToolItem;
 import pw.smto.moretools.item.HammerToolItem;
@@ -80,12 +85,14 @@ public class MoreTools implements ModInitializer {
 					entries.add(Items.NETHERITE_VEIN_HAMMER);
 				}).build());
 
+		// Client compatibility stuff
 		ServerPlayConnectionEvents.JOIN.register((ServerPlayNetworkHandler handler, PacketSender sender, MinecraftServer server) -> {
 			sender.sendPacket(new Payloads.S2CHandshake(true));
 		});
 		PayloadTypeRegistry.playS2C().register(Payloads.S2CHandshake.ID, Payloads.S2CHandshake.CODEC);
 		PayloadTypeRegistry.playC2S().register(Payloads.C2SHandshakeCallback.ID, Payloads.C2SHandshakeCallback.CODEC);
 		ServerPlayNetworking.registerGlobalReceiver(Payloads.C2SHandshakeCallback.ID, (payload, context) -> {
+			// Why isn't context.server() available here? Maybe I'm tweaking, but I feel like that was a thing?
 			context.player().server.execute(() -> {
 				LOGGER.info("Enabling client-side enhancements for player: " + context.player().getDisplayName().getString());
 				PLAYERS_WITH_CLIENT.add(context.player());
@@ -127,25 +134,31 @@ public class MoreTools implements ModInitializer {
 		public static final Item NETHERITE_VEIN_HAMMER = new VeinHammerToolItem((PickaxeItem) net.minecraft.item.Items.NETHERITE_PICKAXE, 7);
 	}
 
+	public class BlockTags {
+		public static final TagKey<Block> SAW_MINEABLE = TagKey.of(RegistryKeys.BLOCK, Identifier.of(MOD_ID, "saw_mineable"));
+		public static final TagKey<Block> VEIN_HAMMER_APPLICABLE = TagKey.of(RegistryKeys.BLOCK, Identifier.of(MOD_ID, "vein_hammer_applicable"));
+	}
+
 	public static class Payloads {
-		public record S2CHandshake(boolean value) implements CustomPayload {
+		public record S2CHandshake(boolean ignored) implements CustomPayload {
 			public static final CustomPayload.Id<S2CHandshake> ID = new CustomPayload.Id<>(Identifier.of(MOD_ID, "s2c_handshake"));
-			public static final PacketCodec<RegistryByteBuf, S2CHandshake> CODEC = PacketCodec.tuple(PacketCodecs.BOOL, S2CHandshake::value, S2CHandshake::new);
-
+			public static final PacketCodec<RegistryByteBuf, S2CHandshake> CODEC = PacketCodec.tuple(PacketCodecs.BOOL, S2CHandshake::ignored, S2CHandshake::new);
 			@Override
 			public Id<? extends CustomPayload> getId() {
 				return ID;
 			}
 		}
-
-		public record C2SHandshakeCallback(boolean value) implements CustomPayload {
+		public record C2SHandshakeCallback(boolean ignored) implements CustomPayload {
 			public static final CustomPayload.Id<C2SHandshakeCallback> ID = new CustomPayload.Id<>(Identifier.of(MOD_ID, "c2s_handshake_callback"));
-			public static final PacketCodec<RegistryByteBuf, C2SHandshakeCallback> CODEC = PacketCodec.tuple(PacketCodecs.BOOL, C2SHandshakeCallback::value, C2SHandshakeCallback::new);
-
+			public static final PacketCodec<RegistryByteBuf, C2SHandshakeCallback> CODEC = PacketCodec.tuple(PacketCodecs.BOOL, C2SHandshakeCallback::ignored, C2SHandshakeCallback::new);
 			@Override
 			public Id<? extends CustomPayload> getId() {
 				return ID;
 			}
 		}
+	}
+
+	public static void debuggerReleaseControl() {
+		GLFW.glfwSetInputMode(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
 	}
 }

@@ -11,9 +11,12 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -21,6 +24,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import pw.smto.moretools.MoreTools;
+import pw.smto.moretools.util.BlockBoxUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +33,7 @@ public class SawToolItem extends BaseToolItem implements PolymerItem, PolymerKee
     private final PolymerModelData model;
 
     public SawToolItem(AxeItem base) {
-        super(base, BlockTags.AXE_MINEABLE);
+        super(base, MoreTools.BlockTags.SAW_MINEABLE);
         this.model = PolymerResourcePackUtils.requestModel(base, Identifier.of(MoreTools.MOD_ID,
                 "item/" + Registries.ITEM.getId(base).getPath().replace("axe", "saw")));
     }
@@ -48,32 +52,27 @@ public class SawToolItem extends BaseToolItem implements PolymerItem, PolymerKee
     }
 
     @Override
-    public String getGimmickText() {
-        return "Breaks as many logs as possible, but only upwards.";
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
+        tooltip.add(Text.translatable("item.moretools.saw.tooltip").formatted(Formatting.GOLD));
+        tooltip.add(Text.translatable("item.moretools.saw.tooltip.2").formatted(Formatting.GOLD));
     }
 
     @Override
-    public List<BlockPos> getAffectedArea(@Nullable World world, BlockPos pos, @Nullable Direction d, @Nullable Block target) {
-        var list = new ArrayList<BlockPos>() {{ add(pos); }};
-
-        BlockPos.Mutable up = pos.mutableCopy();
-        int limit = 0;
-        while (world.getBlockState(up.move(Direction.UP)).isIn(BlockTags.LOGS) && limit < 127) {
-            list.add(up.toImmutable());
-            limit++;
-        }
-
+    public List<BlockPos> getAffectedArea(World world, BlockPos pos, BlockState state, @Nullable Direction d, @Nullable Block target) {
+        var list = new ArrayList<BlockPos>();
+        if (world == null) return list;
+        if (!state.isIn(BlockTags.LOGS)) return list;
+        list.addAll(BlockBoxUtils.getBlockCluster(target, pos, world, 30, BlockBoxUtils.DirectionSets.DOWN_RESTRICTED_EXTENDED));
         return list;
     }
 
     @Override
     public void doToolPower(BlockState state, BlockPos pos, Direction d, ServerPlayerEntity player, World world) {
-        if (state.isIn(BlockTags.LOGS)) {
-            int damage = 1;
+            int damage = 0;
 
             final int maxDamage = Math.abs(player.getMainHandStack().getMaxDamage() - player.getMainHandStack().getDamage());
 
-            for (BlockPos blockPos : getAffectedArea(world, pos, d, state.getBlock())) {
+            for (BlockPos blockPos : getAffectedArea(world, pos, state, d, state.getBlock())) {
                 if (damage >= maxDamage-1) break;
                 world.breakBlock(blockPos, !player.isCreative());
                 damage++;
@@ -87,6 +86,5 @@ public class SawToolItem extends BaseToolItem implements PolymerItem, PolymerKee
                     player.getMainHandStack().damage(damage, player, EquipmentSlot.OFFHAND);
                 }
             }
-        }
     }
 }

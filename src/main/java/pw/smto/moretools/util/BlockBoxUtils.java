@@ -98,58 +98,97 @@ public class BlockBoxUtils {
         );
     }
 
-    public static List<BlockPos> getBlockCluster(Block toFind, BlockPos pos, World world, int limit, boolean useVanillaDirections) {
+    public static List<BlockPos> getBlockCluster(Block toFind, BlockPos pos, World world, int limit, DirectionSet directions) {
         Set<BlockPos> connectedBlocks = new HashSet<>();
         Set<BlockPos> visited = new HashSet<>();
-        freeDfs(world, pos, toFind, connectedBlocks, visited, 0, limit, useVanillaDirections);
+        freeDfs(world, pos, toFind, connectedBlocks, visited, 0, limit, directions);
         return sortBlockSet(pos, connectedBlocks);
     }
 
-    private static final List<Vec3i> DIRECTIONS = new ArrayList<>() {{
-        // Vanilla directions
-        add(new Vec3i(0, -1, 0)); // DOWN
-        add(new Vec3i(0, 1, 0)); // UP
-        add(new Vec3i(-1, 0, 0)); // WEST
-        add(new Vec3i(1, 0, 0)); // EAST
-        add(new Vec3i(0, 0, -1)); // SOUTH
-        add(new Vec3i(0, 0, 1)); // NORTH
-        // Corners
-        add(new Vec3i(0, -1, 1)); // DOWN + NORTH
-        add(new Vec3i(1, -1, 0)); // DOWN + EAST
-        add(new Vec3i(0, -1, -1)); // DOWN + SOUTH
-        add(new Vec3i(-1, -1, 0)); // DOWN + WEST
-        add(new Vec3i(0, 1, 1)); // UP + NORTH
-        add(new Vec3i(1, 1, 0)); // UP + EAST
-        add(new Vec3i(0, 1, -1)); // UP + SOUTH
-        add(new Vec3i(-1, 1, 0)); // UP + WEST
-        // Corners of corners
-        add(new Vec3i(1, -1, 1)); // DOWN + NORTH + EAST
-        add(new Vec3i(-1, -1, 1)); // DOWN + NORTH + WEST
-        add(new Vec3i(1, -1, -1)); // DOWN + SOUTH + EAST
-        add(new Vec3i(-1, -1, -1)); // DOWN + SOUTH + WEST
-        add(new Vec3i(1, 1, 1)); // UP + NORTH + EAST
-        add(new Vec3i(-1, 1, 1)); // UP + NORTH + WEST
-        add(new Vec3i(1, 1, -1)); // UP + SOUTH + EAST
-        add(new Vec3i(-1, 1, -1)); // UP + SOUTH + WEST
+    public record DirectionSet(List<Vec3i> directions) {
+        public static DirectionSet of(Vec3i... directions) {
+            return new DirectionSet(Arrays.asList(directions));
+        }
+    }
 
-    }};
+    public static class DirectionSets {
+        public static final DirectionSet CARDINAL = new DirectionSet(EnumSet.allOf(Direction.class).stream().map(Direction::getVector).toList());
+        public static final DirectionSet EXTENDED = DirectionSet.of(
+                // Vanilla directions
+                new Vec3i(0, -1, 0), // DOWN
+                new Vec3i(0, 1, 0), // UP
+                new Vec3i(-1, 0, 0), // WEST
+                new Vec3i(1, 0, 0), // EAST
+                new Vec3i(0, 0, -1), // SOUTH
+                new Vec3i(0, 0, 1), // NORTH
+                // Corners
+                new Vec3i(1, 0, 1), // NORTH + EAST
+                new Vec3i(-1, 0, 1), // NORTH + WEST
+                new Vec3i(1, 0, -1), // SOUTH + EAST
+                new Vec3i(-1, 0, -1), // SOUTH + WEST
+                new Vec3i(0, -1, 1), // DOWN + NORTH
+                new Vec3i(1, -1, 0), // DOWN + EAST
+                new Vec3i(0, -1, -1), // DOWN + SOUTH
+                new Vec3i(-1, -1, 0), // DOWN + WEST
+                new Vec3i(0, 1, 1), // UP + NORTH
+                new Vec3i(1, 1, 0), // UP + EAST
+                new Vec3i(0, 1, -1), // UP + SOUTH
+                new Vec3i(-1, 1, 0), // UP + WEST
+                // Corners of corners
+                new Vec3i(1, -1, 1), // DOWN + NORTH + EAST
+                new Vec3i(-1, -1, 1), // DOWN + NORTH + WEST
+                new Vec3i(1, -1, -1), // DOWN + SOUTH + EAST
+                new Vec3i(-1, -1, -1), // DOWN + SOUTH + WEST
+                new Vec3i(1, 1, 1), // UP + NORTH + EAST
+                new Vec3i(-1, 1, 1), // UP + NORTH + WEST
+                new Vec3i(1, 1, -1), // UP + SOUTH + EAST
+                new Vec3i(-1, 1, -1) // UP + SOUTH + WEST
+        );
+        public static final DirectionSet DOWN_RESTRICTED_EXTENDED = DirectionSet.of(
+                // Vanilla directions
+                //new Vec3i(0, -1, 0), // DOWN
+                new Vec3i(0, 1, 0), // UP
+                new Vec3i(-1, 0, 0), // WEST
+                new Vec3i(1, 0, 0), // EAST
+                new Vec3i(0, 0, -1), // SOUTH
+                new Vec3i(0, 0, 1), // NORTH
+                // Corners
+                new Vec3i(1, 0, 1), // NORTH + EAST
+                new Vec3i(-1, 0, 1), // NORTH + WEST
+                new Vec3i(1, 0, -1), // SOUTH + EAST
+                new Vec3i(-1, 0, -1), // SOUTH + WEST
+                new Vec3i(0, -1, 1), // DOWN + NORTH
+                new Vec3i(1, -1, 0), // DOWN + EAST
+                new Vec3i(0, -1, -1), // DOWN + SOUTH
+                new Vec3i(-1, -1, 0), // DOWN + WEST
+                new Vec3i(0, 1, 1), // UP + NORTH
+                new Vec3i(1, 1, 0), // UP + EAST
+                new Vec3i(0, 1, -1), // UP + SOUTH
+                new Vec3i(-1, 1, 0), // UP + WEST
+                // Corners of corners
+                new Vec3i(1, -1, 1), // DOWN + NORTH + EAST
+                new Vec3i(-1, -1, 1), // DOWN + NORTH + WEST
+                new Vec3i(1, -1, -1), // DOWN + SOUTH + EAST
+                new Vec3i(-1, -1, -1), // DOWN + SOUTH + WEST
+                new Vec3i(1, 1, 1), // UP + NORTH + EAST
+                new Vec3i(-1, 1, 1), // UP + NORTH + WEST
+                new Vec3i(1, 1, -1), // UP + SOUTH + EAST
+                new Vec3i(-1, 1, -1) // UP + SOUTH + WEST
+        );
 
-    private static void freeDfs(World world, BlockPos currentPos, Block pickBlock, Set<BlockPos> connectedBlocks, Set<BlockPos> visited, int depth, int limit, boolean useVanillaDirections) {
+    }
+
+
+
+    private static void freeDfs(World world, BlockPos currentPos, Block pickBlock, Set<BlockPos> connectedBlocks, Set<BlockPos> visited, int depth, int limit, DirectionSet directions) {
         if (!visited.contains(currentPos) && depth < limit) {
             visited.add(currentPos);
             // Check if the current block matches the origin block type
             if (depth == 0 || world.getBlockState(currentPos).getBlock().equals(pickBlock)) {
                 connectedBlocks.add(currentPos);
-                if (useVanillaDirections) {
-                    for (Direction direction : EnumSet.allOf(Direction.class)) {
-                        BlockPos neighborPos = currentPos.offset(direction);
-                        freeDfs(world, neighborPos, pickBlock, connectedBlocks, visited, depth + 1, limit, useVanillaDirections);
-                    }
-                } else {
-                    for (Vec3i direction : DIRECTIONS) {
-                        BlockPos neighborPos = offset(currentPos, direction);
-                        freeDfs(world, neighborPos, pickBlock, connectedBlocks, visited, depth + 1, limit, useVanillaDirections);
-                    }
+                for (Vec3i direction : directions.directions()) {
+                    BlockPos neighborPos = offset(currentPos, direction);
+                    freeDfs(world, neighborPos, pickBlock, connectedBlocks, visited, depth + 1, limit, directions);
                 }
             }
         }

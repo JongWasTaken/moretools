@@ -10,9 +10,12 @@ import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.PickaxeItem;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -45,13 +48,14 @@ public class HammerToolItem extends BaseToolItem implements PolymerItem, Polymer
     public int getPolymerCustomModelData(ItemStack itemStack, @Nullable ServerPlayerEntity player) {
         return this.model.value();
     }
+
     @Override
-    public String getGimmickText() {
-        return "Allows breaking blocks in a 3x3 radius.";
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
+        tooltip.add(Text.translatable("item.moretools.hammer.tooltip").formatted(Formatting.GOLD));
     }
 
     @Override
-    public List<BlockPos> getAffectedArea(@Nullable World world, BlockPos pos, @Nullable Direction d, @Nullable Block target) {
+    public List<BlockPos> getAffectedArea(@Nullable World world, BlockPos pos, BlockState state, @Nullable Direction d, @Nullable Block target) {
         var result = BlockBoxUtils.getSurroundingBlocks(pos, d, 1).toList();
         var list = new ArrayList<BlockPos>();
         for (BlockPos blockPos : result) {
@@ -63,7 +67,7 @@ public class HammerToolItem extends BaseToolItem implements PolymerItem, Polymer
     }
 
     public void doToolPower(BlockState state, BlockPos pos, Direction d, ServerPlayerEntity player, World world) {
-        List<BlockPos> selection = getAffectedArea(world, pos, d, state.getBlock());
+        List<BlockPos> selection = getAffectedArea(world, pos, state, d, state.getBlock());
         BlockState blockBoxSelection;
         for (BlockPos blockBoxSelectionPos : selection) {
             blockBoxSelection = world.getBlockState(blockBoxSelectionPos);

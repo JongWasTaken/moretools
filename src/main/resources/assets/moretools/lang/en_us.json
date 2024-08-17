@@ -27,6 +27,12 @@
   "item.moretools.diamond_saw": "Diamond Saw",
   "item.moretools.netherite_saw": "Netherite Saw",
 
+  "item.moretools.hammer.tooltip": "Allows breaking blocks in a 3x3 radius.",
+  "item.moretools.vein_hammer.tooltip": "Allows breaking ore veins quickly.",
+  "item.moretools.excavator.tooltip": "Allows breaking blocks in a 3x3 radius.",
+  "item.moretools.saw.tooltip":  "Fells most trees in one go.",
+  "item.moretools.saw.tooltip.2": "Be careful around wooden structures!",
+
   "tag.item.moretools.hammers": "Moretools Hammers",
   "tag.item.moretools.vein_hammers": "Moretools Vein Hammers",
   "tag.item.moretools.excavators": "Moretools Excavators",

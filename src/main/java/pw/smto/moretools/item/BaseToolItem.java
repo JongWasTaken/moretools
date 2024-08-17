@@ -72,22 +72,13 @@ public class BaseToolItem extends MiningToolItem {
         }
     }
 
-    public String getGimmickText() {
-        return "";
-    }
-
-    @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        tooltip.add(Text.literal(getGimmickText()).formatted(Formatting.GOLD));
-    }
-
     public void postBlockBreak(BlockState state, BlockPos pos, Direction d, ServerPlayerEntity player, World world) {
         if (this.actAsBaseTool) return;
         doToolPower(state, pos, d, player, world);
     }
 
-    public List<BlockPos> getAffectedArea(@Nullable World world, BlockPos pos, @Nullable Direction d, @Nullable Block target) {
-        return new ArrayList<BlockPos>() {{ add(pos); }};
+    public List<BlockPos> getAffectedArea(@Nullable World world, BlockPos pos, BlockState state, @Nullable Direction d, @Nullable Block target) {
+        return new ArrayList<BlockPos>();
     }
 
     public void doToolPower(BlockState state, BlockPos pos, Direction d, ServerPlayerEntity player, World world) {}
