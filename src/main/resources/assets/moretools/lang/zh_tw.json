@@ -1,0 +1,40 @@
+{
+  "item.moretools.wooden_hammer": "木錘",
+  "item.moretools.stone_hammer": "石錘",
+  "item.moretools.iron_hammer": "鐵錘",
+  "item.moretools.golden_hammer": "金錘",
+  "item.moretools.diamond_hammer": "鑽石錘",
+  "item.moretools.netherite_hammer": "獄髓錘",
+
+  "item.moretools.wooden_vein_hammer": "木連鎖錘",
+  "item.moretools.stone_vein_hammer": "石連鎖錘",
+  "item.moretools.iron_vein_hammer": "鐵連鎖錘",
+  "item.moretools.golden_vein_hammer": "金連鎖錘",
+  "item.moretools.diamond_vein_hammer": "鑽石連鎖錘",
+  "item.moretools.netherite_vein_hammer": "獄髓連鎖錘",
+
+  "item.moretools.wooden_excavator": "木挖掘器",
+  "item.moretools.stone_excavator": "石挖掘器",
+  "item.moretools.iron_excavator": "鐵挖掘器",
+  "item.moretools.golden_excavator": "金挖掘器",
+  "item.moretools.diamond_excavator": "鑽石挖掘器",
+  "item.moretools.netherite_excavator": "獄髓挖掘器",
+
+  "item.moretools.wooden_saw": "木鋸",
+  "item.moretools.stone_saw": "石鋸",
+  "item.moretools.iron_saw": "鐵鋸",
+  "item.moretools.golden_saw": "金鋸",
+  "item.moretools.diamond_saw": "鑽石鋸",
+  "item.moretools.netherite_saw": "獄髓鋸",
+
+  "item.moretools.hammer.tooltip": "允許破壞 3x3 範圍內的方塊。",
+  "item.moretools.vein_hammer.tooltip": "允許快速破壞礦脈。",
+  "item.moretools.excavator.tooltip": "允許破壞 3x3 範圍內的方塊。",
+  "item.moretools.saw.tooltip":  "一次性砍伐大多數樹木。",
+  "item.moretools.saw.tooltip.2": "在木質結構附近要小心！",
+
+  "tag.item.moretools.hammers": "更多工具 錘",
+  "tag.item.moretools.vein_hammers": "更多工具 連鎖錘",
+  "tag.item.moretools.excavators": "更多工具 挖掘器",
+  "tag.item.moretools.saws": "更多工具 鋸"
+}
