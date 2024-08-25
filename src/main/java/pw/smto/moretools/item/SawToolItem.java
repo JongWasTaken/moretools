@@ -7,7 +7,6 @@ import eu.pb4.polymer.resourcepack.api.PolymerModelData;
 import eu.pb4.polymer.resourcepack.api.PolymerResourcePackUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -17,7 +16,6 @@ import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -69,22 +67,11 @@ public class SawToolItem extends BaseToolItem implements PolymerItem, PolymerKee
     @Override
     public void doToolPower(BlockState state, BlockPos pos, Direction d, ServerPlayerEntity player, World world) {
             int damage = 0;
-
             final int maxDamage = Math.abs(player.getMainHandStack().getMaxDamage() - player.getMainHandStack().getDamage());
-
             for (BlockPos blockPos : getAffectedArea(world, pos, state, d, state.getBlock())) {
                 if (damage >= maxDamage-1) break;
-                world.breakBlock(blockPos, !player.isCreative());
+                player.interactionManager.tryBreakBlock(blockPos);
                 damage++;
-            }
-
-            if (!player.isCreative()) {
-                if (player.getActiveHand() == Hand.MAIN_HAND) {
-                    player.getMainHandStack().damage(damage, player, EquipmentSlot.MAINHAND);
-                }
-                else {
-                    player.getMainHandStack().damage(damage, player, EquipmentSlot.OFFHAND);
-                }
             }
     }
 }

@@ -9,11 +9,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.MiningToolItem;
 import net.minecraft.item.ToolMaterial;
-import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -38,7 +35,7 @@ public class BaseToolItem extends MiningToolItem {
     public BaseToolItem(MiningToolItem baseItem, TagKey<Block> targetBlocks) {
         super(
                 // durability gets tripled
-                MutableMaterial.of(baseItem.getMaterial()).setDurability((int) (baseItem.getDefaultStack().getMaxDamage() * 3)),
+                MutableMaterial.of(baseItem.getMaterial()).setDurability((baseItem.getDefaultStack().getMaxDamage() * 3)),
                 targetBlocks,
                 // damage and mining speed get nerfed
                 new Item.Settings().attributeModifiers(
@@ -78,7 +75,7 @@ public class BaseToolItem extends MiningToolItem {
     }
 
     public List<BlockPos> getAffectedArea(@Nullable World world, BlockPos pos, BlockState state, @Nullable Direction d, @Nullable Block target) {
-        return new ArrayList<BlockPos>();
+        return new ArrayList<>();
     }
 
     public void doToolPower(BlockState state, BlockPos pos, Direction d, ServerPlayerEntity player, World world) {}

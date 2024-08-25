@@ -56,11 +56,14 @@ public class HammerToolItem extends BaseToolItem implements PolymerItem, Polymer
 
     @Override
     public List<BlockPos> getAffectedArea(@Nullable World world, BlockPos pos, BlockState state, @Nullable Direction d, @Nullable Block target) {
-        var result = BlockBoxUtils.getSurroundingBlocks(pos, d, 1).toList();
         var list = new ArrayList<BlockPos>();
-        for (BlockPos blockPos : result) {
-            if (world.getBlockState(blockPos).isIn(BlockTags.PICKAXE_MINEABLE)) {
-                list.add(blockPos);
+        List<BlockPos> result = new ArrayList<>();
+        if (d != null) result = BlockBoxUtils.getSurroundingBlocks(pos, d, 1).toList();
+        if (world != null) {
+            for (BlockPos blockPos : result) {
+                if (world.getBlockState(blockPos).isIn(BlockTags.PICKAXE_MINEABLE)) {
+                    list.add(blockPos);
+                }
             }
         }
         return list;
@@ -68,24 +71,9 @@ public class HammerToolItem extends BaseToolItem implements PolymerItem, Polymer
 
     public void doToolPower(BlockState state, BlockPos pos, Direction d, ServerPlayerEntity player, World world) {
         List<BlockPos> selection = getAffectedArea(world, pos, state, d, state.getBlock());
-        BlockState blockBoxSelection;
         for (BlockPos blockBoxSelectionPos : selection) {
-            blockBoxSelection = world.getBlockState(blockBoxSelectionPos);
             if (!blockBoxSelectionPos.equals(pos)) {
-                blockBoxSelection.getBlock().onBreak(world, pos, blockBoxSelection, player);
-                boolean bl = world.breakBlock(blockBoxSelectionPos, false);
-                if (bl) {
-                    blockBoxSelection.getBlock().onBroken(world, pos, blockBoxSelection);
-                }
-                if (!player.isCreative()) {
-                    ItemStack itemStack = player.getMainHandStack();
-                    ItemStack itemStack2 = itemStack.copy();
-                    boolean bl2 = player.canHarvest(blockBoxSelection);
-                    itemStack.postMine(world, blockBoxSelection, pos, player);
-                    if (bl && bl2) {
-                        blockBoxSelection.getBlock().afterBreak(world, player, pos, blockBoxSelection, world.getBlockEntity(blockBoxSelectionPos), itemStack2);
-                    }
-                }
+                player.interactionManager.tryBreakBlock(blockBoxSelectionPos);
             }
         }
     }

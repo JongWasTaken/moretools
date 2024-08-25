@@ -7,7 +7,6 @@ import eu.pb4.polymer.resourcepack.api.PolymerModelData;
 import eu.pb4.polymer.resourcepack.api.PolymerResourcePackUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.PickaxeItem;
@@ -63,8 +62,11 @@ public class VeinHammerToolItem extends BaseToolItem implements PolymerItem, Pol
 
     @Override
     public List<BlockPos> getAffectedArea(@Nullable World world, BlockPos pos, BlockState state, @Nullable Direction d, @Nullable Block target) {
+        var list = new ArrayList<BlockPos>();
         int range = 3;
-        var targetState = target.getDefaultState();
+        BlockState targetState = null;
+        if (target != null) targetState = target.getDefaultState();
+        if (targetState == null) return list;
         boolean useVanillaDirections = true;
         if (targetState.isIn(MoreTools.BlockTags.VEIN_HAMMER_APPLICABLE)) {
             range = this.range;
@@ -76,36 +78,21 @@ public class VeinHammerToolItem extends BaseToolItem implements PolymerItem, Pol
             result = BlockBoxUtils.getBlockCluster(target, pos, world, range, BlockBoxUtils.DirectionSets.CARDINAL);
         } else result = BlockBoxUtils.getBlockCluster(target, pos, world, range, BlockBoxUtils.DirectionSets.EXTENDED);
 
-        var list = new ArrayList<BlockPos>();
-        for (BlockPos blockPos : result) {
-            if (world.getBlockState(blockPos).isIn(BlockTags.PICKAXE_MINEABLE)) {
-                list.add(blockPos);
+        if (world != null) {
+            for (BlockPos blockPos : result) {
+                if (world.getBlockState(blockPos).isIn(BlockTags.PICKAXE_MINEABLE)) {
+                    list.add(blockPos);
+                }
             }
         }
         return list;
     }
 
     public void doToolPower(BlockState state, BlockPos pos, Direction d, ServerPlayerEntity player, World world) {
-        Block toFind = state.getBlock();
-        List<BlockPos> selection = getAffectedArea(world, pos, state, d, toFind);
-        BlockState blockBoxSelection;
+        List<BlockPos> selection = getAffectedArea(world, pos, state, d, state.getBlock());
         for (BlockPos blockBoxSelectionPos : selection) {
-            blockBoxSelection = world.getBlockState(blockBoxSelectionPos);
             if (!blockBoxSelectionPos.equals(pos)) {
-                blockBoxSelection.getBlock().onBreak(world, pos, blockBoxSelection, player);
-                boolean bl = world.breakBlock(blockBoxSelectionPos, false);
-                if (bl) {
-                    blockBoxSelection.getBlock().onBroken(world, pos, blockBoxSelection);
-                }
-                if (!player.isCreative()) {
-                    ItemStack itemStack = player.getMainHandStack();
-                    ItemStack itemStack2 = itemStack.copy();
-                    boolean bl2 = player.canHarvest(blockBoxSelection);
-                    itemStack.postMine(world, blockBoxSelection, pos, player);
-                    if (bl && bl2) {
-                        blockBoxSelection.getBlock().afterBreak(world, player, pos, blockBoxSelection, world.getBlockEntity(blockBoxSelectionPos), itemStack2);
-                    }
-                }
+                player.interactionManager.tryBreakBlock(blockBoxSelectionPos);
             }
         }
     }
