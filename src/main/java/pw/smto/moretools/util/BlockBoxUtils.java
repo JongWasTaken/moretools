@@ -24,12 +24,12 @@ public class BlockBoxUtils {
         BlockPos secondCorner;
         int negativeMaxBlocks = Integer.parseInt("-" + radius);
 
-        if (side.equals(Direction.UP) || side.equals(Direction.DOWN)) {
+        if (side == Direction.UP || side == Direction.DOWN) {
             firstCorner = pos.add(negativeMaxBlocks,0,negativeMaxBlocks);
             secondCorner = pos.add(radius,0,radius);
         }
         else {
-            if (side.equals(Direction.NORTH) || side.equals(Direction.SOUTH)) { // not Z
+            if (side == Direction.NORTH || side == Direction.SOUTH) { // not Z
                 firstCorner = pos.add(negativeMaxBlocks,negativeMaxBlocks,0);
                 secondCorner = pos.add(radius,radius,0);
             }
@@ -48,8 +48,8 @@ public class BlockBoxUtils {
     public static List<BlockPos> getBlockCluster(Block toFind, BlockPos pos, World world, int limit, DirectionSet directions) {
         Set<BlockPos> connectedBlocks = new HashSet<>();
         Set<BlockPos> visited = new HashSet<>();
-        freeDfs(world, pos, toFind, connectedBlocks, visited, 0, limit, directions);
-        return sortBlockSet(pos, connectedBlocks);
+        BlockBoxUtils.freeDfs(world, pos, toFind, connectedBlocks, visited, 0, limit, directions);
+        return BlockBoxUtils.sortBlockSet(pos, connectedBlocks);
     }
 
     public record DirectionSet(List<Vec3i> directions) {
@@ -134,8 +134,8 @@ public class BlockBoxUtils {
             if (depth == 0 || world.getBlockState(currentPos).getBlock().equals(pickBlock)) {
                 connectedBlocks.add(currentPos);
                 for (Vec3i direction : directions.directions()) {
-                    BlockPos neighborPos = offset(currentPos, direction);
-                    freeDfs(world, neighborPos, pickBlock, connectedBlocks, visited, depth + 1, limit, directions);
+                    BlockPos neighborPos = BlockBoxUtils.offset(currentPos, direction);
+                    BlockBoxUtils.freeDfs(world, neighborPos, pickBlock, connectedBlocks, visited, depth + 1, limit, directions);
                 }
             }
         }
@@ -153,8 +153,8 @@ public class BlockBoxUtils {
             }
 
             public int compare(BlockPos o1, BlockPos o2) {
-                double dist1 = distanceTo(o1, origin);
-                double dist2 = distanceTo(o2, origin);
+                double dist1 = this.distanceTo(o1, origin);
+                double dist2 = this.distanceTo(o2, origin);
                 return Double.compare(dist1, dist2);
             }
         });

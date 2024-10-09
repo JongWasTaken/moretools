@@ -66,12 +66,12 @@ public class SawToolItem extends BaseToolItem implements PolymerItem, PolymerKee
 
     @Override
     public void doToolPower(BlockState state, BlockPos pos, Direction d, ServerPlayerEntity player, World world) {
-            int damage = 0;
-            final int maxDamage = Math.abs(player.getMainHandStack().getMaxDamage() - player.getMainHandStack().getDamage());
-            for (BlockPos blockPos : getAffectedArea(world, pos, state, d, state.getBlock())) {
-                if (damage >= maxDamage-1) break;
-                player.interactionManager.tryBreakBlock(blockPos);
-                damage++;
-            }
+        int damage = 0;
+        int maxDamage = Math.abs(player.getMainHandStack().getMaxDamage() - player.getMainHandStack().getDamage());
+        for (BlockPos blockPos : this.getAffectedArea(world, pos, state, d, state.getBlock())) {
+            if (damage >= maxDamage-1) break;
+            player.interactionManager.tryBreakBlock(blockPos);
+            damage++;
+        }
     }
 }

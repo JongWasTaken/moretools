@@ -8,7 +8,6 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.Block;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.*;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
@@ -23,7 +22,6 @@ import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import org.lwjgl.glfw.GLFW;
 import org.slf4j.LoggerFactory;
 import pw.smto.moretools.item.ExcavatorToolItem;
 import pw.smto.moretools.item.HammerToolItem;
@@ -34,28 +32,29 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class MoreTools implements ModInitializer {
 	public static final String MOD_ID = "moretools";
-	public static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+	public static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(MoreTools.MOD_ID);
 	public static final List<ServerPlayerEntity> PLAYERS_WITH_CLIENT = new ArrayList<>();
 
 	@Override
 	public void onInitialize() {
-		PolymerResourcePackUtils.addModAssets(MOD_ID);
+		PolymerResourcePackUtils.addModAssets(MoreTools.MOD_ID);
 		PolymerResourcePackUtils.markAsRequired();
 
 		// Register all items
 		for (Field field : Items.class.getFields()) {
             try {
-				Registry.register(Registries.ITEM, Identifier.of(MOD_ID, field.getName().toLowerCase(Locale.ROOT)), (Item)field.get(null));
+				Registry.register(Registries.ITEM, Identifier.of(MoreTools.MOD_ID, field.getName().toLowerCase(Locale.ROOT)), (Item)field.get(null));
             } catch (Exception ignored) {
-				LOGGER.error("Failed to register item: " + field.getName());
+                MoreTools.LOGGER.error("Failed to register item: {}", field.getName());
 			}
         }
 
 		// Create an item group with all items
-		PolymerItemGroupUtils.registerPolymerItemGroup(Identifier.of(MOD_ID,"items"), PolymerItemGroupUtils.builder()
+		PolymerItemGroupUtils.registerPolymerItemGroup(Identifier.of(MoreTools.MOD_ID,"items"), PolymerItemGroupUtils.builder()
 				.icon(() -> new ItemStack(Items.DIAMOND_HAMMER))
 				.displayName(Text.of("More Tools"))
 				.entries((context, entries) -> {
@@ -86,25 +85,21 @@ public class MoreTools implements ModInitializer {
 				}).build());
 
 		// Client compatibility stuff
-		ServerPlayConnectionEvents.JOIN.register((ServerPlayNetworkHandler handler, PacketSender sender, MinecraftServer server) -> {
-			sender.sendPacket(new Payloads.S2CHandshake(true));
-		});
+		ServerPlayConnectionEvents.JOIN.register((ServerPlayNetworkHandler handler, PacketSender sender, MinecraftServer server) -> sender.sendPacket(new Payloads.S2CHandshake(true)));
 		PayloadTypeRegistry.playS2C().register(Payloads.S2CHandshake.ID, Payloads.S2CHandshake.CODEC);
 		PayloadTypeRegistry.playC2S().register(Payloads.C2SHandshakeCallback.ID, Payloads.C2SHandshakeCallback.CODEC);
 		ServerPlayNetworking.registerGlobalReceiver(Payloads.C2SHandshakeCallback.ID, (payload, context) -> {
 			// Why isn't context.server() available here? Maybe I'm tweaking, but I feel like that was a thing?
 			context.player().server.execute(() -> {
-				LOGGER.info("Enabling client-side enhancements for player: " + context.player().getDisplayName().getString());
-				PLAYERS_WITH_CLIENT.add(context.player());
+                MoreTools.LOGGER.info("Enabling client-side enhancements for player: {}", Objects.requireNonNull(context.player().getDisplayName()).getString());
+                MoreTools.PLAYERS_WITH_CLIENT.add(context.player());
 				context.player().getInventory().markDirty();
 			});
 		});
 
-		ServerPlayConnectionEvents.DISCONNECT.register((ServerPlayNetworkHandler handler, MinecraftServer server) -> {
-			PLAYERS_WITH_CLIENT.remove(handler.player);
-		});
+		ServerPlayConnectionEvents.DISCONNECT.register((ServerPlayNetworkHandler handler, MinecraftServer server) -> MoreTools.PLAYERS_WITH_CLIENT.remove(handler.player));
 
-		LOGGER.info("MoreTools loaded!");
+        MoreTools.LOGGER.info("MoreTools loaded!");
 	}
 
 	public static class Items {
@@ -134,31 +129,27 @@ public class MoreTools implements ModInitializer {
 		public static final Item NETHERITE_VEIN_HAMMER = new VeinHammerToolItem((PickaxeItem) net.minecraft.item.Items.NETHERITE_PICKAXE, 7);
 	}
 
-	public class BlockTags {
-		public static final TagKey<Block> SAW_MINEABLE = TagKey.of(RegistryKeys.BLOCK, Identifier.of(MOD_ID, "saw_mineable"));
-		public static final TagKey<Block> VEIN_HAMMER_APPLICABLE = TagKey.of(RegistryKeys.BLOCK, Identifier.of(MOD_ID, "vein_hammer_applicable"));
+	public static class BlockTags {
+		public static final TagKey<Block> SAW_MINEABLE = TagKey.of(RegistryKeys.BLOCK, Identifier.of(MoreTools.MOD_ID, "saw_mineable"));
+		public static final TagKey<Block> VEIN_HAMMER_APPLICABLE = TagKey.of(RegistryKeys.BLOCK, Identifier.of(MoreTools.MOD_ID, "vein_hammer_applicable"));
 	}
 
 	public static class Payloads {
 		public record S2CHandshake(boolean ignored) implements CustomPayload {
-			public static final CustomPayload.Id<S2CHandshake> ID = new CustomPayload.Id<>(Identifier.of(MOD_ID, "s2c_handshake"));
+			public static final CustomPayload.Id<S2CHandshake> ID = new CustomPayload.Id<>(Identifier.of(MoreTools.MOD_ID, "s2c_handshake"));
 			public static final PacketCodec<RegistryByteBuf, S2CHandshake> CODEC = PacketCodec.tuple(PacketCodecs.BOOL, S2CHandshake::ignored, S2CHandshake::new);
 			@Override
 			public Id<? extends CustomPayload> getId() {
-				return ID;
+				return S2CHandshake.ID;
 			}
 		}
 		public record C2SHandshakeCallback(boolean ignored) implements CustomPayload {
-			public static final CustomPayload.Id<C2SHandshakeCallback> ID = new CustomPayload.Id<>(Identifier.of(MOD_ID, "c2s_handshake_callback"));
+			public static final CustomPayload.Id<C2SHandshakeCallback> ID = new CustomPayload.Id<>(Identifier.of(MoreTools.MOD_ID, "c2s_handshake_callback"));
 			public static final PacketCodec<RegistryByteBuf, C2SHandshakeCallback> CODEC = PacketCodec.tuple(PacketCodecs.BOOL, C2SHandshakeCallback::ignored, C2SHandshakeCallback::new);
 			@Override
 			public Id<? extends CustomPayload> getId() {
-				return ID;
+				return C2SHandshakeCallback.ID;
 			}
 		}
-	}
-
-	public static void debuggerReleaseControl() {
-		GLFW.glfwSetInputMode(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
 	}
 }

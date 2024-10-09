@@ -5,6 +5,7 @@ import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.tag.TagKey;
 
+@SuppressWarnings("unused")
 public class MutableMaterial implements ToolMaterial {
     public static MutableMaterial of(ToolMaterial base) {
         return new MutableMaterial(base.getDurability(), base.getMiningSpeedMultiplier(), base.getAttackDamage(), base.getInverseTag(), base.getEnchantability(),base.getRepairIngredient());

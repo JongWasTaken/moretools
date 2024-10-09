@@ -70,7 +70,7 @@ public class HammerToolItem extends BaseToolItem implements PolymerItem, Polymer
     }
 
     public void doToolPower(BlockState state, BlockPos pos, Direction d, ServerPlayerEntity player, World world) {
-        List<BlockPos> selection = getAffectedArea(world, pos, state, d, state.getBlock());
+        List<BlockPos> selection = this.getAffectedArea(world, pos, state, d, state.getBlock());
         for (BlockPos blockBoxSelectionPos : selection) {
             if (!blockBoxSelectionPos.equals(pos)) {
                 player.interactionManager.tryBreakBlock(blockBoxSelectionPos);

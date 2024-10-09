@@ -46,11 +46,11 @@ public class BaseToolItem extends MiningToolItem {
                         )
                 )
         );
-        this.fastComponent = createComponent(baseItem.getMaterial(), targetBlocks, 1F);
-        this.slowComponent = createComponent(baseItem.getMaterial(), targetBlocks, 0.5F);
+        this.fastComponent = BaseToolItem.createComponent(baseItem.getMaterial(), targetBlocks, 1.0F);
+        this.slowComponent = BaseToolItem.createComponent(baseItem.getMaterial(), targetBlocks, 0.5F);
     }
 
-    private boolean actAsBaseTool = false;
+    private boolean actAsBaseTool;
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
         if (selected)
@@ -71,7 +71,7 @@ public class BaseToolItem extends MiningToolItem {
 
     public void postBlockBreak(BlockState state, BlockPos pos, Direction d, ServerPlayerEntity player, World world) {
         if (this.actAsBaseTool) return;
-        doToolPower(state, pos, d, player, world);
+        this.doToolPower(state, pos, d, player, world);
     }
 
     public List<BlockPos> getAffectedArea(@Nullable World world, BlockPos pos, BlockState state, @Nullable Direction d, @Nullable Block target) {

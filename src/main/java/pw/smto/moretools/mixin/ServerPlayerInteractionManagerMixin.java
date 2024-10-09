@@ -34,7 +34,7 @@ public abstract class ServerPlayerInteractionManagerMixin {
         boolean cached = world.removeBlock(pos, dropItems);
 
         if (this.player.getStackInHand(Hand.MAIN_HAND).getItem() instanceof BaseToolItem item) {
-            var d = blockBreakDirections.remove(this.player);
+            var d = ServerPlayerInteractionManagerMixin.BLOCK_BREAK_DIRECTIONS.remove(this.player);
             if (d != null) {
                 item.postBlockBreak(state, pos, d, this.player, this.world);
             }
@@ -45,9 +45,9 @@ public abstract class ServerPlayerInteractionManagerMixin {
 
     @Inject(method = "processBlockBreakingAction", at = @At("HEAD"))
     private void processBlockBreakingAction(BlockPos pos, PlayerActionC2SPacket.Action action, Direction direction, int worldHeight, int sequence, CallbackInfo ci) {
-        blockBreakDirections.put(this.player, direction);
+        ServerPlayerInteractionManagerMixin.BLOCK_BREAK_DIRECTIONS.put(this.player, direction);
     }
 
     @Unique
-    private static final HashMap<PlayerEntity,Direction> blockBreakDirections = new HashMap<>();
+    private static final HashMap<PlayerEntity,Direction> BLOCK_BREAK_DIRECTIONS = new HashMap<>();
 }
