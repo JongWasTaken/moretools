@@ -1,0 +1,40 @@
+{
+  "item.moretools.wooden_hammer": "Holzhammer",
+  "item.moretools.stone_hammer": "Steinhammer",
+  "item.moretools.iron_hammer": "Eisenhammer",
+  "item.moretools.golden_hammer": "Goldhammer",
+  "item.moretools.diamond_hammer": "Diamanthammer",
+  "item.moretools.netherite_hammer": "Netherithammer",
+
+  "item.moretools.wooden_vein_hammer": "Holzvenenhammer",
+  "item.moretools.stone_vein_hammer": "Steinvenenhammer",
+  "item.moretools.iron_vein_hammer": "Eisenvenenhammer",
+  "item.moretools.golden_vein_hammer": "Goldvenenhammer",
+  "item.moretools.diamond_vein_hammer": "Diamantvenenhammer",
+  "item.moretools.netherite_vein_hammer": "Netheritvenenhammer",
+
+  "item.moretools.wooden_excavator": "Holzgroßschaufel",
+  "item.moretools.stone_excavator": "Steingroßschaufel",
+  "item.moretools.iron_excavator": "Eisengroßschaufel",
+  "item.moretools.golden_excavator": "Goldgroßschaufel",
+  "item.moretools.diamond_excavator": "Diamantgroßschaufel",
+  "item.moretools.netherite_excavator": "Netheritgroßschaufel",
+
+  "item.moretools.wooden_saw": "Holzsäge",
+  "item.moretools.stone_saw": "Steinsäge",
+  "item.moretools.iron_saw": "Eisensäge",
+  "item.moretools.golden_saw": "Goldsäge",
+  "item.moretools.diamond_saw": "Diamantsäge",
+  "item.moretools.netherite_saw": "Netheritsäge",
+
+  "item.moretools.hammer.tooltip": "Zerstört Blöcke in einem 3x3 Radius.",
+  "item.moretools.vein_hammer.tooltip": "Zerstört ganze Erzvenen auf einmal.",
+  "item.moretools.excavator.tooltip": "Zerstört Blöcke in einem 3x3 Radius.",
+  "item.moretools.saw.tooltip":  "Fällt die meisten Bäume in einem Schlag.",
+  "item.moretools.saw.tooltip.2": "Vorsicht in hölzernen Strukturen!",
+
+  "tag.item.moretools.hammers": "Moretools Hämmer",
+  "tag.item.moretools.vein_hammers": "Moretools Venenhämmer",
+  "tag.item.moretools.excavators": "Moretools Großschaufeln",
+  "tag.item.moretools.saws": "Moretools Sägen"
+}
