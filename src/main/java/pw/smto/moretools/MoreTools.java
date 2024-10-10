@@ -90,6 +90,7 @@ public class MoreTools implements ModInitializer {
 		PayloadTypeRegistry.playC2S().register(Payloads.C2SHandshakeCallback.ID, Payloads.C2SHandshakeCallback.CODEC);
 		ServerPlayNetworking.registerGlobalReceiver(Payloads.C2SHandshakeCallback.ID, (payload, context) -> {
 			// Why isn't context.server() available here? Maybe I'm tweaking, but I feel like that was a thing?
+			if (context.player() == null) return;
 			context.player().server.execute(() -> {
                 MoreTools.LOGGER.info("Enabling client-side enhancements for player: {}", Objects.requireNonNull(context.player().getDisplayName()).getString());
                 MoreTools.PLAYERS_WITH_CLIENT.add(context.player());

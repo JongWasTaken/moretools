@@ -28,46 +28,43 @@ public class MoreToolsClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ClientPlayNetworking.registerGlobalReceiver(MoreTools.Payloads.S2CHandshake.ID, (payload, context) -> {
-            try(var client = context.client()) {
-                client.execute(() -> ClientPlayNetworking.send(new MoreTools.Payloads.C2SHandshakeCallback(true)));
-            }
+            // Using the context.client() autocloseable crashes minecraft clients lol?
+            context.client().execute(() -> ClientPlayNetworking.send(new MoreTools.Payloads.C2SHandshakeCallback(true)));
         });
 
         WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register((WorldRenderContext context, HitResult hitResult) -> {
+            if (context.matrixStack() == null) return true;
+            if (context.consumers() == null) return true;
+
             BlockHitResult rtr = hitResult instanceof BlockHitResult ? (BlockHitResult) hitResult : null;
             if(rtr == null) return true;
             if (rtr.isInsideBlock()) return true;
-            try(var gameRenderer = context.gameRenderer()) {
-                PlayerEntity player = gameRenderer.getClient().player;
-                if(player == null) return true;
-                var matrixStack = context.matrixStack();
-                var consumer = context.consumers();
-                if (matrixStack == null) return true;
-                if (consumer == null) return true;
-                if (player.isSpectator()) return true;
-                if (player.isSneaking()) return true;
-                if (player.getWorld().getBlockState(rtr.getBlockPos()).isAir()) return true;
+            // This one too... what the hell is going on?
+            PlayerEntity player = context.gameRenderer().getClient().player;
+            if(player == null) return true;
+            if (player.isSpectator()) return true;
+            if (player.isSneaking()) return true;
 
-                ItemStack tool = MoreToolsClient.convertPolymerStack(player.getMainHandStack());
-                if(tool.isEmpty()) return true;
-                if (tool.getItem() instanceof BaseToolItem t) {
-                    var blocks = t.getAffectedArea(player.getWorld(), rtr.getBlockPos(), player.getWorld().getBlockState(rtr.getBlockPos()), rtr.getSide(), player.getWorld().getBlockState(rtr.getBlockPos()).getBlock());
-                    if(blocks == null || blocks.isEmpty()) return true;
+            if (player.getWorld().getBlockState(rtr.getBlockPos()).isAir()) return true;
+            ItemStack tool = MoreToolsClient.convertPolymerStack(player.getMainHandStack());
+            if(tool.isEmpty()) return true;
+            if (tool.getItem() instanceof BaseToolItem t) {
+                var blocks = t.getAffectedArea(player.getWorld(), rtr.getBlockPos(), player.getWorld().getBlockState(rtr.getBlockPos()), rtr.getSide(), player.getWorld().getBlockState(rtr.getBlockPos()).getBlock());
+                if(blocks == null || blocks.isEmpty()) return true;
 
-                    double d0 = player.lastRenderX + (player.getX() - player.lastRenderX) * context.tickCounter().getTickDelta(false);
-                    double d1 = player.lastRenderY + player.getStandingEyeHeight() + (player.getY() - player.lastRenderY) * context.tickCounter().getTickDelta(false);
-                    double d2 = player.lastRenderZ + (player.getZ() - player.lastRenderZ) * context.tickCounter().getTickDelta(false);
+                double d0 = player.lastRenderX + (player.getX() - player.lastRenderX) * context.tickCounter().getTickDelta(false);
+                double d1 = player.lastRenderY + player.getStandingEyeHeight() + (player.getY() - player.lastRenderY) * context.tickCounter().getTickDelta(false);
+                double d2 = player.lastRenderZ + (player.getZ() - player.lastRenderZ) * context.tickCounter().getTickDelta(false);
 
-                    for(BlockPos block : blocks) {
-                        WorldRenderer.drawBox(
-                                matrixStack,
-                                consumer.getBuffer(RenderLayer.getLines()),
-                                new Box(block).offset(-d0, -d1, -d2),
-                                1, 1, 1, 0.4F
-                        );
-                    }
-                    return false;
+                for(BlockPos block : blocks) {
+                    WorldRenderer.drawBox(
+                            Objects.requireNonNull(context.matrixStack()),
+                            Objects.requireNonNull(context.consumers()).getBuffer(RenderLayer.getLines()),
+                            new Box(block).offset(-d0, -d1, -d2),
+                            1, 1, 1, 0.4F
+                    );
                 }
+                return false;
             }
             return true;
         });
