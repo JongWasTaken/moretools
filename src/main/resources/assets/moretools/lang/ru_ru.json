@@ -1,0 +1,40 @@
+{
+  "item.moretools.wooden_hammer": "Деревянный молот",
+  "item.moretools.stone_hammer": "Каменный молот",
+  "item.moretools.iron_hammer": "Железный молот",
+  "item.moretools.golden_hammer": "Золотой молот",
+  "item.moretools.diamond_hammer": "Алмазный молот",
+  "item.moretools.netherite_hammer": "Незеритовый молот",
+
+  "item.moretools.wooden_vein_hammer": "Деревянный жильный молот",
+  "item.moretools.stone_vein_hammer": "Каменный жильный молот",
+  "item.moretools.iron_vein_hammer": "Железный жильный молот",
+  "item.moretools.golden_vein_hammer": "Золотой жильный молот",
+  "item.moretools.diamond_vein_hammer": "Алмазный жильный молот",
+  "item.moretools.netherite_vein_hammer": "Незеритовый жильный молот",
+
+  "item.moretools.wooden_excavator": "Деревянный раскапыватель",
+  "item.moretools.stone_excavator": "Каменный раскапыватель",
+  "item.moretools.iron_excavator": "Железный раскапыватель",
+  "item.moretools.golden_excavator": "Золотой раскапыватель",
+  "item.moretools.diamond_excavator": "Алмазный раскапыватель",
+  "item.moretools.netherite_excavator": "Незеритовый раскапыватель",
+
+  "item.moretools.wooden_saw": "Деревянная пила",
+  "item.moretools.stone_saw": "Каменная пила",
+  "item.moretools.iron_saw": "Железная пила",
+  "item.moretools.golden_saw": "Золотая пила",
+  "item.moretools.diamond_saw": "Алмазная пила",
+  "item.moretools.netherite_saw": "Незеритовая пила",
+
+  "item.moretools.hammer.tooltip": "Позволяет ломать блоки в радиусе 3x3.",
+  "item.moretools.vein_hammer.tooltip": "Позволяет быстро ломать рудные жилы.",
+  "item.moretools.excavator.tooltip": "Позволяет раскапывать блоки в радиусе 3x3.",
+  "item.moretools.saw.tooltip":  "Валит большую часть дерева за раз.",
+  "item.moretools.saw.tooltip.2": "Осторожно около деревянных построек!",
+
+  "tag.item.moretools.hammers": "Молоты Moretools",
+  "tag.item.moretools.vein_hammers": "Жильные молоты Moretools",
+  "tag.item.moretools.excavators": "Раскапыватели Moretools",
+  "tag.item.moretools.saws": "Пилы Moretools"
+}
