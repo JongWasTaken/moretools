@@ -6,12 +6,8 @@
         " / "
     ],
     "key": {
-        "#": {
-            "item": "minecraft:golden_axe"
-        },
-        "/": {
-            "item": "minecraft:stick"
-        }
+        "#": "minecraft:golden_axe",
+        "/": "minecraft:stick"
     },
     "result": {
         "id": "moretools:golden_saw",

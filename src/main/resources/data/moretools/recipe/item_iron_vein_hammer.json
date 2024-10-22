@@ -6,15 +6,9 @@
         " / "
     ],
     "key": {
-        "#": {
-            "item": "minecraft:iron_pickaxe"
-        },
-        "M": {
-            "item": "minecraft:iron_ingot"
-        },
-        "/": {
-            "item": "minecraft:stick"
-        }
+        "#": "minecraft:iron_pickaxe",
+        "M": "minecraft:iron_ingot",
+        "/": "minecraft:stick"
     },
     "result": {
         "id": "moretools:iron_vein_hammer",

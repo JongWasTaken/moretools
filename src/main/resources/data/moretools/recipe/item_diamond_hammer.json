@@ -6,12 +6,8 @@
         " / "
     ],
     "key": {
-        "#": {
-            "item": "minecraft:diamond_pickaxe"
-        },
-        "/": {
-            "item": "minecraft:stick"
-        }
+        "#": "minecraft:diamond_pickaxe",
+        "/": "minecraft:stick"
     },
     "result": {
         "id": "moretools:diamond_hammer",

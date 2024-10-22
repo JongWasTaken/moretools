@@ -9,45 +9,57 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.MiningToolItem;
 import net.minecraft.item.ToolMaterial;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryEntryLookup;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import pw.smto.moretools.util.MutableMaterial;
+import pw.smto.moretools.MoreTools;
+import pw.smto.moretools.util.CustomMaterial;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BaseToolItem extends MiningToolItem {
     private static ToolComponent createComponent(ToolMaterial m, TagKey<Block> tag, float multiplier) {
-        float speed = m.getMiningSpeedMultiplier() * multiplier;
+        RegistryEntryLookup<Block> registryEntryLookup = Registries.createEntryLookup(Registries.BLOCK);
+        float speed = m.speed() * multiplier;
         return new ToolComponent(
                 // 0.1F applies to all non-target blocks, e.g. grass for a hammer
-                List.of(ToolComponent.Rule.ofNeverDropping(m.getInverseTag()), ToolComponent.Rule.ofAlwaysDropping(tag, speed)), 0.3F, 1
+                List.of(
+                        ToolComponent.Rule.ofNeverDropping(
+                                registryEntryLookup.getOrThrow(m.incorrectBlocksForDrops())
+                        ),
+                        ToolComponent.Rule.ofAlwaysDropping(
+                                registryEntryLookup.getOrThrow(tag), speed)
+                ), 0.3F, 1
         );
     }
 
     private final ToolComponent fastComponent;
     private final ToolComponent slowComponent;
 
-    public BaseToolItem(MiningToolItem baseItem, TagKey<Block> targetBlocks) {
+    public final Identifier id;
+
+    public BaseToolItem(Identifier id, ToolMaterial baseMaterial, TagKey<Block> targetBlocks) {
         super(
                 // durability gets tripled
-                MutableMaterial.of(baseItem.getMaterial()).setDurability((baseItem.getDefaultStack().getMaxDamage() * 3)),
+                CustomMaterial.of(baseMaterial).multiplyDurability(3).toVanilla(),
                 targetBlocks,
                 // damage and mining speed get nerfed
-                new Item.Settings().attributeModifiers(
-                        MiningToolItem.createAttributeModifiers(
-                                baseItem.getMaterial(),
-                                Math.max(baseItem.getMaterial().getAttackDamage()-4, 1.0F),
-                                -3.0f
-                        )
-                )
+                Math.max(baseMaterial.attackDamageBonus()-4, 1.0F),
+                -3.0f,
+                new Item.Settings().registryKey(RegistryKey.of(RegistryKeys.ITEM, id))
         );
-        this.fastComponent = BaseToolItem.createComponent(baseItem.getMaterial(), targetBlocks, 1.0F);
-        this.slowComponent = BaseToolItem.createComponent(baseItem.getMaterial(), targetBlocks, 0.5F);
+        this.id = id;
+        this.fastComponent = BaseToolItem.createComponent(baseMaterial, targetBlocks, 1.0F);
+        this.slowComponent = BaseToolItem.createComponent(baseMaterial, targetBlocks, 0.5F);
     }
 
     private boolean actAsBaseTool;

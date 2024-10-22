@@ -6,12 +6,8 @@
         " / "
     ],
     "key": {
-        "#": {
-            "item": "minecraft:stone_shovel"
-        },
-        "/": {
-            "item": "minecraft:stick"
-        }
+        "#": "minecraft:stone_shovel",
+        "/": "minecraft:stick"
     },
     "result": {
         "id": "moretools:stone_excavator",

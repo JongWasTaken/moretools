@@ -1,14 +1,8 @@
 {
     "type": "smithing_transform",
-    "base": {
-        "item": "moretools:diamond_vein_hammer"
-    },
-    "addition": {
-        "item": "minecraft:netherite_ingot"
-    },
-    "template": {
-        "item": "minecraft:netherite_upgrade_smithing_template"
-    },
+    "base": "moretools:diamond_vein_hammer",
+    "addition": "minecraft:netherite_ingot",
+    "template": "minecraft:netherite_upgrade_smithing_template",
     "result": {
         "id": "moretools:netherite_vein_hammer",
         "count": 1

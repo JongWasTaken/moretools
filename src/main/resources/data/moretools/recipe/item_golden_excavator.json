@@ -6,12 +6,8 @@
         " / "
     ],
     "key": {
-        "#": {
-            "item": "minecraft:golden_shovel"
-        },
-        "/": {
-            "item": "minecraft:stick"
-        }
+        "#": "minecraft:golden_shovel",
+        "/": "minecraft:stick"
     },
     "result": {
         "id": "moretools:golden_excavator",

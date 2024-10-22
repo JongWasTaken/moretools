@@ -6,12 +6,8 @@
         " / "
     ],
     "key": {
-        "#": {
-            "item": "minecraft:stone_axe"
-        },
-        "/": {
-            "item": "minecraft:stick"
-        }
+        "#": "minecraft:stone_axe",
+        "/": "minecraft:stick"
     },
     "result": {
         "id": "moretools:stone_saw",

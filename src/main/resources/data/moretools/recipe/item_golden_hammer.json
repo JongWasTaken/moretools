@@ -6,12 +6,8 @@
         " / "
     ],
     "key": {
-        "#": {
-            "item": "minecraft:golden_pickaxe"
-        },
-        "/": {
-            "item": "minecraft:stick"
-        }
+        "#": "minecraft:golden_pickaxe",
+        "/": "minecraft:stick"
     },
     "result": {
         "id": "moretools:golden_hammer",

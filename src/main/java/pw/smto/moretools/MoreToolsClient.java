@@ -8,7 +8,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.WorldRenderer;
+import net.minecraft.client.render.VertexRendering;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.player.PlayerEntity;
@@ -60,7 +60,7 @@ public class MoreToolsClient implements ClientModInitializer {
                 double d2 = player.lastRenderZ + (player.getZ() - player.lastRenderZ) * context.tickCounter().getTickDelta(false);
 
                 for(BlockPos block : blocks) {
-                    WorldRenderer.drawBox(
+                    VertexRendering.drawBox(
                             Objects.requireNonNull(context.matrixStack()),
                             Objects.requireNonNull(context.consumers()).getBuffer(RenderLayer.getLines()),
                             new Box(block).offset(-d0, -d1, -d2),

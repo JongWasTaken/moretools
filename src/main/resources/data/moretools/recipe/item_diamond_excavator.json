@@ -6,12 +6,8 @@
         " / "
     ],
     "key": {
-        "#": {
-            "item": "minecraft:diamond_shovel"
-        },
-        "/": {
-            "item": "minecraft:stick"
-        }
+        "#": "minecraft:diamond_shovel",
+        "/": "minecraft:stick"
     },
     "result": {
         "id": "moretools:diamond_excavator",

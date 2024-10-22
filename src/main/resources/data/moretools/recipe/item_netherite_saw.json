@@ -1,14 +1,8 @@
 {
     "type": "smithing_transform",
-    "base": {
-        "item": "moretools:diamond_saw"
-    },
-    "addition": {
-        "item": "minecraft:netherite_ingot"
-    },
-    "template": {
-        "item": "minecraft:netherite_upgrade_smithing_template"
-    },
+    "base": "moretools:diamond_saw",
+    "addition": "minecraft:netherite_ingot",
+    "template": "minecraft:netherite_upgrade_smithing_template",
     "result": {
         "id": "moretools:netherite_saw",
         "count": 1

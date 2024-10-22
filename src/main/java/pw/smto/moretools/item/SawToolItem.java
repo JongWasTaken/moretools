@@ -3,13 +3,13 @@ package pw.smto.moretools.item;
 import eu.pb4.polymer.core.api.item.PolymerItem;
 import eu.pb4.polymer.core.api.utils.PolymerClientDecoded;
 import eu.pb4.polymer.core.api.utils.PolymerKeepModel;
-import eu.pb4.polymer.resourcepack.api.PolymerModelData;
 import eu.pb4.polymer.resourcepack.api.PolymerResourcePackUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ToolMaterial;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.BlockTags;
@@ -23,30 +23,31 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import pw.smto.moretools.MoreTools;
 import pw.smto.moretools.util.BlockBoxUtils;
+import xyz.nucleoid.packettweaker.PacketContext;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SawToolItem extends BaseToolItem implements PolymerItem, PolymerKeepModel, PolymerClientDecoded {
-    private final PolymerModelData model;
+    private final Item baseItem;
 
-    public SawToolItem(AxeItem base) {
-        super(base, MoreTools.BlockTags.SAW_MINEABLE);
-        this.model = PolymerResourcePackUtils.requestModel(base, Identifier.of(MoreTools.MOD_ID,
-                "item/" + Registries.ITEM.getId(base).getPath().replace("axe", "saw")));
+    public SawToolItem(AxeItem base, ToolMaterial baseMaterial) {
+        super(Identifier.of(MoreTools.MOD_ID, Registries.ITEM.getId(base).getPath().replace("axe", "saw")), baseMaterial, MoreTools.BlockTags.SAW_MINEABLE);
+        this.baseItem = base;
     }
 
     @Override
-    public Item getPolymerItem(ItemStack itemStack, @Nullable ServerPlayerEntity player) {
-        if (MoreTools.PLAYERS_WITH_CLIENT.contains(player)) {
+    public Item getPolymerItem(ItemStack itemStack, PacketContext context) {
+        if (MoreTools.PLAYERS_WITH_CLIENT.contains(context.getPlayer())) {
             return this;
         }
-        return this.model.item();
+        return this.baseItem;
     }
 
+
     @Override
-    public int getPolymerCustomModelData(ItemStack itemStack, @Nullable ServerPlayerEntity player) {
-        return this.model.value();
+    public @Nullable Identifier getPolymerItemModel(ItemStack stack, PacketContext context) {
+        return super.id;
     }
 
     @Override

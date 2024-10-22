@@ -6,12 +6,8 @@
         " / "
     ],
     "key": {
-        "#": {
-            "item": "minecraft:diamond_axe"
-        },
-        "/": {
-            "item": "minecraft:stick"
-        }
+        "#": "minecraft:diamond_axe",
+        "/": "minecraft:stick"
     },
     "result": {
         "id": "moretools:diamond_saw",

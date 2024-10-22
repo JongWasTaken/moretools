@@ -1,22 +1,22 @@
 package pw.smto.moretools.util;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ToolMaterial;
-import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.tag.TagKey;
 
 @SuppressWarnings("unused")
-public class MutableMaterial implements ToolMaterial {
-    public static MutableMaterial of(ToolMaterial base) {
-        return new MutableMaterial(base.getDurability(), base.getMiningSpeedMultiplier(), base.getAttackDamage(), base.getInverseTag(), base.getEnchantability(),base.getRepairIngredient());
+public class CustomMaterial {
+    public static CustomMaterial of(ToolMaterial base) {
+        return new CustomMaterial(base.durability(), base.speed(), base.attackDamageBonus(), base.incorrectBlocksForDrops(), base.enchantmentValue(), base.repairItems());
     }
     private int durability;
     private float miningSpeedMultiplier;
     private float attackDamage;
     private TagKey<Block> inverseTag;
     private int enchantability;
-    private Ingredient repairIngredient;
-    public MutableMaterial(int durability, float miningSpeedMultiplier, float attackDamage, TagKey<Block> inverseTag, int enchantability, Ingredient repairIngredient) {
+    private TagKey<Item> repairIngredient;
+    public CustomMaterial(int durability, float miningSpeedMultiplier, float attackDamage, TagKey<Block> inverseTag, int enchantability, TagKey<Item> repairIngredient) {
         this.durability = durability;
         this.miningSpeedMultiplier = miningSpeedMultiplier;
         this.attackDamage = attackDamage;
@@ -24,52 +24,53 @@ public class MutableMaterial implements ToolMaterial {
         this.enchantability = enchantability;
         this.repairIngredient = repairIngredient;
     }
-    @Override
     public int getDurability() {
         return this.durability;
     }
-    public MutableMaterial setDurability(int newDurability) {
+    public CustomMaterial setDurability(int newDurability) {
         this.durability = newDurability;
         return this;
     }
-    @Override
+    public CustomMaterial multiplyDurability(int multiplier) {
+        this.durability *= multiplier;
+        return this;
+    }
     public float getMiningSpeedMultiplier() {
         return this.miningSpeedMultiplier;
     }
-    public MutableMaterial setMiningSpeedMultiplier(float newMiningSpeedMultiplier) {
+    public CustomMaterial setMiningSpeedMultiplier(float newMiningSpeedMultiplier) {
         this.miningSpeedMultiplier = newMiningSpeedMultiplier;
         return this;
     }
-    @Override
     public float getAttackDamage() {
         return this.attackDamage;
     }
-    public MutableMaterial setAttackDamage(float newAttackDamage) {
+    public CustomMaterial setAttackDamage(float newAttackDamage) {
         this.attackDamage = newAttackDamage;
         return this;
     }
-    @Override
     public TagKey<Block> getInverseTag() {
         return this.inverseTag;
     }
-    public MutableMaterial setInverseTag(TagKey<Block> newInverseTag) {
+    public CustomMaterial setInverseTag(TagKey<Block> newInverseTag) {
         this.inverseTag = newInverseTag;
         return this;
     }
-    @Override
     public int getEnchantability() {
         return this.enchantability;
     }
-    public MutableMaterial setEnchantability(int newEnchantability) {
+    public CustomMaterial setEnchantability(int newEnchantability) {
         this.enchantability = newEnchantability;
         return this;
     }
-    @Override
-    public Ingredient getRepairIngredient() {
+    public TagKey<Item> getRepairIngredient() {
         return this.repairIngredient;
     }
-    public MutableMaterial setRepairIngredient(Ingredient newRepairIngredient) {
+    public CustomMaterial setRepairIngredient(TagKey<Item> newRepairIngredient) {
         this.repairIngredient = newRepairIngredient;
         return this;
+    }
+    public ToolMaterial toVanilla() {
+        return new ToolMaterial(this.inverseTag, this.durability, this.miningSpeedMultiplier, this.attackDamage, this.enchantability, this.repairIngredient);
     }
 }

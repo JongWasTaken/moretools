@@ -6,15 +6,9 @@
         " / "
     ],
     "key": {
-        "#": {
-            "item": "minecraft:golden_pickaxe"
-        },
-        "M": {
-            "item": "minecraft:gold_ingot"
-        },
-        "/": {
-            "item": "minecraft:stick"
-        }
+        "#": "minecraft:golden_pickaxe",
+        "M": "minecraft:gold_ingot",
+        "/": "minecraft:stick"
     },
     "result": {
         "id": "moretools:golden_vein_hammer",

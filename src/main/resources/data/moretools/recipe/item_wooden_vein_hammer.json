@@ -6,15 +6,9 @@
         " / "
     ],
     "key": {
-        "#": {
-            "item": "minecraft:wooden_pickaxe"
-        },
-        "M": {
-            "tag": "minecraft:planks"
-        },
-        "/": {
-            "item": "minecraft:stick"
-        }
+        "#": "minecraft:wooden_pickaxe",
+        "M": "#minecraft:planks",
+        "/": "minecraft:stick"
     },
     "result": {
         "id": "moretools:wooden_vein_hammer",

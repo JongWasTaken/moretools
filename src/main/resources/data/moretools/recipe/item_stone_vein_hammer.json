@@ -6,15 +6,9 @@
         " / "
     ],
     "key": {
-        "#": {
-            "item": "minecraft:stone_pickaxe"
-        },
-        "M": {
-            "item": "minecraft:cobblestone"
-        },
-        "/": {
-            "item": "minecraft:stick"
-        }
+        "#": "minecraft:stone_pickaxe",
+        "M": "minecraft:cobblestone",
+        "/": "minecraft:stick"
     },
     "result": {
         "id": "moretools:stone_vein_hammer",

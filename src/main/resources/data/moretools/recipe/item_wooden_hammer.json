@@ -6,12 +6,8 @@
         " / "
     ],
     "key": {
-        "#": {
-            "item": "minecraft:wooden_pickaxe"
-        },
-        "/": {
-            "item": "minecraft:stick"
-        }
+        "#": "minecraft:wooden_pickaxe",
+        "/": "minecraft:stick"
     },
     "result": {
         "id": "moretools:wooden_hammer",
