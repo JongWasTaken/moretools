@@ -6,17 +6,16 @@ import eu.pb4.polymer.core.api.utils.PolymerKeepModel;
 import eu.pb4.polymer.resourcepack.api.PolymerResourcePackUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.item.AxeItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ToolMaterial;
+import net.minecraft.item.*;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -43,7 +42,6 @@ public class SawToolItem extends BaseToolItem implements PolymerItem, PolymerKee
         }
         return this.baseItem;
     }
-
 
     @Override
     public @Nullable Identifier getPolymerItemModel(ItemStack stack, PacketContext context) {
@@ -74,5 +72,14 @@ public class SawToolItem extends BaseToolItem implements PolymerItem, PolymerKee
             player.interactionManager.tryBreakBlock(blockPos);
             damage++;
         }
+    }
+
+    @Override
+    public ActionResult useOnBlock(ItemUsageContext context) {
+        if (context.getPlayer().isSneaking()) return this.baseItem.useOnBlock(context);
+        for (BlockPos blockPos : this.getAffectedArea(context.getWorld(), context.getBlockPos(), context.getWorld().getBlockState(context.getBlockPos()), context.getSide(), context.getWorld().getBlockState(context.getBlockPos()).getBlock())) {
+            this.baseItem.useOnBlock(new ItemUsageContext(context.getWorld(), context.getPlayer(), context.getHand(), context.getStack(), new BlockHitResult(context.getHitPos(), context.getSide(), blockPos, context.hitsInsideBlock())));
+        }
+        return this.baseItem.useOnBlock(context);
     }
 }
