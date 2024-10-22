@@ -36,5 +36,10 @@
   "tag.item.moretools.hammers": "更多工具 錘",
   "tag.item.moretools.vein_hammers": "更多工具 連鎖錘",
   "tag.item.moretools.excavators": "更多工具 挖掘器",
-  "tag.item.moretools.saws": "更多工具 鋸"
+  "tag.item.moretools.saws": "更多工具 鋸",
+
+  "moretools.client_version_mismatch.1": "您的客戶端版本的更多工具可能太舊了來這個伺服器。",
+  "moretools.client_version_mismatch.2": "工具預覽可能不準確!",
+  "moretools.client_version_mismatch.3": "您的版本:",
+  "moretools.client_version_mismatch.4": "需要的版本:"
 }

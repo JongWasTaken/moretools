@@ -36,5 +36,10 @@
   "tag.item.moretools.hammers": "Moretools Hammers",
   "tag.item.moretools.vein_hammers": "Moretools Vein Hammers",
   "tag.item.moretools.excavators": "Moretools Excavators",
-  "tag.item.moretools.saws": "Moretools Saws"
+  "tag.item.moretools.saws": "Moretools Saws",
+
+  "moretools.client_version_mismatch.1": "Your client-side version of MoreTools might be too old for this server.",
+  "moretools.client_version_mismatch.2": "Tool-previews could be inaccurate!",
+  "moretools.client_version_mismatch.3": "Your version:",
+  "moretools.client_version_mismatch.4": "Required version:"
 }

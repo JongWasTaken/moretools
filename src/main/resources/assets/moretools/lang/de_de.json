@@ -36,5 +36,11 @@
   "tag.item.moretools.hammers": "Moretools Hämmer",
   "tag.item.moretools.vein_hammers": "Moretools Venenhämmer",
   "tag.item.moretools.excavators": "Moretools Großschaufeln",
-  "tag.item.moretools.saws": "Moretools Sägen"
+  "tag.item.moretools.saws": "Moretools Sägen",
+
+
+  "moretools.client_version_mismatch.1": "Deine lokale Version von MoreTools ist möglicherweise zu alt für diesen Server.",
+  "moretools.client_version_mismatch.2": "Die Werkzeug-Vorschau könnte inakkurat sein!",
+  "moretools.client_version_mismatch.3": "Lokale Version:",
+  "moretools.client_version_mismatch.4": "Benötigte Version:"
 }

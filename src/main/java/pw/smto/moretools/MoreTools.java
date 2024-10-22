@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.item.*;
 import net.minecraft.network.RegistryByteBuf;
@@ -21,6 +22,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.slf4j.LoggerFactory;
 import pw.smto.moretools.item.ExcavatorToolItem;
@@ -38,6 +40,8 @@ public class MoreTools implements ModInitializer {
 	public static final String MOD_ID = "moretools";
 	public static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(MoreTools.MOD_ID);
 	public static final List<ServerPlayerEntity> PLAYERS_WITH_CLIENT = new ArrayList<>();
+	@SuppressWarnings("OptionalGetWithoutIsPresent")
+    public static final String VERSION = FabricLoader.getInstance().getModContainer(MoreTools.MOD_ID).get().getMetadata().getVersion().toString();
 
 	@Override
 	public void onInitialize() {
@@ -88,19 +92,33 @@ public class MoreTools implements ModInitializer {
 		ServerPlayConnectionEvents.JOIN.register((ServerPlayNetworkHandler handler, PacketSender sender, MinecraftServer server) -> sender.sendPacket(new Payloads.S2CHandshake(true)));
 		PayloadTypeRegistry.playS2C().register(Payloads.S2CHandshake.ID, Payloads.S2CHandshake.CODEC);
 		PayloadTypeRegistry.playC2S().register(Payloads.C2SHandshakeCallback.ID, Payloads.C2SHandshakeCallback.CODEC);
+		PayloadTypeRegistry.playC2S().register(Payloads.C2SHandshakeCallbackWithVersion.ID, Payloads.C2SHandshakeCallbackWithVersion.CODEC);
 		ServerPlayNetworking.registerGlobalReceiver(Payloads.C2SHandshakeCallback.ID, (payload, context) -> {
 			// Why isn't context.server() available here? Maybe I'm tweaking, but I feel like that was a thing?
 			if (context.player() == null) return;
-			context.player().server.execute(() -> {
-                MoreTools.LOGGER.info("Enabling client-side enhancements for player: {}", Objects.requireNonNull(context.player().getDisplayName()).getString());
-                MoreTools.PLAYERS_WITH_CLIENT.add(context.player());
-				context.player().getInventory().markDirty();
-			});
+			context.player().server.execute(() -> MoreTools.handleClientCallback(context.player(), "1.7.3"));
+		});
+		ServerPlayNetworking.registerGlobalReceiver(Payloads.C2SHandshakeCallbackWithVersion.ID, (payload, context) -> {
+			if (context.player() == null) return;
+			context.player().server.execute(() -> MoreTools.handleClientCallback(context.player(), payload.version));
 		});
 
 		ServerPlayConnectionEvents.DISCONNECT.register((ServerPlayNetworkHandler handler, MinecraftServer server) -> MoreTools.PLAYERS_WITH_CLIENT.remove(handler.player));
 
         MoreTools.LOGGER.info("MoreTools loaded!");
+	}
+
+	private static void handleClientCallback(ServerPlayerEntity player, String version) {
+		if (!Objects.equals(version, MoreTools.VERSION.split("\\+")[0])) {
+			player.sendMessage(Text.translatable("moretools.client_version_mismatch.1"), false);
+			player.sendMessage(Text.translatable("moretools.client_version_mismatch.2"), false);
+			player.sendMessage(Text.translatable("moretools.client_version_mismatch.3").append(Text.literal(" " + version).formatted(Formatting.RED)), false);
+			player.sendMessage(Text.translatable("moretools.client_version_mismatch.4").append(Text.literal(" " + MoreTools.VERSION).formatted(Formatting.GREEN)), false);
+			return;
+		}
+		MoreTools.LOGGER.info("Enabling client-side item models for player: {}", Objects.requireNonNull(player.getDisplayName()).getString());
+		MoreTools.PLAYERS_WITH_CLIENT.add(player);
+		player.getInventory().markDirty();
 	}
 
 	public static class Items {
@@ -150,6 +168,14 @@ public class MoreTools implements ModInitializer {
 			@Override
 			public Id<? extends CustomPayload> getId() {
 				return C2SHandshakeCallback.ID;
+			}
+		}
+		public record C2SHandshakeCallbackWithVersion(String version) implements CustomPayload {
+			public static final CustomPayload.Id<C2SHandshakeCallbackWithVersion> ID = new CustomPayload.Id<>(Identifier.of(MoreTools.MOD_ID, "c2s_handshake_callback_with_version"));
+			public static final PacketCodec<RegistryByteBuf, C2SHandshakeCallbackWithVersion> CODEC = PacketCodec.tuple(PacketCodecs.STRING, C2SHandshakeCallbackWithVersion::version, C2SHandshakeCallbackWithVersion::new);
+			@Override
+			public Id<? extends CustomPayload> getId() {
+				return C2SHandshakeCallbackWithVersion.ID;
 			}
 		}
 	}

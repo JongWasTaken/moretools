@@ -36,5 +36,10 @@
   "tag.item.moretools.hammers": "Молоты Moretools",
   "tag.item.moretools.vein_hammers": "Жильные молоты Moretools",
   "tag.item.moretools.excavators": "Раскапыватели Moretools",
-  "tag.item.moretools.saws": "Пилы Moretools"
+  "tag.item.moretools.saws": "Пилы Moretools",
+
+  "moretools.client_version_mismatch.1": "Ваша локальная версия MoreTools может быть слишком старой для этого сервера.",
+  "moretools.client_version_mismatch.2": "Предпросмотр может быть некорректным!",
+  "moretools.client_version_mismatch.3": "Ваша версия:",
+  "moretools.client_version_mismatch.4": "Необходимая версия:"
 }

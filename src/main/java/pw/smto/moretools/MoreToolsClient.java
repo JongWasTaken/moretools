@@ -6,6 +6,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.component.DataComponentTypes;
@@ -25,11 +26,13 @@ import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
 public class MoreToolsClient implements ClientModInitializer {
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
+    public static final String VERSION = FabricLoader.getInstance().getModContainer(MoreTools.MOD_ID).get().getMetadata().getVersion().toString();
     @Override
     public void onInitializeClient() {
         ClientPlayNetworking.registerGlobalReceiver(MoreTools.Payloads.S2CHandshake.ID, (payload, context) -> {
             // Using the context.client() autocloseable crashes minecraft clients lol?
-            context.client().execute(() -> ClientPlayNetworking.send(new MoreTools.Payloads.C2SHandshakeCallback(true)));
+            context.client().execute(() -> ClientPlayNetworking.send(new MoreTools.Payloads.C2SHandshakeCallbackWithVersion(MoreToolsClient.VERSION.split("\\+")[0])));
         });
 
         WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register((WorldRenderContext context, HitResult hitResult) -> {
