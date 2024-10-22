@@ -10,13 +10,16 @@ import net.minecraft.block.BlockState;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -29,11 +32,13 @@ import java.util.List;
 
 public class SawToolItem extends BaseToolItem implements PolymerItem, PolymerKeepModel, PolymerClientDecoded {
     private final PolymerModelData model;
+    private final Item baseItem;
 
     public SawToolItem(AxeItem base) {
         super(base, MoreTools.BlockTags.SAW_MINEABLE);
         this.model = PolymerResourcePackUtils.requestModel(base, Identifier.of(MoreTools.MOD_ID,
                 "item/" + Registries.ITEM.getId(base).getPath().replace("axe", "saw")));
+        this.baseItem = base;
     }
 
     @Override
@@ -73,5 +78,16 @@ public class SawToolItem extends BaseToolItem implements PolymerItem, PolymerKee
             player.interactionManager.tryBreakBlock(blockPos);
             damage++;
         }
+    }
+
+    @Override
+    public ActionResult useOnBlock(ItemUsageContext context) {
+        if (context.getPlayer().isSneaking()) return this.baseItem.useOnBlock(context);
+        ActionResult res = ActionResult.PASS;
+        for (BlockPos blockPos : this.getAffectedArea(context.getWorld(), context.getBlockPos(), context.getWorld().getBlockState(context.getBlockPos()), context.getSide(), context.getWorld().getBlockState(context.getBlockPos()).getBlock())) {
+            var out = this.baseItem.useOnBlock(new ItemUsageContext(context.getWorld(), context.getPlayer(), context.getHand(), context.getStack(), new BlockHitResult(context.getHitPos(), context.getSide(), blockPos, context.hitsInsideBlock())));
+            if (out == ActionResult.SUCCESS) res = ActionResult.SUCCESS;
+        }
+        return res;
     }
 }
