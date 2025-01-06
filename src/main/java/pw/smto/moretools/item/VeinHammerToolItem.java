@@ -81,7 +81,7 @@ public class VeinHammerToolItem extends BaseToolItem implements PolymerItem, Pol
         if (world != null) {
             for (BlockPos blockPos : result) {
                 if (world.getBlockState(blockPos).isIn(BlockTags.PICKAXE_MINEABLE)) {
-                    list.add(blockPos);
+                    if (!(world.getBlockState(blockPos).getHardness(world, blockPos) > state.getHardness(world, pos))) list.add(blockPos);
                 }
             }
         }

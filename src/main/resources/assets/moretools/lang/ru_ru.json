@@ -20,6 +20,13 @@
   "item.moretools.diamond_excavator": "Алмазный раскапыватель",
   "item.moretools.netherite_excavator": "Незеритовый раскапыватель",
 
+  "item.moretools.wooden_vein_excavator": "Wooden Vein Excavator",
+  "item.moretools.stone_vein_excavator": "Stone Vein Excavator",
+  "item.moretools.iron_vein_excavator": "Iron Vein Excavator",
+  "item.moretools.golden_vein_excavator": "Golden Vein Excavator",
+  "item.moretools.diamond_vein_excavator": "Diamond Vein Excavator",
+  "item.moretools.netherite_vein_excavator": "Netherite Vein Excavator",
+
   "item.moretools.wooden_saw": "Деревянная пила",
   "item.moretools.stone_saw": "Каменная пила",
   "item.moretools.iron_saw": "Железная пила",
@@ -30,11 +37,13 @@
   "item.moretools.hammer.tooltip": "Позволяет ломать блоки в радиусе 3x3.",
   "item.moretools.vein_hammer.tooltip": "Позволяет быстро ломать рудные жилы.",
   "item.moretools.excavator.tooltip": "Позволяет раскапывать блоки в радиусе 3x3.",
+  "item.moretools.vein_excavator.tooltip": "Allows breaking some shovel-able clusters of blocks quickly.",
   "item.moretools.saw.tooltip":  "Валит большую часть дерева за раз.",
   "item.moretools.saw.tooltip.2": "Осторожно около деревянных построек!",
 
   "tag.item.moretools.hammers": "Молоты Moretools",
   "tag.item.moretools.vein_hammers": "Жильные молоты Moretools",
+  "tag.item.moretools.vein_excavators": "Moretools Vein Excavators",
   "tag.item.moretools.excavators": "Раскапыватели Moretools",
   "tag.item.moretools.saws": "Пилы Moretools",
 

@@ -17,7 +17,7 @@ public class BlockBoxUtils {
      * @param pos BlockPos to get the surrounding blocks from
      * @param side Direction facing the player, e.g. from a raycast
      * @param radius How far to add blocks, e.g. a radius of 1 will add 9 blocks
-     * @return a {@link IterableBlockBox} containing all surrounding blocks
+     * @return {@link IterableBlockBox} containing all surrounding blocks
      */
     public static IterableBlockBox getSurroundingBlocks(BlockPos pos, Direction side, int radius) {
         BlockPos firstCorner;

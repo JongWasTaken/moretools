@@ -3,7 +3,6 @@ package pw.smto.moretools.item;
 import eu.pb4.polymer.core.api.item.PolymerItem;
 import eu.pb4.polymer.core.api.utils.PolymerClientDecoded;
 import eu.pb4.polymer.core.api.utils.PolymerKeepModel;
-import eu.pb4.polymer.resourcepack.api.PolymerResourcePackUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.*;
@@ -58,7 +57,7 @@ public class SawToolItem extends BaseToolItem implements PolymerItem, PolymerKee
     public List<BlockPos> getAffectedArea(World world, BlockPos pos, BlockState state, @Nullable Direction d, @Nullable Block target) {
         var list = new ArrayList<BlockPos>();
         if (world == null) return list;
-        if (!state.isIn(BlockTags.LOGS)) return list;
+        if (!state.isIn(MoreTools.BlockTags.SAW_APPLICABLE)) return list;
         list.addAll(BlockBoxUtils.getBlockCluster(target, pos, world, 30, BlockBoxUtils.DirectionSets.DOWN_RESTRICTED_EXTENDED));
         return list;
     }
@@ -76,6 +75,7 @@ public class SawToolItem extends BaseToolItem implements PolymerItem, PolymerKee
 
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
+        if (context.getPlayer() == null) return ActionResult.PASS;
         if (context.getPlayer().isSneaking()) return this.baseItem.useOnBlock(context);
         for (BlockPos blockPos : this.getAffectedArea(context.getWorld(), context.getBlockPos(), context.getWorld().getBlockState(context.getBlockPos()), context.getSide(), context.getWorld().getBlockState(context.getBlockPos()).getBlock())) {
             this.baseItem.useOnBlock(new ItemUsageContext(context.getWorld(), context.getPlayer(), context.getHand(), context.getStack(), new BlockHitResult(context.getHitPos(), context.getSide(), blockPos, context.hitsInsideBlock())));

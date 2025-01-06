@@ -1,0 +1,10 @@
+{
+    "type": "smithing_transform",
+    "base": "moretools:diamond_vein_excavator",
+    "addition": "minecraft:netherite_ingot",
+    "template": "minecraft:netherite_upgrade_smithing_template",
+    "result": {
+        "id": "moretools:netherite_vein_excavator",
+        "count": 1
+    }
+}

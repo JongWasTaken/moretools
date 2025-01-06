@@ -5,16 +5,11 @@ import eu.pb4.polymer.core.api.utils.PolymerClientDecoded;
 import eu.pb4.polymer.core.api.utils.PolymerKeepModel;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.CampfireBlock;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
@@ -23,8 +18,6 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldEvents;
-import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
 import pw.smto.moretools.MoreTools;
 import pw.smto.moretools.util.BlockBoxUtils;
@@ -87,6 +80,7 @@ public class ExcavatorToolItem extends BaseToolItem implements PolymerItem, Poly
 
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
+        if (context.getPlayer() == null) return ActionResult.PASS;
         if (context.getPlayer().isSneaking()) return this.baseItem.useOnBlock(context);
         ActionResult res = ActionResult.PASS;
         for (BlockPos blockPos : this.getAffectedArea(context.getWorld(), context.getBlockPos(), context.getWorld().getBlockState(context.getBlockPos()), context.getSide(), context.getWorld().getBlockState(context.getBlockPos()).getBlock())) {

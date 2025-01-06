@@ -5,10 +5,7 @@ import eu.pb4.polymer.core.api.utils.PolymerClientDecoded;
 import eu.pb4.polymer.core.api.utils.PolymerKeepModel;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.PickaxeItem;
-import net.minecraft.item.ToolMaterial;
+import net.minecraft.item.*;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.BlockTags;
@@ -27,12 +24,18 @@ import xyz.nucleoid.packettweaker.PacketContext;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HammerToolItem extends BaseToolItem implements PolymerItem, PolymerKeepModel, PolymerClientDecoded {
+public class VeinExcavatorToolItem extends BaseToolItem implements PolymerItem, PolymerKeepModel, PolymerClientDecoded {
     private final Item baseItem;
+    private final int range;
 
-    public HammerToolItem(PickaxeItem base, ToolMaterial baseMaterial) {
-        super(Identifier.of(MoreTools.MOD_ID, Registries.ITEM.getId(base).getPath().replace("pickaxe", "hammer")), baseMaterial, BlockTags.PICKAXE_MINEABLE);
+    public VeinExcavatorToolItem(ShovelItem base, ToolMaterial baseMaterial, int range) {
+        super(Identifier.of(MoreTools.MOD_ID, Registries.ITEM.getId(base).getPath().replace("shovel", "vein_excavator")), baseMaterial, BlockTags.SHOVEL_MINEABLE);
         this.baseItem = base;
+        this.range = range;
+    }
+
+    public VeinExcavatorToolItem(ShovelItem base, ToolMaterial baseMaterial) {
+        this(base, baseMaterial, 3);
     }
 
     @Override
@@ -43,25 +46,39 @@ public class HammerToolItem extends BaseToolItem implements PolymerItem, Polymer
         return this.baseItem;
     }
 
+
     @Override
     public @Nullable Identifier getPolymerItemModel(ItemStack stack, PacketContext context) {
         return super.id;
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        tooltip.add(Text.translatable("item.moretools.hammer.tooltip").formatted(Formatting.GOLD));
+    public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
+        tooltip.add(Text.translatable("item.moretools.vein_excavator.tooltip").formatted(Formatting.GOLD));
     }
 
     @Override
     public List<BlockPos> getAffectedArea(@Nullable World world, BlockPos pos, BlockState state, @Nullable Direction d, @Nullable Block target) {
         var list = new ArrayList<BlockPos>();
-        List<BlockPos> result = new ArrayList<>();
-        if (d != null) result = BlockBoxUtils.getSurroundingBlocks(pos, d, 1).toList();
+        int range = 3;
+        BlockState targetState = null;
+        if (target != null) targetState = target.getDefaultState();
+        if (targetState == null) return list;
+        boolean useVanillaDirections = true;
+        if (targetState.isIn(MoreTools.BlockTags.VEIN_EXCAVATOR_APPLICABLE)) {
+            range = this.range;
+            useVanillaDirections = false;
+        }
+
+        List<BlockPos> result;
+        if (useVanillaDirections) {
+            result = BlockBoxUtils.getBlockCluster(target, pos, world, range, BlockBoxUtils.DirectionSets.CARDINAL);
+        } else result = BlockBoxUtils.getBlockCluster(target, pos, world, range, BlockBoxUtils.DirectionSets.EXTENDED);
+
         if (world != null) {
             for (BlockPos blockPos : result) {
-                if (world.getBlockState(blockPos).isIn(BlockTags.PICKAXE_MINEABLE)) {
-                    if (!(world.getBlockState(blockPos).getHardness(world, blockPos) > state.getHardness(world, pos))) list.add(blockPos);
+                if (world.getBlockState(blockPos).isIn(BlockTags.SHOVEL_MINEABLE)) {
+                    list.add(blockPos);
                 }
             }
         }

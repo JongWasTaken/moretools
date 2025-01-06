@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "###",
+        "M/M",
+        " / "
+    ],
+    "key": {
+        "#": "minecraft:diamond_shovel",
+        "M": "minecraft:diamond",
+        "/": "minecraft:stick"
+    },
+    "result": {
+        "id": "moretools:diamond_vein_excavator",
+        "count": 1
+    }
+}

@@ -20,6 +20,13 @@
   "item.moretools.diamond_excavator": "Diamond Excavator",
   "item.moretools.netherite_excavator": "Netherite Excavator",
 
+  "item.moretools.wooden_vein_excavator": "Wooden Vein Excavator",
+  "item.moretools.stone_vein_excavator": "Stone Vein Excavator",
+  "item.moretools.iron_vein_excavator": "Iron Vein Excavator",
+  "item.moretools.golden_vein_excavator": "Golden Vein Excavator",
+  "item.moretools.diamond_vein_excavator": "Diamond Vein Excavator",
+  "item.moretools.netherite_vein_excavator": "Netherite Vein Excavator",
+
   "item.moretools.wooden_saw": "Wooden Saw",
   "item.moretools.stone_saw": "Stone Saw",
   "item.moretools.iron_saw": "Iron Saw",
@@ -29,12 +36,14 @@
 
   "item.moretools.hammer.tooltip": "Allows breaking blocks in a 3x3 radius.",
   "item.moretools.vein_hammer.tooltip": "Allows breaking ore veins quickly.",
+  "item.moretools.vein_excavator.tooltip": "Allows breaking some shovel-able clusters of blocks quickly.",
   "item.moretools.excavator.tooltip": "Allows breaking blocks in a 3x3 radius.",
   "item.moretools.saw.tooltip":  "Fells most trees in one go.",
   "item.moretools.saw.tooltip.2": "Be careful around wooden structures!",
 
   "tag.item.moretools.hammers": "Moretools Hammers",
   "tag.item.moretools.vein_hammers": "Moretools Vein Hammers",
+  "tag.item.moretools.vein_excavators": "Moretools Vein Excavators",
   "tag.item.moretools.excavators": "Moretools Excavators",
   "tag.item.moretools.saws": "Moretools Saws",
 

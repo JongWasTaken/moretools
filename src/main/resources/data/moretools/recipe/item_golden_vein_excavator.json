@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "###",
+        "M/M",
+        " / "
+    ],
+    "key": {
+        "#": "minecraft:golden_shovel",
+        "M": "minecraft:gold_ingot",
+        "/": "minecraft:stick"
+    },
+    "result": {
+        "id": "moretools:golden_vein_excavator",
+        "count": 1
+    }
+}

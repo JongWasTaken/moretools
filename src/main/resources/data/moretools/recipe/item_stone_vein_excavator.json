@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "###",
+        "M/M",
+        " / "
+    ],
+    "key": {
+        "#": "minecraft:stone_shovel",
+        "M": "minecraft:cobblestone",
+        "/": "minecraft:stick"
+    },
+    "result": {
+        "id": "moretools:stone_vein_excavator",
+        "count": 1
+    }
+}

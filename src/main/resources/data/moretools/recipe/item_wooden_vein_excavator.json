@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "###",
+        "M/M",
+        " / "
+    ],
+    "key": {
+        "#": "minecraft:wooden_shovel",
+        "M": "#minecraft:planks",
+        "/": "minecraft:stick"
+    },
+    "result": {
+        "id": "moretools:wooden_vein_excavator",
+        "count": 1
+    }
+}

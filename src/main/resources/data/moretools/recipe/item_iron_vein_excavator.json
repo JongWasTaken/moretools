@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "###",
+        "M/M",
+        " / "
+    ],
+    "key": {
+        "#": "minecraft:iron_shovel",
+        "M": "minecraft:iron_ingot",
+        "/": "minecraft:stick"
+    },
+    "result": {
+        "id": "moretools:iron_vein_excavator",
+        "count": 1
+    }
+}

@@ -33,10 +33,11 @@ public abstract class ServerPlayerInteractionManagerMixin {
         BlockState state = world.getBlockState(pos);
         boolean cached = world.removeBlock(pos, dropItems);
 
-        if (this.player.getStackInHand(Hand.MAIN_HAND).getItem() instanceof BaseToolItem item) {
+        var handStack = this.player.getStackInHand(Hand.MAIN_HAND);
+        if (handStack.getItem() instanceof BaseToolItem item) {
             var d = ServerPlayerInteractionManagerMixin.BLOCK_BREAK_DIRECTIONS.remove(this.player);
             if (d != null) {
-                item.postBlockBreak(state, pos, d, this.player, this.world);
+                item.postBlockBreak(state, pos, d, this.player, this.world, handStack);
             }
         }
 

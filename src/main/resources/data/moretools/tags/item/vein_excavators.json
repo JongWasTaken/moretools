@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "moretools:wooden_vein_excavator",
+    "moretools:stone_vein_excavator",
+    "moretools:iron_vein_excavator",
+    "moretools:golden_vein_excavator",
+    "moretools:diamond_vein_excavator",
+    "moretools:netherite_vein_excavator"
+  ]
+}

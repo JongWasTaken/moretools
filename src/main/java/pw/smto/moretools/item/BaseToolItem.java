@@ -20,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import pw.smto.moretools.MoreTools;
 import pw.smto.moretools.util.CustomMaterial;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class BaseToolItem extends MiningToolItem {
         RegistryEntryLookup<Block> registryEntryLookup = Registries.createEntryLookup(Registries.BLOCK);
         float speed = m.speed() * multiplier;
         return new ToolComponent(
-                // 0.1F applies to all non-target blocks, e.g. grass for a hammer
+                // 0.3F applies to all non-target blocks, e.g. grass for a hammer
                 List.of(
                         ToolComponent.Rule.ofNeverDropping(
                                 registryEntryLookup.getOrThrow(m.incorrectBlocksForDrops())
@@ -54,14 +55,13 @@ public class BaseToolItem extends MiningToolItem {
                 // damage and mining speed get nerfed
                 Math.max(baseMaterial.attackDamageBonus()-4, 1.0F),
                 -3.0f,
-                new Item.Settings().registryKey(RegistryKey.of(RegistryKeys.ITEM, id))
+                new Item.Settings().registryKey(RegistryKey.of(RegistryKeys.ITEM, id)).component(MoreTools.ACT_AS_BASE_TOOL, false)
         );
         this.id = id;
         this.fastComponent = BaseToolItem.createComponent(baseMaterial, targetBlocks, 1.0F);
         this.slowComponent = BaseToolItem.createComponent(baseMaterial, targetBlocks, 0.5F);
     }
 
-    private boolean actAsBaseTool;
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
         if (selected)
@@ -70,18 +70,18 @@ public class BaseToolItem extends MiningToolItem {
                 if (serverPlayerEntity.isSneaking())
                 {
                     stack.set(DataComponentTypes.TOOL, this.fastComponent);
-                    this.actAsBaseTool = true;
+                    stack.set(MoreTools.ACT_AS_BASE_TOOL, true);
                 }
                 else {
                     stack.set(DataComponentTypes.TOOL, this.slowComponent);
-                    this.actAsBaseTool = false;
+                    stack.set(MoreTools.ACT_AS_BASE_TOOL, false);
                 }
             }
         }
     }
 
-    public void postBlockBreak(BlockState state, BlockPos pos, Direction d, ServerPlayerEntity player, World world) {
-        if (this.actAsBaseTool) return;
+    public void postBlockBreak(BlockState state, BlockPos pos, Direction d, ServerPlayerEntity player, World world, ItemStack stack) {
+        if (Boolean.TRUE.equals(stack.get(MoreTools.ACT_AS_BASE_TOOL))) return;
         this.doToolPower(state, pos, d, player, world);
     }
 
