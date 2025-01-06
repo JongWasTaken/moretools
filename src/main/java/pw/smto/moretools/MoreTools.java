@@ -2,6 +2,7 @@ package pw.smto.moretools;
 
 import com.mojang.serialization.Codec;
 import eu.pb4.polymer.core.api.item.PolymerItemGroupUtils;
+import eu.pb4.polymer.core.api.other.PolymerComponent;
 import eu.pb4.polymer.resourcepack.api.PolymerResourcePackUtils;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
@@ -48,6 +49,7 @@ public class MoreTools implements ModInitializer {
 		PolymerResourcePackUtils.markAsRequired();
 
 		Registry.register(Registries.DATA_COMPONENT_TYPE, Identifier.of(MoreTools.MOD_ID, "act_as_base_tool"), MoreTools.ACT_AS_BASE_TOOL);
+		PolymerComponent.registerDataComponent(MoreTools.ACT_AS_BASE_TOOL);
 
 		// Register all items
 		for (Field field : Items.class.getFields()) {
@@ -124,7 +126,7 @@ public class MoreTools implements ModInitializer {
 			player.sendMessage(Text.translatable("moretools.client_version_mismatch.4").append(Text.literal(" " + MoreTools.VERSION).formatted(Formatting.GREEN)), false);
 			return;
 		}
-		MoreTools.LOGGER.info("Enabling client-side item models for player: {}", Objects.requireNonNull(player.getDisplayName()).getString());
+		MoreTools.LOGGER.info("Enabling client-side enhancements for player: {}", Objects.requireNonNull(player.getDisplayName()).getString());
 		MoreTools.PLAYERS_WITH_CLIENT.add(player);
 		player.getInventory().markDirty();
 	}
