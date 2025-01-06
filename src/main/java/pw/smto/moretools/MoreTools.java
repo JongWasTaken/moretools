@@ -41,7 +41,7 @@ public class MoreTools implements ModInitializer {
 	@SuppressWarnings("OptionalGetWithoutIsPresent")
     public static final String VERSION = FabricLoader.getInstance().getModContainer(MoreTools.MOD_ID).get().getMetadata().getVersion().toString();
 
-	public static final ComponentType<Boolean> ACT_AS_BASE_TOOL = ComponentType.<Boolean>builder().codec(Codec.BOOL).packetCodec(PacketCodecs.BOOL).build();
+	public static final ComponentType<Boolean> ACT_AS_BASE_TOOL = ComponentType.<Boolean>builder().codec(Codec.BOOL).packetCodec(PacketCodecs.BOOLEAN).build();
 
 	@Override
 	public void onInitialize() {
@@ -175,7 +175,7 @@ public class MoreTools implements ModInitializer {
 	public static class Payloads {
 		public record S2CHandshake(boolean ignored) implements CustomPayload {
 			public static final CustomPayload.Id<S2CHandshake> ID = new CustomPayload.Id<>(Identifier.of(MoreTools.MOD_ID, "s2c_handshake"));
-			public static final PacketCodec<RegistryByteBuf, S2CHandshake> CODEC = PacketCodec.tuple(PacketCodecs.BOOL, S2CHandshake::ignored, S2CHandshake::new);
+			public static final PacketCodec<RegistryByteBuf, S2CHandshake> CODEC = PacketCodec.tuple(PacketCodecs.BOOLEAN, S2CHandshake::ignored, S2CHandshake::new);
 			@Override
 			public Id<? extends CustomPayload> getId() {
 				return S2CHandshake.ID;
@@ -183,7 +183,7 @@ public class MoreTools implements ModInitializer {
 		}
 		public record C2SHandshakeCallback(boolean ignored) implements CustomPayload {
 			public static final CustomPayload.Id<C2SHandshakeCallback> ID = new CustomPayload.Id<>(Identifier.of(MoreTools.MOD_ID, "c2s_handshake_callback"));
-			public static final PacketCodec<RegistryByteBuf, C2SHandshakeCallback> CODEC = PacketCodec.tuple(PacketCodecs.BOOL, C2SHandshakeCallback::ignored, C2SHandshakeCallback::new);
+			public static final PacketCodec<RegistryByteBuf, C2SHandshakeCallback> CODEC = PacketCodec.tuple(PacketCodecs.BOOLEAN, C2SHandshakeCallback::ignored, C2SHandshakeCallback::new);
 			@Override
 			public Id<? extends CustomPayload> getId() {
 				return C2SHandshakeCallback.ID;
