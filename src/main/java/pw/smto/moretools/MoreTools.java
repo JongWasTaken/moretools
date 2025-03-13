@@ -119,7 +119,7 @@ public class MoreTools implements ModInitializer {
 	}
 
 	private static void handleClientCallback(ServerPlayerEntity player, String version) {
-		if (!Objects.equals(version, MoreTools.VERSION.split("\\+")[0])) {
+		if (!Objects.equals(version.charAt(3), MoreTools.VERSION.split("\\+")[0].charAt(3))) {
 			player.sendMessage(Text.translatable("moretools.client_version_mismatch.1"), false);
 			player.sendMessage(Text.translatable("moretools.client_version_mismatch.2"), false);
 			player.sendMessage(Text.translatable("moretools.client_version_mismatch.3").append(Text.literal(" " + version).formatted(Formatting.RED)), false);
