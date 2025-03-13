@@ -29,7 +29,7 @@ public class VeinExcavatorToolItem extends BaseToolItem implements PolymerItem, 
     private final int range;
 
     public VeinExcavatorToolItem(ShovelItem base, ToolMaterial baseMaterial, int range) {
-        super(Identifier.of(MoreTools.MOD_ID, Registries.ITEM.getId(base).getPath().replace("shovel", "vein_excavator")), baseMaterial, BlockTags.SHOVEL_MINEABLE);
+        super(base, Identifier.of(MoreTools.MOD_ID, Registries.ITEM.getId(base).getPath().replace("shovel", "vein_excavator")), baseMaterial, BlockTags.SHOVEL_MINEABLE);
         this.baseItem = base;
         this.range = range;
     }

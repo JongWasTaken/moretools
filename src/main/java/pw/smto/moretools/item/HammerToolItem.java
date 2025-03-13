@@ -31,7 +31,7 @@ public class HammerToolItem extends BaseToolItem implements PolymerItem, Polymer
     private final Item baseItem;
 
     public HammerToolItem(PickaxeItem base, ToolMaterial baseMaterial) {
-        super(Identifier.of(MoreTools.MOD_ID, Registries.ITEM.getId(base).getPath().replace("pickaxe", "hammer")), baseMaterial, BlockTags.PICKAXE_MINEABLE);
+        super(base, Identifier.of(MoreTools.MOD_ID, Registries.ITEM.getId(base).getPath().replace("pickaxe", "hammer")), baseMaterial, BlockTags.PICKAXE_MINEABLE);
         this.baseItem = base;
     }
 

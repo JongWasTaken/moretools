@@ -30,7 +30,7 @@ public class ExcavatorToolItem extends BaseToolItem implements PolymerItem, Poly
     private final Item baseItem;
 
     public ExcavatorToolItem(ShovelItem base, ToolMaterial baseMaterial) {
-        super(Identifier.of(MoreTools.MOD_ID, Registries.ITEM.getId(base).getPath().replace("shovel", "excavator")), baseMaterial, BlockTags.SHOVEL_MINEABLE);
+        super(base, Identifier.of(MoreTools.MOD_ID, Registries.ITEM.getId(base).getPath().replace("shovel", "excavator")), baseMaterial, BlockTags.SHOVEL_MINEABLE);
         this.baseItem = base;
     }
 

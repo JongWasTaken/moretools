@@ -30,7 +30,7 @@ public class SawToolItem extends BaseToolItem implements PolymerItem, PolymerKee
     private final Item baseItem;
 
     public SawToolItem(AxeItem base, ToolMaterial baseMaterial) {
-        super(Identifier.of(MoreTools.MOD_ID, Registries.ITEM.getId(base).getPath().replace("axe", "saw")), baseMaterial, MoreTools.BlockTags.SAW_MINEABLE);
+        super(base, Identifier.of(MoreTools.MOD_ID, Registries.ITEM.getId(base).getPath().replace("axe", "saw")), baseMaterial, MoreTools.BlockTags.SAW_MINEABLE);
         this.baseItem = base;
     }
 

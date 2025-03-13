@@ -3,6 +3,8 @@ package pw.smto.moretools.item;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.EnchantableComponent;
+import net.minecraft.component.type.RepairableComponent;
 import net.minecraft.component.type.ToolComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
@@ -13,6 +15,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
@@ -38,7 +41,7 @@ public class BaseToolItem extends MiningToolItem {
                         ),
                         ToolComponent.Rule.ofAlwaysDropping(
                                 registryEntryLookup.getOrThrow(tag), speed)
-                ), 0.3F, 1
+                ), 1.0F, 1
         );
     }
 
@@ -47,7 +50,7 @@ public class BaseToolItem extends MiningToolItem {
 
     public final Identifier id;
 
-    public BaseToolItem(Identifier id, ToolMaterial baseMaterial, TagKey<Block> targetBlocks) {
+    public BaseToolItem(Item base, Identifier id, ToolMaterial baseMaterial, TagKey<Block> targetBlocks) {
         super(
                 // durability gets tripled
                 CustomMaterial.of(baseMaterial).multiplyDurability(3).toVanilla(),
@@ -55,7 +58,9 @@ public class BaseToolItem extends MiningToolItem {
                 // damage and mining speed get nerfed
                 Math.max(baseMaterial.attackDamageBonus()-4, 1.0F),
                 -3.0f,
-                new Item.Settings().registryKey(RegistryKey.of(RegistryKeys.ITEM, id)).component(MoreTools.ACT_AS_BASE_TOOL, false)
+                new Item.Settings()
+                        .registryKey(RegistryKey.of(RegistryKeys.ITEM, id))
+                        .component(MoreTools.ACT_AS_BASE_TOOL, false)
         );
         this.id = id;
         this.fastComponent = BaseToolItem.createComponent(baseMaterial, targetBlocks, 1.0F);

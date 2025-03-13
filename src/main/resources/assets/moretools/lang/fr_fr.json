@@ -1,0 +1,54 @@
+{
+  "item.moretools.wooden_hammer": "Marteau en bois",
+  "item.moretools.stone_hammer": "Marteau en pierre",
+  "item.moretools.iron_hammer": "Marteau en fer",
+  "item.moretools.golden_hammer": "Marteau en or",
+  "item.moretools.diamond_hammer": "Marteau en diamant",
+  "item.moretools.netherite_hammer": "Marteau en Netherite",
+
+  "item.moretools.wooden_vein_hammer": "Marteau de veine en bois",
+  "item.moretools.stone_vein_hammer": "Marteau de veine en pierre",
+  "item.moretools.iron_vein_hammer": "Marteau de veine en fer",
+  "item.moretools.golden_vein_hammer": "Marteau de veine en or",
+  "item.moretools.diamond_vein_hammer": "Marteau de veine en diamant",
+  "item.moretools.netherite_vein_hammer": "Marteau de veine en Netherite",
+
+  "item.moretools.wooden_excavator": "Excavateur en bois",
+  "item.moretools.stone_excavator": "Excavateur en pierre",
+  "item.moretools.iron_excavator": "Excavateur en fer",
+  "item.moretools.golden_excavator": "Excavateur en or",
+  "item.moretools.diamond_excavator": "Excavateur en diamant",
+  "item.moretools.netherite_excavator": "Excavateur en Netherite",
+
+  "item.moretools.wooden_vein_excavator": "Excavateur de veine en bois",
+  "item.moretools.stone_vein_excavator": "Excavateur de veine en pierre",
+  "item.moretools.iron_vein_excavator": "Excavateur de veine en fer",
+  "item.moretools.golden_vein_excavator": "Excavateur de veine en or",
+  "item.moretools.diamond_vein_excavator": "Excavateur de veine en diamant",
+  "item.moretools.netherite_vein_excavator": "Excavateur de veine en Netherite",
+
+  "item.moretools.wooden_saw": "Scie en bois",
+  "item.moretools.stone_saw": "Scie en pierre",
+  "item.moretools.iron_saw": "Scie en fer",
+  "item.moretools.golden_saw": "Scie en or",
+  "item.moretools.diamond_saw": "Scie en diamant",
+  "item.moretools.netherite_saw": "Scie en Netherite",
+
+  "item.moretools.hammer.tooltip": "Permet de miner dans un rayon de 3x3 blocs.",
+  "item.moretools.vein_hammer.tooltip": "Permet de miner les minerais plus rapidement.",
+  "item.moretools.vein_excavator.tooltip": "Permet de casser rapidement certains amas de blocs creusables avec une pelle.",
+  "item.moretools.excavator.tooltip": "Permet de miner dans un rayon de 3x3 blocs.",
+  "item.moretools.saw.tooltip":  "Abat la plupart des arbres en un seul coup.",
+  "item.moretools.saw.tooltip.2": "Gare à vous autour de structures en bois !",
+
+  "tag.item.moretools.hammers": "Marteaux MoreTools",
+  "tag.item.moretools.vein_hammers": "Marteaux de veine MoreTools",
+  "tag.item.moretools.vein_excavators": "Excavateurs de veine MoreTools",
+  "tag.item.moretools.excavators": "Excavateurs MoreTools",
+  "tag.item.moretools.saws": "Scies MoreTools",
+
+  "moretools.client_version_mismatch.1": "Votre client MoreTools pourrait être obsolète pour ce serveur.",
+  "moretools.client_version_mismatch.2": "Les aperçus des outils peuvent-être inexacts !",
+  "moretools.client_version_mismatch.3": "Votre version:",
+  "moretools.client_version_mismatch.4": "Version requise:"
+}

@@ -32,7 +32,7 @@ public class VeinHammerToolItem extends BaseToolItem implements PolymerItem, Pol
     private final int range;
 
     public VeinHammerToolItem(PickaxeItem base, ToolMaterial baseMaterial, int range) {
-        super(Identifier.of(MoreTools.MOD_ID, Registries.ITEM.getId(base).getPath().replace("pickaxe", "vein_hammer")), baseMaterial, BlockTags.PICKAXE_MINEABLE);
+        super(base, Identifier.of(MoreTools.MOD_ID, Registries.ITEM.getId(base).getPath().replace("pickaxe", "vein_hammer")), baseMaterial, BlockTags.PICKAXE_MINEABLE);
         this.baseItem = base;
         this.range = range;
     }
