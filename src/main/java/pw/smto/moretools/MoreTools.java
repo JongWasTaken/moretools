@@ -12,7 +12,6 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.component.ComponentType;
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.*;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
@@ -132,12 +131,12 @@ public class MoreTools implements ModInitializer {
 	}
 
 	public static class Items {
-		public static final Item WOODEN_HAMMER = new HammerToolItem((PickaxeItem) net.minecraft.item.Items.WOODEN_PICKAXE, ToolMaterial.WOOD);
-		public static final Item STONE_HAMMER = new HammerToolItem((PickaxeItem) net.minecraft.item.Items.STONE_PICKAXE, ToolMaterial.STONE);
-		public static final Item IRON_HAMMER = new HammerToolItem((PickaxeItem) net.minecraft.item.Items.IRON_PICKAXE, ToolMaterial.IRON);
-		public static final Item GOLDEN_HAMMER = new HammerToolItem((PickaxeItem) net.minecraft.item.Items.GOLDEN_PICKAXE, ToolMaterial.GOLD);
-		public static final Item DIAMOND_HAMMER = new HammerToolItem((PickaxeItem) net.minecraft.item.Items.DIAMOND_PICKAXE, ToolMaterial.DIAMOND);
-		public static final Item NETHERITE_HAMMER = new HammerToolItem((PickaxeItem) net.minecraft.item.Items.NETHERITE_PICKAXE, ToolMaterial.NETHERITE);
+		public static final Item WOODEN_HAMMER = new HammerToolItem(net.minecraft.item.Items.WOODEN_PICKAXE, ToolMaterial.WOOD);
+		public static final Item STONE_HAMMER = new HammerToolItem(net.minecraft.item.Items.STONE_PICKAXE, ToolMaterial.STONE);
+		public static final Item IRON_HAMMER = new HammerToolItem(net.minecraft.item.Items.IRON_PICKAXE, ToolMaterial.IRON);
+		public static final Item GOLDEN_HAMMER = new HammerToolItem(net.minecraft.item.Items.GOLDEN_PICKAXE, ToolMaterial.GOLD);
+		public static final Item DIAMOND_HAMMER = new HammerToolItem(net.minecraft.item.Items.DIAMOND_PICKAXE, ToolMaterial.DIAMOND);
+		public static final Item NETHERITE_HAMMER = new HammerToolItem(net.minecraft.item.Items.NETHERITE_PICKAXE, ToolMaterial.NETHERITE);
 		public static final Item WOODEN_EXCAVATOR = new ExcavatorToolItem((ShovelItem) net.minecraft.item.Items.WOODEN_SHOVEL, ToolMaterial.WOOD);
 		public static final Item STONE_EXCAVATOR = new ExcavatorToolItem((ShovelItem) net.minecraft.item.Items.STONE_SHOVEL, ToolMaterial.STONE);
 		public static final Item IRON_EXCAVATOR = new ExcavatorToolItem((ShovelItem) net.minecraft.item.Items.IRON_SHOVEL, ToolMaterial.IRON);
@@ -150,12 +149,12 @@ public class MoreTools implements ModInitializer {
 		public static final Item GOLDEN_SAW = new SawToolItem((AxeItem) net.minecraft.item.Items.GOLDEN_AXE, ToolMaterial.GOLD);
 		public static final Item DIAMOND_SAW = new SawToolItem((AxeItem) net.minecraft.item.Items.DIAMOND_AXE, ToolMaterial.DIAMOND);
 		public static final Item NETHERITE_SAW = new SawToolItem((AxeItem) net.minecraft.item.Items.NETHERITE_AXE, ToolMaterial.NETHERITE);
-		public static final Item WOODEN_VEIN_HAMMER = new VeinHammerToolItem((PickaxeItem) net.minecraft.item.Items.WOODEN_PICKAXE, ToolMaterial.WOOD);
-		public static final Item STONE_VEIN_HAMMER = new VeinHammerToolItem((PickaxeItem) net.minecraft.item.Items.STONE_PICKAXE, ToolMaterial.STONE, 4);
-		public static final Item IRON_VEIN_HAMMER = new VeinHammerToolItem((PickaxeItem) net.minecraft.item.Items.IRON_PICKAXE, ToolMaterial.IRON, 5);
-		public static final Item GOLDEN_VEIN_HAMMER = new VeinHammerToolItem((PickaxeItem) net.minecraft.item.Items.GOLDEN_PICKAXE, ToolMaterial.GOLD, 6);
-		public static final Item DIAMOND_VEIN_HAMMER = new VeinHammerToolItem((PickaxeItem) net.minecraft.item.Items.DIAMOND_PICKAXE, ToolMaterial.DIAMOND, 6);
-		public static final Item NETHERITE_VEIN_HAMMER = new VeinHammerToolItem((PickaxeItem) net.minecraft.item.Items.NETHERITE_PICKAXE, ToolMaterial.NETHERITE, 7);
+		public static final Item WOODEN_VEIN_HAMMER = new VeinHammerToolItem(net.minecraft.item.Items.WOODEN_PICKAXE, ToolMaterial.WOOD);
+		public static final Item STONE_VEIN_HAMMER = new VeinHammerToolItem(net.minecraft.item.Items.STONE_PICKAXE, ToolMaterial.STONE, 4);
+		public static final Item IRON_VEIN_HAMMER = new VeinHammerToolItem(net.minecraft.item.Items.IRON_PICKAXE, ToolMaterial.IRON, 5);
+		public static final Item GOLDEN_VEIN_HAMMER = new VeinHammerToolItem(net.minecraft.item.Items.GOLDEN_PICKAXE, ToolMaterial.GOLD, 6);
+		public static final Item DIAMOND_VEIN_HAMMER = new VeinHammerToolItem(net.minecraft.item.Items.DIAMOND_PICKAXE, ToolMaterial.DIAMOND, 6);
+		public static final Item NETHERITE_VEIN_HAMMER = new VeinHammerToolItem(net.minecraft.item.Items.NETHERITE_PICKAXE, ToolMaterial.NETHERITE, 7);
 		public static final Item WOODEN_VEIN_EXCAVATOR = new VeinExcavatorToolItem((ShovelItem) net.minecraft.item.Items.WOODEN_SHOVEL, ToolMaterial.WOOD);
 		public static final Item STONE_VEIN_EXCAVATOR = new VeinExcavatorToolItem((ShovelItem) net.minecraft.item.Items.STONE_SHOVEL, ToolMaterial.STONE, 4);
 		public static final Item IRON_VEIN_EXCAVATOR = new VeinExcavatorToolItem((ShovelItem) net.minecraft.item.Items.IRON_SHOVEL, ToolMaterial.IRON, 5);
