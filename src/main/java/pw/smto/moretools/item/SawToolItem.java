@@ -44,6 +44,11 @@ public class SawToolItem extends BaseToolItem implements PolymerItem, PolymerKee
     }
 
     @Override
+    public List<Text> getLore() {
+        return List.of(Text.translatable("item.moretools.saw.tooltip").formatted(Formatting.GOLD), Text.translatable("item.moretools.saw.tooltip.2").formatted(Formatting.GOLD));
+    }
+
+    @Override
     public Item getPolymerItem(ItemStack itemStack, PacketContext context) {
         if (MoreTools.PLAYERS_WITH_CLIENT.contains(context.getPlayer())) {
             return this;

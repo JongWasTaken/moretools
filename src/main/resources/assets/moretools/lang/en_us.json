@@ -41,6 +41,8 @@
   "item.moretools.saw.tooltip":  "Fells most trees in one go.",
   "item.moretools.saw.tooltip.2": "Be careful around wooden structures!",
 
+  "tooltip.moretools.durability": "Left durability",
+
   "tag.item.moretools.hammers": "Moretools Hammers",
   "tag.item.moretools.vein_hammers": "Moretools Vein Hammers",
   "tag.item.moretools.vein_excavators": "Moretools Vein Excavators",

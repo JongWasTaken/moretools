@@ -12,6 +12,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.component.ComponentType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
@@ -27,11 +28,13 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import org.geysermc.geyser.api.GeyserApi;
 import org.slf4j.LoggerFactory;
 import pw.smto.moretools.item.*;
 
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.function.Function;
 
 public class MoreTools implements ModInitializer {
 	public static final String MOD_ID = "moretools";
@@ -41,6 +44,8 @@ public class MoreTools implements ModInitializer {
     public static final String VERSION = FabricLoader.getInstance().getModContainer(MoreTools.MOD_ID).get().getMetadata().getVersion().toString();
 
 	public static final ComponentType<Boolean> ACT_AS_BASE_TOOL = ComponentType.<Boolean>builder().codec(Codec.BOOL).packetCodec(PacketCodecs.BOOLEAN).build();
+
+	private static Function<UUID, Boolean> bedrockPlayerCheckFunction = uuid -> false;
 
 	@Override
 	public void onInitialize() {
@@ -113,7 +118,10 @@ public class MoreTools implements ModInitializer {
 
 		ServerPlayConnectionEvents.DISCONNECT.register((ServerPlayNetworkHandler handler, MinecraftServer server) -> MoreTools.PLAYERS_WITH_CLIENT.remove(handler.player));
 
-		//net.minecraft.registry.tag.BlockTags.SOUL
+		if (FabricLoader.getInstance().isModLoaded("geyser-fabric")) {
+			MoreTools.bedrockPlayerCheckFunction = (uuid) -> GeyserApi.api().connectionByUuid(uuid) != null;
+		}
+
         MoreTools.LOGGER.info("MoreTools loaded!");
 	}
 
@@ -196,5 +204,9 @@ public class MoreTools implements ModInitializer {
 				return C2SHandshakeCallbackWithVersion.ID;
 			}
 		}
+	}
+
+	public static boolean isBedrockPlayer(PlayerEntity player) {
+		return MoreTools.bedrockPlayerCheckFunction.apply(player.getUuid());
 	}
 }

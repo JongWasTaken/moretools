@@ -50,6 +50,11 @@ public class VeinExcavatorToolItem extends BaseToolItem implements PolymerItem, 
     }
 
     @Override
+    public List<Text> getLore() {
+        return List.of(Text.translatable("item.moretools.vein_excavator.tooltip").formatted(Formatting.GOLD));
+    }
+
+    @Override
     public Item getPolymerItem(ItemStack itemStack, PacketContext context) {
         if (MoreTools.PLAYERS_WITH_CLIENT.contains(context.getPlayer())) {
             return this;

@@ -51,6 +51,11 @@ public class VeinHammerToolItem extends BaseToolItem implements PolymerItem, Pol
     }
 
     @Override
+    public List<Text> getLore() {
+        return List.of(Text.translatable("item.moretools.vein_hammer.tooltip").formatted(Formatting.GOLD));
+    }
+
+    @Override
     public Item getPolymerItem(ItemStack itemStack, PacketContext context) {
         if (MoreTools.PLAYERS_WITH_CLIENT.contains(context.getPlayer())) {
             return this;
