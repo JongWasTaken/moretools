@@ -37,7 +37,7 @@ public abstract class ServerPlayerInteractionManagerMixin {
         if (handStack.getItem() instanceof BaseToolItem item) {
             var d = ServerPlayerInteractionManagerMixin.BLOCK_BREAK_DIRECTIONS.remove(this.player);
             if (d != null) {
-                item.postBlockBreak(state, pos, d, this.player, this.world, handStack);
+                item.doToolPowerIfAllowed(state, pos, d, this.player, this.world, handStack);
             }
         }
 

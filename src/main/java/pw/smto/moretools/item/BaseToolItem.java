@@ -82,7 +82,7 @@ public abstract class BaseToolItem extends Item {
         }
     }
 
-    public void postBlockBreak(BlockState state, BlockPos pos, Direction d, ServerPlayerEntity player, World world, ItemStack stack) {
+    public void doToolPowerIfAllowed(BlockState state, BlockPos pos, Direction d, ServerPlayerEntity player, World world, ItemStack stack) {
         if (Boolean.TRUE.equals(stack.get(MoreTools.ACT_AS_BASE_TOOL))) return;
         this.doToolPower(state, pos, d, player, world);
     }

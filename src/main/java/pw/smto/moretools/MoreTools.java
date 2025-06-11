@@ -107,13 +107,12 @@ public class MoreTools implements ModInitializer {
 		PayloadTypeRegistry.playC2S().register(Payloads.C2SHandshakeCallback.ID, Payloads.C2SHandshakeCallback.CODEC);
 		PayloadTypeRegistry.playC2S().register(Payloads.C2SHandshakeCallbackWithVersion.ID, Payloads.C2SHandshakeCallbackWithVersion.CODEC);
 		ServerPlayNetworking.registerGlobalReceiver(Payloads.C2SHandshakeCallback.ID, (payload, context) -> {
-			// Why isn't context.server() available here? Maybe I'm tweaking, but I feel like that was a thing?
-			if (context.player() == null) return;
-			context.player().server.execute(() -> MoreTools.handleClientCallback(context.player(), "1.7.3"));
+			if (context.server() == null) return;
+			context.server().execute(() -> MoreTools.handleClientCallback(context.player(), "1.7.3"));
 		});
 		ServerPlayNetworking.registerGlobalReceiver(Payloads.C2SHandshakeCallbackWithVersion.ID, (payload, context) -> {
-			if (context.player() == null) return;
-			context.player().server.execute(() -> MoreTools.handleClientCallback(context.player(), payload.version));
+			if (context.server() == null) return;
+			context.server().execute(() -> MoreTools.handleClientCallback(context.player(), payload.version));
 		});
 
 		ServerPlayConnectionEvents.DISCONNECT.register((ServerPlayNetworkHandler handler, MinecraftServer server) -> MoreTools.PLAYERS_WITH_CLIENT.remove(handler.player));
