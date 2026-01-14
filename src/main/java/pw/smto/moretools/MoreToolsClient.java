@@ -8,12 +8,12 @@ import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.render.RenderLayers;
 import net.minecraft.client.render.VertexRendering;
 import net.minecraft.client.render.state.OutlineRenderState;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -22,7 +22,8 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
+import net.minecraft.util.math.ColorHelper;
+import net.minecraft.util.shape.VoxelShapes;
 import pw.smto.moretools.item.BaseToolItem;
 
 import java.util.Objects;
@@ -42,12 +43,11 @@ public class MoreToolsClient implements ClientModInitializer {
             if (context.matrices() == null) return true;
             if (context.consumers() == null) return true;
 
-            PlayerEntity player = context.gameRenderer().getClient().player;
+            ClientPlayerEntity player = context.gameRenderer().getClient().player;
             if(player == null) return true;
 
             var tickCounter = MinecraftClient.getInstance().getRenderTickCounter();
-            HitResult hitResult = context.gameRenderer().findCrosshairTarget(context.gameRenderer().getClient().getCameraEntity(), player.getBlockInteractionRange(), player.getEntityInteractionRange(), tickCounter.getTickProgress(true));
-
+            HitResult hitResult = player.getCrosshairTarget(tickCounter.getTickProgress(true), context.gameRenderer().getClient().getCameraEntity());
             BlockHitResult rtr = hitResult instanceof BlockHitResult ? (BlockHitResult) hitResult : null;
             if(rtr == null) return true;
 
@@ -67,11 +67,12 @@ public class MoreToolsClient implements ClientModInitializer {
                 double d2 = player.lastRenderZ + (player.getZ() - player.lastRenderZ) * tickCounter.getTickProgress(true);
 
                 for(BlockPos block : blocks) {
-                    VertexRendering.drawBox(
-                            context.matrices().peek(),
-                            Objects.requireNonNull(context.consumers()).getBuffer(RenderLayer.getLines()),
-                            new Box(block).offset(-d0, -d1, -d2),
-                            1, 1, 1, 0.4F
+                    VertexRendering.drawOutline(
+                            context.matrices(),
+                            context.consumers().getBuffer(RenderLayers.lines()),
+                            VoxelShapes.fullCube(),
+                            block.getX() -d0, block.getY() -d1, block.getZ() -d2,
+                            ColorHelper.getArgb(255, 255, 255), 2F
                     );
                 }
                 return false;

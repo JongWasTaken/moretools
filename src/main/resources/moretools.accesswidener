@@ -2,4 +2,3 @@ accessWidener v2 named
 
 accessible method net/minecraft/block/LeavesBlock randomTick (Lnet/minecraft/block/BlockState;Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/random/Random;)V
 accessible method net/minecraft/item/ToolMaterial createToolAttributeModifiers (FF)Lnet/minecraft/component/type/AttributeModifiersComponent;
-accessible method net/minecraft/client/render/GameRenderer findCrosshairTarget (Lnet/minecraft/entity/Entity;DDF)Lnet/minecraft/util/hit/HitResult;
