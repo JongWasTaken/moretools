@@ -4,11 +4,13 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexRendering;
+import net.minecraft.client.render.state.OutlineRenderState;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.player.PlayerEntity;
@@ -36,33 +38,37 @@ public class MoreToolsClient implements ClientModInitializer {
             context.client().execute(() -> ClientPlayNetworking.send(new MoreTools.Payloads.C2SHandshakeCallbackWithVersion(MoreToolsClient.VERSION.split("\\+")[0])));
         });
 
-        WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register((WorldRenderContext context, HitResult hitResult) -> {
-            if (context.matrixStack() == null) return true;
+        WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register((WorldRenderContext context, OutlineRenderState outlineRenderState) -> {
+            if (context.matrices() == null) return true;
             if (context.consumers() == null) return true;
+
+            PlayerEntity player = context.gameRenderer().getClient().player;
+            if(player == null) return true;
+
+            var tickCounter = MinecraftClient.getInstance().getRenderTickCounter();
+            HitResult hitResult = context.gameRenderer().findCrosshairTarget(context.gameRenderer().getClient().getCameraEntity(), player.getBlockInteractionRange(), player.getEntityInteractionRange(), tickCounter.getTickProgress(true));
 
             BlockHitResult rtr = hitResult instanceof BlockHitResult ? (BlockHitResult) hitResult : null;
             if(rtr == null) return true;
+
             if (rtr.isInsideBlock()) return true;
-            // This one too... what the hell is going on?
-            PlayerEntity player = context.gameRenderer().getClient().player;
-            if(player == null) return true;
             if (player.isSpectator()) return true;
             if (player.isSneaking()) return true;
 
-            if (player.getWorld().getBlockState(rtr.getBlockPos()).isAir()) return true;
+            if (player.getEntityWorld().getBlockState(rtr.getBlockPos()).isAir()) return true;
             ItemStack tool = MoreToolsClient.convertPolymerStack(player.getMainHandStack());
             if(tool.isEmpty()) return true;
             if (tool.getItem() instanceof BaseToolItem t) {
-                var blocks = t.getAffectedArea(player.getWorld(), rtr.getBlockPos(), player.getWorld().getBlockState(rtr.getBlockPos()), rtr.getSide(), player.getWorld().getBlockState(rtr.getBlockPos()).getBlock());
+                var blocks = t.getAffectedArea(player.getEntityWorld(), rtr.getBlockPos(), player.getEntityWorld().getBlockState(rtr.getBlockPos()), rtr.getSide(), player.getEntityWorld().getBlockState(rtr.getBlockPos()).getBlock());
                 if(blocks == null || blocks.isEmpty()) return true;
 
-                double d0 = player.lastRenderX + (player.getX() - player.lastRenderX) * context.tickCounter().getTickProgress(true);
-                double d1 = player.lastRenderY + player.getStandingEyeHeight() + (player.getY() - player.lastRenderY) * context.tickCounter().getTickProgress(true);
-                double d2 = player.lastRenderZ + (player.getZ() - player.lastRenderZ) * context.tickCounter().getTickProgress(true);
+                double d0 = player.lastRenderX + (player.getX() - player.lastRenderX) * tickCounter.getTickProgress(true);
+                double d1 = player.lastRenderY + player.getStandingEyeHeight() + (player.getY() - player.lastRenderY) * tickCounter.getTickProgress(true);
+                double d2 = player.lastRenderZ + (player.getZ() - player.lastRenderZ) * tickCounter.getTickProgress(true);
 
                 for(BlockPos block : blocks) {
                     VertexRendering.drawBox(
-                            Objects.requireNonNull(context.matrixStack()),
+                            context.matrices().peek(),
                             Objects.requireNonNull(context.consumers()).getBuffer(RenderLayer.getLines()),
                             new Box(block).offset(-d0, -d1, -d2),
                             1, 1, 1, 0.4F
