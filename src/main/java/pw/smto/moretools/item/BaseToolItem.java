@@ -25,11 +25,15 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import pw.smto.moretools.MoreTools;
+import pw.smto.moretools.util.ToolConfigEntry;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BaseToolItem extends Item {
+
+    public record BaseToolSettings(Identifier id, Item.Settings settings, ToolConfigEntry config) {}
+
     private static ToolComponent createComponent(ToolMaterial m, TagKey<Block> tag, float multiplier) {
         RegistryEntryLookup<Block> registryEntryLookup = Registries.createEntryLookup(Registries.BLOCK);
         float speed = m.speed() * multiplier;
@@ -50,11 +54,11 @@ public abstract class BaseToolItem extends Item {
 
     public final Identifier id;
 
-    protected BaseToolItem(Item base, Item.Settings settings, Identifier id, ToolMaterial baseMaterial, TagKey<Block> targetBlocks) {
-        super(settings.registryKey(RegistryKey.of(RegistryKeys.ITEM, id)).component(MoreTools.ACT_AS_BASE_TOOL, false));
-        this.id = id;
-        this.fastComponent = BaseToolItem.createComponent(baseMaterial, targetBlocks, 1.0F);
-        this.slowComponent = BaseToolItem.createComponent(baseMaterial, targetBlocks, 0.5F);
+    protected BaseToolItem(BaseToolSettings ts, ToolMaterial baseMaterial, TagKey<Block> targetBlocks) {
+        super(ts.settings().registryKey(RegistryKey.of(RegistryKeys.ITEM, ts.id())).component(MoreTools.ACT_AS_BASE_TOOL, false));
+        this.id = ts.id();
+        this.fastComponent = BaseToolItem.createComponent(baseMaterial, targetBlocks, ts.config().defaultSpeed());
+        this.slowComponent = BaseToolItem.createComponent(baseMaterial, targetBlocks, ts.config().sneakSpeed());
     }
 
     public abstract List<Text> getLore();

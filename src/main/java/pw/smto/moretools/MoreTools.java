@@ -31,6 +31,7 @@ import net.minecraft.util.Identifier;
 import org.geysermc.geyser.api.GeyserApi;
 import org.slf4j.LoggerFactory;
 import pw.smto.moretools.item.*;
+import pw.smto.moretools.util.ConfigManager;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -39,7 +40,7 @@ import java.util.function.Function;
 public class MoreTools implements ModInitializer {
 	public static final String MOD_ID = "moretools";
 	public static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(MoreTools.MOD_ID);
-	public static final List<ServerPlayerEntity> PLAYERS_WITH_CLIENT = new ArrayList<>();
+	public static final HashSet<UUID> PLAYERS_WITH_CLIENT = new HashSet<>();
 	@SuppressWarnings("OptionalGetWithoutIsPresent")
     public static final String VERSION = FabricLoader.getInstance().getModContainer(MoreTools.MOD_ID).get().getMetadata().getVersion().toString();
 
@@ -49,6 +50,8 @@ public class MoreTools implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		ConfigManager.init();
+
 		PolymerResourcePackUtils.addModAssets(MoreTools.MOD_ID);
 		PolymerResourcePackUtils.markAsRequired();
 
@@ -103,15 +106,14 @@ public class MoreTools implements ModInitializer {
 
 		// Client compatibility stuff
 		ServerPlayConnectionEvents.JOIN.register((ServerPlayNetworkHandler handler, PacketSender sender, MinecraftServer server) -> sender.sendPacket(new Payloads.S2CHandshake(true)));
+		ServerPlayConnectionEvents.DISCONNECT.register((ServerPlayNetworkHandler handler, MinecraftServer server) -> MoreTools.PLAYERS_WITH_CLIENT.remove(handler.player.getUuid()));
 		PayloadTypeRegistry.playS2C().register(Payloads.S2CHandshake.ID, Payloads.S2CHandshake.CODEC);
 		PayloadTypeRegistry.playC2S().register(Payloads.C2SHandshakeCallback.ID, Payloads.C2SHandshakeCallback.CODEC);
 		PayloadTypeRegistry.playC2S().register(Payloads.C2SHandshakeCallbackWithVersion.ID, Payloads.C2SHandshakeCallbackWithVersion.CODEC);
 		ServerPlayNetworking.registerGlobalReceiver(Payloads.C2SHandshakeCallback.ID, (payload, context) -> {
-			if (context.server() == null) return;
 			context.server().execute(() -> MoreTools.handleClientCallback(context.player(), "1.7.3"));
 		});
 		ServerPlayNetworking.registerGlobalReceiver(Payloads.C2SHandshakeCallbackWithVersion.ID, (payload, context) -> {
-			if (context.server() == null) return;
 			context.server().execute(() -> MoreTools.handleClientCallback(context.player(), payload.version));
 		});
 
@@ -133,7 +135,7 @@ public class MoreTools implements ModInitializer {
 			return;
 		}
 		MoreTools.LOGGER.info("Enabling client-side enhancements for player: {}", Objects.requireNonNull(player.getDisplayName()).getString());
-		MoreTools.PLAYERS_WITH_CLIENT.add(player);
+		MoreTools.PLAYERS_WITH_CLIENT.add(player.getUuid());
 		player.getInventory().markDirty();
 	}
 

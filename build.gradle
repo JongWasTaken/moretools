@@ -11,6 +11,7 @@ base {
 }
 
 repositories {
+	maven { url 'https://smto.dev/maven/releases' }
 	maven { url 'https://maven.nucleoid.xyz' }
 	maven { url 'https://api.modrinth.com/maven' }
 	maven { url 'https://jitpack.io' }
@@ -34,6 +35,7 @@ dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+	//include implementation("dev.smto:simpleconfig:2.4.3")
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	include(modImplementation("eu.pb4:polymer-core:${project.polymer_version}"))

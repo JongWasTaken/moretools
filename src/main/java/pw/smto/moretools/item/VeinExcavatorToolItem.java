@@ -20,7 +20,9 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import pw.smto.moretools.MoreTools;
 import pw.smto.moretools.util.BlockBoxUtils;
+import pw.smto.moretools.util.ConfigManager;
 import pw.smto.moretools.util.CustomMaterial;
+import pw.smto.moretools.util.ToolConfigEntry;
 import xyz.nucleoid.packettweaker.PacketContext;
 
 import java.util.ArrayList;
@@ -28,21 +30,31 @@ import java.util.List;
 
 public class VeinExcavatorToolItem extends BaseToolItem implements PolymerItem, PolymerKeepModel, PolymerClientDecoded {
     private final Item baseItem;
-    private final int range;
+    private final int fallbackRange;
 
-    private static Settings createSettings(ToolMaterial baseMaterial) {
-        var settings = new Settings()
-                .shovel(CustomMaterial.of(baseMaterial).multiplyDurability(3).toVanilla(), Math.max(baseMaterial.attackDamageBonus()-4, 1.0F), -3.0f)
-                .component(DataComponentTypes.LORE, new LoreComponent(List.of(Text.translatable("item.moretools.vein_excavator.tooltip").formatted(Formatting.GOLD))));
+    private static final List<Text> LORE = List.of(Text.translatable("item.moretools.vein_excavator.tooltip").formatted(Formatting.GOLD));
+
+    private static ToolConfigEntry config;
+
+    private static BaseToolSettings createSettings(Item base, ToolMaterial baseMaterial) {
+        Identifier id = Identifier.of(MoreTools.MOD_ID, Registries.ITEM.getId(base).getPath().replace("shovel", "vein_excavator"));
+        VeinExcavatorToolItem.config = ConfigManager.config.get(id.getPath());
+        Settings settings = new Settings();
+        if (VeinExcavatorToolItem.config == null) {
+            VeinExcavatorToolItem.config = ToolConfigEntry.DEFAULT;
+            settings.pickaxe(CustomMaterial.of(baseMaterial).multiplyDurability(3).toVanilla(), Math.max(baseMaterial.attackDamageBonus()-4, 1.0F), -3.0f);
+        } else {
+            settings.pickaxe(CustomMaterial.of(baseMaterial).multiplyDurability(VeinExcavatorToolItem.config.durabilityMultiplier()).toVanilla(), Math.max(baseMaterial.attackDamageBonus() + VeinExcavatorToolItem.config.attackDamageModifier(), 1.0F), VeinExcavatorToolItem.config.attackSpeed());
+        }
+        settings.component(DataComponentTypes.LORE, new LoreComponent(VeinExcavatorToolItem.LORE));
         if (baseMaterial.equals(ToolMaterial.NETHERITE)) settings.fireproof();
-        return settings;
+        return new BaseToolSettings(id, settings, VeinExcavatorToolItem.config);
     }
 
-
-    public VeinExcavatorToolItem(ShovelItem base, ToolMaterial baseMaterial, int range) {
-        super(base, VeinExcavatorToolItem.createSettings(baseMaterial), Identifier.of(MoreTools.MOD_ID, Registries.ITEM.getId(base).getPath().replace("shovel", "vein_excavator")), baseMaterial, BlockTags.SHOVEL_MINEABLE);
+    public VeinExcavatorToolItem(ShovelItem base, ToolMaterial baseMaterial, int fallbackRange) {
+        super(VeinExcavatorToolItem.createSettings(base, baseMaterial), baseMaterial, BlockTags.SHOVEL_MINEABLE);
         this.baseItem = base;
-        this.range = range;
+        this.fallbackRange = fallbackRange;
     }
 
     public VeinExcavatorToolItem(ShovelItem base, ToolMaterial baseMaterial) {
@@ -51,7 +63,7 @@ public class VeinExcavatorToolItem extends BaseToolItem implements PolymerItem, 
 
     @Override
     public List<Text> getLore() {
-        return List.of(Text.translatable("item.moretools.vein_excavator.tooltip").formatted(Formatting.GOLD));
+        return VeinExcavatorToolItem.LORE;
     }
 
     @Override
@@ -77,7 +89,7 @@ public class VeinExcavatorToolItem extends BaseToolItem implements PolymerItem, 
         if (targetState == null) return list;
         boolean useVanillaDirections = true;
         if (targetState.isIn(MoreTools.BlockTags.VEIN_EXCAVATOR_APPLICABLE)) {
-            range = this.range;
+            range = VeinExcavatorToolItem.config.range().orElse(this.fallbackRange);
             useVanillaDirections = false;
         }
 
