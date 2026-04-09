@@ -1,15 +1,15 @@
 package pw.smto.moretools.util;
 
-import net.minecraft.block.Block;
-import net.minecraft.util.math.BlockBox;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Consumer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
 public class BlockBoxUtils {
     /**
@@ -25,18 +25,18 @@ public class BlockBoxUtils {
         int negativeMaxBlocks = Integer.parseInt("-" + radius);
 
         if (side == Direction.UP || side == Direction.DOWN) {
-            firstCorner = pos.add(negativeMaxBlocks,0,negativeMaxBlocks);
-            secondCorner = pos.add(radius,0,radius);
+            firstCorner = pos.offset(negativeMaxBlocks,0,negativeMaxBlocks);
+            secondCorner = pos.offset(radius,0,radius);
         }
         else {
             if (side == Direction.NORTH || side == Direction.SOUTH) { // not Z
-                firstCorner = pos.add(negativeMaxBlocks,negativeMaxBlocks,0);
-                secondCorner = pos.add(radius,radius,0);
+                firstCorner = pos.offset(negativeMaxBlocks,negativeMaxBlocks,0);
+                secondCorner = pos.offset(radius,radius,0);
             }
             else // not X
             {
-                firstCorner = pos.add(0,negativeMaxBlocks,negativeMaxBlocks);
-                secondCorner = pos.add(0,radius,radius);
+                firstCorner = pos.offset(0,negativeMaxBlocks,negativeMaxBlocks);
+                secondCorner = pos.offset(0,radius,radius);
             }
         }
         return new IterableBlockBox(
@@ -45,7 +45,7 @@ public class BlockBoxUtils {
         );
     }
 
-    public static List<BlockPos> getBlockCluster(Block toFind, BlockPos pos, World world, int limit, DirectionSet directions) {
+    public static List<BlockPos> getBlockCluster(Block toFind, BlockPos pos, Level world, int limit, DirectionSet directions) {
         Set<BlockPos> connectedBlocks = new HashSet<>();
         Set<BlockPos> visited = new HashSet<>();
         BlockBoxUtils.freeDfs(world, pos, toFind, connectedBlocks, visited, 0, limit, directions);
@@ -59,7 +59,7 @@ public class BlockBoxUtils {
     }
 
     public static class DirectionSets {
-        public static final DirectionSet CARDINAL = new DirectionSet(EnumSet.allOf(Direction.class).stream().map(Direction::getVector).toList());
+        public static final DirectionSet CARDINAL = new DirectionSet(EnumSet.allOf(Direction.class).stream().map(Direction::getUnitVec3i).toList());
         public static final DirectionSet EXTENDED = DirectionSet.of(
                 // Vanilla directions
                 new Vec3i(0, -1, 0), // DOWN
@@ -127,7 +127,7 @@ public class BlockBoxUtils {
 
 
 
-    private static void freeDfs(World world, BlockPos currentPos, Block pickBlock, Set<BlockPos> connectedBlocks, Set<BlockPos> visited, int depth, int limit, DirectionSet directions) {
+    private static void freeDfs(Level world, BlockPos currentPos, Block pickBlock, Set<BlockPos> connectedBlocks, Set<BlockPos> visited, int depth, int limit, DirectionSet directions) {
         if (!visited.contains(currentPos) && depth < limit) {
             visited.add(currentPos);
             // Check if the current block matches the origin block type
@@ -142,14 +142,14 @@ public class BlockBoxUtils {
     }
 
     private static BlockPos offset(BlockPos pos, Vec3i direction) {
-        return pos.add(direction);
+        return pos.offset(direction);
     }
 
     private static List<BlockPos> sortBlockSet(BlockPos origin, Set<BlockPos> list) {
         List<BlockPos> sortedBlockPositionList = new ArrayList<>(list.stream().toList());
         sortedBlockPositionList.sort(new Comparator<>() {
             private double distanceTo(BlockPos o1, BlockPos origin) {
-                return Math.sqrt(Math.pow(o1.getX() - origin.getX(), 2) + Math.pow(origin.getY() - origin.getY(), 2) + Math.pow(origin.getZ() - origin.getZ(), 2));
+                return Math.sqrt(Math.pow(o1.getX() - origin.getX(), 2) + Math.pow(o1.getY() - origin.getY(), 2) + Math.pow(o1.getZ() - origin.getZ(), 2));
             }
 
             public int compare(BlockPos o1, BlockPos o2) {
@@ -162,7 +162,7 @@ public class BlockBoxUtils {
         return sortedBlockPositionList;
     }
 
-    public static class IterableBlockBox extends BlockBox implements Iterable<BlockPos> {
+    public static class IterableBlockBox extends BoundingBox implements Iterable<BlockPos> {
         public IterableBlockBox(int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
             super(minX, minY, minZ, maxX, maxY, maxZ);
         }
@@ -177,11 +177,11 @@ public class BlockBoxUtils {
 
         @Override
         public void forEach(Consumer<? super BlockPos> action) {
-            for(var y = this.getMinY(); y < this.getMaxY()+1; y++)
+            for(var y = this.minY(); y < this.maxY()+1; y++)
             {
-                for(var z = this.getMinZ(); z < this.getMaxZ()+1; z++)
+                for(var z = this.minZ(); z < this.maxZ()+1; z++)
                 {
-                    for(var x = this.getMinX(); x < this.getMaxX()+1; x++)
+                    for(var x = this.minX(); x < this.maxX()+1; x++)
                     {
                         action.accept(new BlockPos(x, y, z));
                     }

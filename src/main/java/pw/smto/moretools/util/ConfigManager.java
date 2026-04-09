@@ -6,27 +6,18 @@ import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.util.dynamic.Codecs;
+import net.minecraft.util.ExtraCodecs;
 import pw.smto.moretools.MoreTools;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 public class ConfigManager {
     private static final Gson JSON_BUILDER = new GsonBuilder().setPrettyPrinting().create();
 
-    private static <T> String toPrettyJsonString(T input, Codec<T> codec) throws NoSuchElementException {
-        return ConfigManager.JSON_BUILDER.toJson(codec.encodeStart(JsonOps.INSTANCE, input).resultOrPartial((x) -> {}).orElseThrow());
-    }
-
-    private static <T> T fromJsonString(String input, Codec<T> codec) throws NoSuchElementException {
-        return codec.parse(JsonOps.INSTANCE, JsonParser.parseString(input)).resultOrPartial((x) -> {}).orElseThrow();
-    }
-
-    private static final Codec<Map<String, ToolConfigEntry>> CODEC = Codec.unboundedMap(Codecs.NON_EMPTY_STRING, ToolConfigEntry.CODEC);
+    private static final Codec<Map<String, ToolConfigEntry>> CODEC = Codec.unboundedMap(ExtraCodecs.NON_EMPTY_STRING, ToolConfigEntry.CODEC);
     private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("moretools.json");
 
     public static Map<String, ToolConfigEntry> config = new HashMap<>() {{
@@ -70,11 +61,12 @@ public class ConfigManager {
         if (Files.exists(ConfigManager.CONFIG_PATH)) {
             try {
                 String json = Files.readString(ConfigManager.CONFIG_PATH);
-                ConfigManager.config = ConfigManager.fromJsonString(json, ConfigManager.CODEC);
+                ConfigManager.config = ConfigManager.CODEC.parse(JsonOps.INSTANCE, JsonParser.parseString(json)).resultOrPartial((_) -> {}).orElseThrow();
             } catch (Exception ignored) {}
         } else {
             try {
-                Files.writeString(ConfigManager.CONFIG_PATH, ConfigManager.toPrettyJsonString(ConfigManager.config, ConfigManager.CODEC));
+
+                Files.writeString(ConfigManager.CONFIG_PATH, ConfigManager.JSON_BUILDER.toJson(ConfigManager.CODEC.encodeStart(JsonOps.INSTANCE, ConfigManager.config).resultOrPartial((_) -> {}).orElseThrow()));
             } catch (Exception ignored) {
                 MoreTools.LOGGER.warn("Failed to write default config file!");
             }

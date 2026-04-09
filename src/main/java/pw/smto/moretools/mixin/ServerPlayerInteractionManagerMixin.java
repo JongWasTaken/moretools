@@ -1,14 +1,5 @@
 package pw.smto.moretools.mixin;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.network.ServerPlayerInteractionManager;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,35 +11,44 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import pw.smto.moretools.item.BaseToolItem;
 
 import java.util.HashMap;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerPlayerGameMode;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.state.BlockState;
 
-@Mixin(ServerPlayerInteractionManager.class)
+@Mixin(ServerPlayerGameMode.class)
 public abstract class ServerPlayerInteractionManagerMixin {
     @Shadow
-    protected ServerWorld world;
+    protected ServerLevel level;
     @Final @Shadow
-    protected ServerPlayerEntity player;
+    protected ServerPlayer player;
 
-    @Redirect(method = "tryBreakBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;removeBlock(Lnet/minecraft/util/math/BlockPos;Z)Z"))
-    private boolean removeBlockProxy(ServerWorld world, BlockPos pos, boolean dropItems) {
+    @Redirect(method = "destroyBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;removeBlock(Lnet/minecraft/core/BlockPos;Z)Z"))
+    private boolean removeBlockProxy(ServerLevel world, BlockPos pos, boolean dropItems) {
         BlockState state = world.getBlockState(pos);
         boolean cached = world.removeBlock(pos, dropItems);
 
-        var handStack = this.player.getStackInHand(Hand.MAIN_HAND);
+        var handStack = this.player.getItemInHand(InteractionHand.MAIN_HAND);
         if (handStack.getItem() instanceof BaseToolItem item) {
             var d = ServerPlayerInteractionManagerMixin.BLOCK_BREAK_DIRECTIONS.remove(this.player);
             if (d != null) {
-                item.doToolPowerIfAllowed(state, pos, d, this.player, this.world, handStack);
+                item.doToolPowerIfAllowed(state, pos, d, this.player, this.level, handStack);
             }
         }
 
         return cached;
     }
 
-    @Inject(method = "processBlockBreakingAction", at = @At("HEAD"))
-    private void processBlockBreakingAction(BlockPos pos, PlayerActionC2SPacket.Action action, Direction direction, int worldHeight, int sequence, CallbackInfo ci) {
+    @Inject(method = "handleBlockBreakAction", at = @At("HEAD"))
+    private void processBlockBreakingAction(BlockPos pos, ServerboundPlayerActionPacket.Action action, Direction direction, int maxY, int sequence, CallbackInfo ci) {
         ServerPlayerInteractionManagerMixin.BLOCK_BREAK_DIRECTIONS.put(this.player, direction);
     }
 
     @Unique
-    private static final HashMap<PlayerEntity,Direction> BLOCK_BREAK_DIRECTIONS = new HashMap<>();
+    private static final HashMap<Player,Direction> BLOCK_BREAK_DIRECTIONS = new HashMap<>();
 }
