@@ -170,9 +170,7 @@ public class BlockBoxUtils {
         @NotNull
         @Override
         public Iterator<BlockPos> iterator() {
-            var x = new ArrayList<BlockPos>();
-            this.forEach(x::add);
-            return x.iterator();
+            return this.toList().iterator();
         }
 
         @Override
