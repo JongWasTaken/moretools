@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "###",
+        "M/M",
+        " / "
+    ],
+    "key": {
+        "#": "minecraft:copper_pickaxe",
+        "M": "minecraft:copper_ingot",
+        "/": "minecraft:stick"
+    },
+    "result": {
+        "id": "moretools:copper_vein_hammer",
+        "count": 1
+    }
+}

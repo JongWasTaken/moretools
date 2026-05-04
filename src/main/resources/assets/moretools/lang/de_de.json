@@ -1,6 +1,7 @@
 {
   "item.moretools.wooden_hammer": "Holzhammer",
   "item.moretools.stone_hammer": "Steinhammer",
+  "item.moretools.copper_hammer": "Kupferhammer",
   "item.moretools.iron_hammer": "Eisenhammer",
   "item.moretools.golden_hammer": "Goldhammer",
   "item.moretools.diamond_hammer": "Diamanthammer",
@@ -8,6 +9,7 @@
 
   "item.moretools.wooden_vein_hammer": "Holzvenenhammer",
   "item.moretools.stone_vein_hammer": "Steinvenenhammer",
+  "item.moretools.copper_vein_hammer": "Kupfervenenhammer",
   "item.moretools.iron_vein_hammer": "Eisenvenenhammer",
   "item.moretools.golden_vein_hammer": "Goldvenenhammer",
   "item.moretools.diamond_vein_hammer": "Diamantvenenhammer",
@@ -15,6 +17,7 @@
 
   "item.moretools.wooden_excavator": "Holzgroßschaufel",
   "item.moretools.stone_excavator": "Steingroßschaufel",
+  "item.moretools.copper_excavator": "Kupfergroßschaufel",
   "item.moretools.iron_excavator": "Eisengroßschaufel",
   "item.moretools.golden_excavator": "Goldgroßschaufel",
   "item.moretools.diamond_excavator": "Diamantgroßschaufel",
@@ -22,6 +25,7 @@
 
   "item.moretools.wooden_vein_excavator": "Holzvenenschaufel",
   "item.moretools.stone_vein_excavator": "Steinvenenschaufel",
+  "item.moretools.copper_vein_excavator": "Kupfervenenschaufel",
   "item.moretools.iron_vein_excavator": "Eisenvenenschaufel",
   "item.moretools.golden_vein_excavator": "Goldvenenschaufel",
   "item.moretools.diamond_vein_excavator": "Diamantvenenschaufel",
@@ -29,6 +33,7 @@
 
   "item.moretools.wooden_saw": "Holzsäge",
   "item.moretools.stone_saw": "Steinsäge",
+  "item.moretools.copper_saw": "Kupfersäge",
   "item.moretools.iron_saw": "Eisensäge",
   "item.moretools.golden_saw": "Goldsäge",
   "item.moretools.diamond_saw": "Diamantsäge",
@@ -50,5 +55,7 @@
   "moretools.client_version_mismatch.1": "Deine lokale Version von MoreTools ist möglicherweise zu alt für diesen Server.",
   "moretools.client_version_mismatch.2": "Die Werkzeug-Vorschau könnte inakkurat sein!",
   "moretools.client_version_mismatch.3": "Lokale Version:",
-  "moretools.client_version_mismatch.4": "Benötigte Version:"
+  "moretools.client_version_mismatch.4": "Benötigte Version:",
+
+  "tooltip.moretools.durability": "Haltbarkeit"
 }
