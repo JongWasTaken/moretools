@@ -1,5 +1,5 @@
 plugins {
-	id 'net.fabricmc.fabric-loom' version '1.15-SNAPSHOT'
+	id 'net.fabricmc.fabric-loom' version '1.17-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -42,7 +42,7 @@ dependencies {
 	include(implementation("eu.pb4:polymer-blocks:${project.polymer_version}"))
 	include(implementation("eu.pb4:polymer-resource-pack:${project.polymer_version}"))
 	include(implementation("eu.pb4:polymer-autohost:${project.polymer_version}"))
-	compileOnly('org.geysermc.geyser:api:2.7.0-SNAPSHOT')
+	compileOnly('org.geysermc.geyser:api:2.10.1-SNAPSHOT')
 }
 
 processResources {

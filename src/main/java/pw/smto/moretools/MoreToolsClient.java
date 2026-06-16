@@ -9,7 +9,6 @@ import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.ShapeRenderer;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.level.BlockOutlineRenderState;
 import net.minecraft.core.BlockPos;
@@ -37,11 +36,11 @@ public class MoreToolsClient implements ClientModInitializer {
         ClientPlayNetworking.registerGlobalReceiver(MoreTools.Payloads.S2CHandshake.ID, (_, context) -> context.client().execute(() -> ClientPlayNetworking.send(new MoreTools.Payloads.C2SHandshakeCallbackWithVersion(MoreToolsClient.VERSION.split("\\+")[0]))));
 
         LevelRenderEvents.BEFORE_BLOCK_OUTLINE.register((LevelRenderContext context, BlockOutlineRenderState _) -> {
-            LocalPlayer player = context.gameRenderer().getMinecraft().player;
+            LocalPlayer player = Minecraft.getInstance().player;
             if(player == null) return true;
 
             var tickCounter = Minecraft.getInstance().getDeltaTracker();
-            HitResult hitResult = player.raycastHitResult(tickCounter.getGameTimeDeltaPartialTick(true), Objects.requireNonNull(context.gameRenderer().getMinecraft().getCameraEntity()));
+            HitResult hitResult = player.raycastHitResult(tickCounter.getGameTimeDeltaPartialTick(true), Objects.requireNonNull(Minecraft.getInstance().getCameraEntity()));
             BlockHitResult rtr = hitResult instanceof BlockHitResult ? (BlockHitResult) hitResult : null;
             if(rtr == null) return true;
 
@@ -60,15 +59,15 @@ public class MoreToolsClient implements ClientModInitializer {
                 double d1 = player.yOld + player.getEyeHeight() + (player.getY() - player.yOld) * tickCounter.getGameTimeDeltaPartialTick(true);
                 double d2 = player.zOld + (player.getZ() - player.zOld) * tickCounter.getGameTimeDeltaPartialTick(true);
 
-                for(BlockPos block : blocks) {
-                    ShapeRenderer.renderShape(
-                            context.poseStack(),
-                            context.bufferSource().getBuffer(RenderTypes.lines()),
-                            Shapes.block(),
-                            block.getX() -d0, block.getY() -d1, block.getZ() -d2,
-                            ARGB.color(255, 255, 255), 2.0F
+                for (BlockPos block : blocks) {
+                    context.poseStack().pushPose();
+                    context.poseStack().translate(block.getX() - d0, block.getY() - d1, block.getZ() - d2);
+                    context.submitNodeCollector().submitShapeOutline(
+                            context.poseStack(), Shapes.block(), RenderTypes.lines(), ARGB.color(255, 255, 255), 2.0F, true
                     );
+                    context.poseStack().popPose();
                 }
+
                 return false;
             }
             return true;
