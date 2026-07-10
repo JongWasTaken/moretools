@@ -1,0 +1,10 @@
+{
+    "replace": false,
+    "values": [
+        "#moretools:excavators",
+        "#moretools:hammers",
+        "#moretools:saws",
+        "#moretools:vein_excavators",
+        "#moretools:vein_hammers"
+    ]
+}
