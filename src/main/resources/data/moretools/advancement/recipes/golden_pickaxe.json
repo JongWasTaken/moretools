@@ -1,0 +1,22 @@
+{
+    "parent": "minecraft:recipes/root",
+    "criteria": {
+        "crafted": {
+            "trigger": "minecraft:recipe_crafted",
+            "conditions": {
+                "recipe_id": "minecraft:golden_pickaxe"
+            }
+        }
+    },
+    "requirements": [
+        [
+            "crafted"
+        ]
+    ],
+    "rewards": {
+        "recipes": [
+            "moretools:item_golden_hammer",
+            "moretools:item_golden_vein_hammer"
+        ]
+    }
+}

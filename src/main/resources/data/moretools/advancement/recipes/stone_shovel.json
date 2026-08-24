@@ -1,0 +1,22 @@
+{
+    "parent": "minecraft:recipes/root",
+    "criteria": {
+        "crafted": {
+            "trigger": "minecraft:recipe_crafted",
+            "conditions": {
+                "recipe_id": "minecraft:stone_shovel"
+            }
+        }
+    },
+    "requirements": [
+        [
+            "crafted"
+        ]
+    ],
+    "rewards": {
+        "recipes": [
+            "moretools:item_stone_excavator",
+            "moretools:item_stone_vein_excavator"
+        ]
+    }
+}

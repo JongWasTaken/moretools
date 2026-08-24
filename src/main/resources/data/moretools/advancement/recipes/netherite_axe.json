@@ -1,0 +1,21 @@
+{
+    "parent": "minecraft:recipes/root",
+    "criteria": {
+        "crafted": {
+            "trigger": "minecraft:recipe_crafted",
+            "conditions": {
+                "recipe_id": "minecraft:netherite_axe_smithing"
+            }
+        }
+    },
+    "requirements": [
+        [
+            "crafted"
+        ]
+    ],
+    "rewards": {
+        "recipes": [
+            "moretools:item_netherite_saw"
+        ]
+    }
+}

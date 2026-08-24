@@ -1,0 +1,21 @@
+{
+    "parent": "minecraft:recipes/root",
+    "criteria": {
+        "crafted": {
+            "trigger": "minecraft:recipe_crafted",
+            "conditions": {
+                "recipe_id": "minecraft:copper_axe"
+            }
+        }
+    },
+    "requirements": [
+        [
+            "crafted"
+        ]
+    ],
+    "rewards": {
+        "recipes": [
+            "moretools:item_copper_saw"
+        ]
+    }
+}

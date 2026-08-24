@@ -1,0 +1,22 @@
+{
+    "parent": "minecraft:recipes/root",
+    "criteria": {
+        "crafted": {
+            "trigger": "minecraft:recipe_crafted",
+            "conditions": {
+                "recipe_id": "minecraft:iron_pickaxe"
+            }
+        }
+    },
+    "requirements": [
+        [
+            "crafted"
+        ]
+    ],
+    "rewards": {
+        "recipes": [
+            "moretools:item_iron_hammer",
+            "moretools:item_iron_vein_hammer"
+        ]
+    }
+}
