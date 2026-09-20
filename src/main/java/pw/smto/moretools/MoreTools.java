@@ -149,20 +149,20 @@ public class MoreTools implements ModInitializer {
 		public static final Item GOLDEN_HAMMER = new HammerToolItem(net.minecraft.world.item.Items.GOLDEN_PICKAXE, ToolMaterial.GOLD);
 		public static final Item DIAMOND_HAMMER = new HammerToolItem(net.minecraft.world.item.Items.DIAMOND_PICKAXE, ToolMaterial.DIAMOND);
 		public static final Item NETHERITE_HAMMER = new HammerToolItem(net.minecraft.world.item.Items.NETHERITE_PICKAXE, ToolMaterial.NETHERITE);
-		public static final Item WOODEN_EXCAVATOR = new ExcavatorToolItem((ShovelItem) net.minecraft.world.item.Items.WOODEN_SHOVEL, ToolMaterial.WOOD);
-		public static final Item STONE_EXCAVATOR = new ExcavatorToolItem((ShovelItem) net.minecraft.world.item.Items.STONE_SHOVEL, ToolMaterial.STONE);
-		public static final Item COPPER_EXCAVATOR = new ExcavatorToolItem((ShovelItem) net.minecraft.world.item.Items.COPPER_SHOVEL, ToolMaterial.COPPER);
-		public static final Item IRON_EXCAVATOR = new ExcavatorToolItem((ShovelItem) net.minecraft.world.item.Items.IRON_SHOVEL, ToolMaterial.IRON);
-		public static final Item GOLDEN_EXCAVATOR = new ExcavatorToolItem((ShovelItem) net.minecraft.world.item.Items.GOLDEN_SHOVEL, ToolMaterial.GOLD);
-		public static final Item DIAMOND_EXCAVATOR = new ExcavatorToolItem((ShovelItem) net.minecraft.world.item.Items.DIAMOND_SHOVEL, ToolMaterial.DIAMOND);
-		public static final Item NETHERITE_EXCAVATOR = new ExcavatorToolItem((ShovelItem) net.minecraft.world.item.Items.NETHERITE_SHOVEL, ToolMaterial.NETHERITE);
-		public static final Item WOODEN_SAW = new SawToolItem((AxeItem) net.minecraft.world.item.Items.WOODEN_AXE, ToolMaterial.WOOD);
-		public static final Item STONE_SAW = new SawToolItem((AxeItem) net.minecraft.world.item.Items.STONE_AXE, ToolMaterial.STONE);
-		public static final Item COPPER_SAW = new SawToolItem((AxeItem) net.minecraft.world.item.Items.COPPER_AXE, ToolMaterial.COPPER);
-		public static final Item IRON_SAW = new SawToolItem((AxeItem) net.minecraft.world.item.Items.IRON_AXE, ToolMaterial.IRON);
-		public static final Item GOLDEN_SAW = new SawToolItem((AxeItem) net.minecraft.world.item.Items.GOLDEN_AXE, ToolMaterial.GOLD);
-		public static final Item DIAMOND_SAW = new SawToolItem((AxeItem) net.minecraft.world.item.Items.DIAMOND_AXE, ToolMaterial.DIAMOND);
-		public static final Item NETHERITE_SAW = new SawToolItem((AxeItem) net.minecraft.world.item.Items.NETHERITE_AXE, ToolMaterial.NETHERITE);
+		public static final Item WOODEN_EXCAVATOR = new ExcavatorToolItem(net.minecraft.world.item.Items.WOODEN_SHOVEL, ToolMaterial.WOOD);
+		public static final Item STONE_EXCAVATOR = new ExcavatorToolItem(net.minecraft.world.item.Items.STONE_SHOVEL, ToolMaterial.STONE);
+		public static final Item COPPER_EXCAVATOR = new ExcavatorToolItem(net.minecraft.world.item.Items.COPPER_SHOVEL, ToolMaterial.COPPER);
+		public static final Item IRON_EXCAVATOR = new ExcavatorToolItem(net.minecraft.world.item.Items.IRON_SHOVEL, ToolMaterial.IRON);
+		public static final Item GOLDEN_EXCAVATOR = new ExcavatorToolItem(net.minecraft.world.item.Items.GOLDEN_SHOVEL, ToolMaterial.GOLD);
+		public static final Item DIAMOND_EXCAVATOR = new ExcavatorToolItem(net.minecraft.world.item.Items.DIAMOND_SHOVEL, ToolMaterial.DIAMOND);
+		public static final Item NETHERITE_EXCAVATOR = new ExcavatorToolItem(net.minecraft.world.item.Items.NETHERITE_SHOVEL, ToolMaterial.NETHERITE);
+		public static final Item WOODEN_SAW = new SawToolItem(net.minecraft.world.item.Items.WOODEN_AXE, ToolMaterial.WOOD);
+		public static final Item STONE_SAW = new SawToolItem(net.minecraft.world.item.Items.STONE_AXE, ToolMaterial.STONE);
+		public static final Item COPPER_SAW = new SawToolItem(net.minecraft.world.item.Items.COPPER_AXE, ToolMaterial.COPPER);
+		public static final Item IRON_SAW = new SawToolItem(net.minecraft.world.item.Items.IRON_AXE, ToolMaterial.IRON);
+		public static final Item GOLDEN_SAW = new SawToolItem(net.minecraft.world.item.Items.GOLDEN_AXE, ToolMaterial.GOLD);
+		public static final Item DIAMOND_SAW = new SawToolItem(net.minecraft.world.item.Items.DIAMOND_AXE, ToolMaterial.DIAMOND);
+		public static final Item NETHERITE_SAW = new SawToolItem(net.minecraft.world.item.Items.NETHERITE_AXE, ToolMaterial.NETHERITE);
 		public static final Item WOODEN_VEIN_HAMMER = new VeinHammerToolItem(net.minecraft.world.item.Items.WOODEN_PICKAXE, ToolMaterial.WOOD);
 		public static final Item STONE_VEIN_HAMMER = new VeinHammerToolItem(net.minecraft.world.item.Items.STONE_PICKAXE, ToolMaterial.STONE, 4);
 		public static final Item COPPER_VEIN_HAMMER = new VeinHammerToolItem(net.minecraft.world.item.Items.COPPER_PICKAXE, ToolMaterial.COPPER, 4);
@@ -170,13 +170,13 @@ public class MoreTools implements ModInitializer {
 		public static final Item GOLDEN_VEIN_HAMMER = new VeinHammerToolItem(net.minecraft.world.item.Items.GOLDEN_PICKAXE, ToolMaterial.GOLD, 6);
 		public static final Item DIAMOND_VEIN_HAMMER = new VeinHammerToolItem(net.minecraft.world.item.Items.DIAMOND_PICKAXE, ToolMaterial.DIAMOND, 6);
 		public static final Item NETHERITE_VEIN_HAMMER = new VeinHammerToolItem(net.minecraft.world.item.Items.NETHERITE_PICKAXE, ToolMaterial.NETHERITE, 7);
-		public static final Item WOODEN_VEIN_EXCAVATOR = new VeinExcavatorToolItem((ShovelItem) net.minecraft.world.item.Items.WOODEN_SHOVEL, ToolMaterial.WOOD);
-		public static final Item STONE_VEIN_EXCAVATOR = new VeinExcavatorToolItem((ShovelItem) net.minecraft.world.item.Items.STONE_SHOVEL, ToolMaterial.STONE, 4);
-		public static final Item COPPER_VEIN_EXCAVATOR = new VeinExcavatorToolItem((ShovelItem) net.minecraft.world.item.Items.COPPER_SHOVEL, ToolMaterial.COPPER, 4);
-		public static final Item IRON_VEIN_EXCAVATOR = new VeinExcavatorToolItem((ShovelItem) net.minecraft.world.item.Items.IRON_SHOVEL, ToolMaterial.IRON, 5);
-		public static final Item GOLDEN_VEIN_EXCAVATOR = new VeinExcavatorToolItem((ShovelItem) net.minecraft.world.item.Items.GOLDEN_SHOVEL, ToolMaterial.GOLD, 6);
-		public static final Item DIAMOND_VEIN_EXCAVATOR = new VeinExcavatorToolItem((ShovelItem) net.minecraft.world.item.Items.DIAMOND_SHOVEL, ToolMaterial.DIAMOND, 6);
-		public static final Item NETHERITE_VEIN_EXCAVATOR = new VeinExcavatorToolItem((ShovelItem) net.minecraft.world.item.Items.NETHERITE_SHOVEL, ToolMaterial.NETHERITE, 7);
+		public static final Item WOODEN_VEIN_EXCAVATOR = new VeinExcavatorToolItem(net.minecraft.world.item.Items.WOODEN_SHOVEL, ToolMaterial.WOOD);
+		public static final Item STONE_VEIN_EXCAVATOR = new VeinExcavatorToolItem(net.minecraft.world.item.Items.STONE_SHOVEL, ToolMaterial.STONE, 4);
+		public static final Item COPPER_VEIN_EXCAVATOR = new VeinExcavatorToolItem(net.minecraft.world.item.Items.COPPER_SHOVEL, ToolMaterial.COPPER, 4);
+		public static final Item IRON_VEIN_EXCAVATOR = new VeinExcavatorToolItem(net.minecraft.world.item.Items.IRON_SHOVEL, ToolMaterial.IRON, 5);
+		public static final Item GOLDEN_VEIN_EXCAVATOR = new VeinExcavatorToolItem(net.minecraft.world.item.Items.GOLDEN_SHOVEL, ToolMaterial.GOLD, 6);
+		public static final Item DIAMOND_VEIN_EXCAVATOR = new VeinExcavatorToolItem(net.minecraft.world.item.Items.DIAMOND_SHOVEL, ToolMaterial.DIAMOND, 6);
+		public static final Item NETHERITE_VEIN_EXCAVATOR = new VeinExcavatorToolItem(net.minecraft.world.item.Items.NETHERITE_SHOVEL, ToolMaterial.NETHERITE, 7);
 	}
 
 	public static class BlockTags {

@@ -28,8 +28,8 @@
 	"accessWidener" : "moretools.accesswidener",
 	"depends": {
 		"fabricloader": ">=${loader_version}",
-		"minecraft": ["26.2", "26.2.1", "26.2.2", "26.2.3", "26.2-rc-2", "26.2-rc.2"],
-		"java": ">=21",
+		"minecraft": ["26.3", "26.3.1", "26.3.2", "26.3.3"],
+		"java": ">=25",
 		"fabric-api": ">=${fabric_version}"
 	}
 }

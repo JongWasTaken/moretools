@@ -16,7 +16,6 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.item.context.UseOnContext;
@@ -56,7 +55,7 @@ public class ExcavatorToolItem extends BaseToolItem implements PolymerItem, Poly
         return new BaseToolSettings(id, settings, config);
     }
 
-    public ExcavatorToolItem(ShovelItem base, ToolMaterial baseMaterial) {
+    public ExcavatorToolItem(Item base, ToolMaterial baseMaterial) {
         super(ExcavatorToolItem.createSettings(base, baseMaterial), baseMaterial, BlockTags.MINEABLE_WITH_SHOVEL);
         this.baseItem = base;
     }

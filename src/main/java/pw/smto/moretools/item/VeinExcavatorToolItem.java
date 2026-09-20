@@ -15,7 +15,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.level.Level;
@@ -55,13 +54,13 @@ public class VeinExcavatorToolItem extends BaseToolItem implements PolymerItem, 
         return new BaseToolSettings(id, settings, VeinExcavatorToolItem.config);
     }
 
-    public VeinExcavatorToolItem(ShovelItem base, ToolMaterial baseMaterial, int fallbackRange) {
+    public VeinExcavatorToolItem(Item base, ToolMaterial baseMaterial, int fallbackRange) {
         super(VeinExcavatorToolItem.createSettings(base, baseMaterial), baseMaterial, BlockTags.MINEABLE_WITH_SHOVEL);
         this.baseItem = base;
         this.fallbackRange = fallbackRange;
     }
 
-    public VeinExcavatorToolItem(ShovelItem base, ToolMaterial baseMaterial) {
+    public VeinExcavatorToolItem(Item base, ToolMaterial baseMaterial) {
         this(base, baseMaterial, 3);
     }
 

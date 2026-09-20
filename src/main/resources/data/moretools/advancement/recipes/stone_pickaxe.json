@@ -4,7 +4,7 @@
         "crafted": {
             "trigger": "minecraft:recipe_crafted",
             "conditions": {
-                "recipe_id": "minecraft:stone_pickaxe"
+                "recipes": "minecraft:stone_pickaxe"
             }
         }
     },

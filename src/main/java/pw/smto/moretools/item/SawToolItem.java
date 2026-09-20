@@ -13,7 +13,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ToolMaterial;
@@ -55,7 +54,7 @@ public class SawToolItem extends BaseToolItem implements PolymerItem, PolymerCli
         return new BaseToolSettings(id, settings, config);
     }
 
-    public SawToolItem(AxeItem base, ToolMaterial baseMaterial) {
+    public SawToolItem(Item base, ToolMaterial baseMaterial) {
         super(SawToolItem.createSettings(base, baseMaterial), baseMaterial, MoreTools.BlockTags.SAW_MINEABLE);
         this.baseItem = base;
     }
