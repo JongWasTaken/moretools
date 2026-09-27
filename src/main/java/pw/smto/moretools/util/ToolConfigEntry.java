@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.Optional;
 
 public record ToolConfigEntry(int durabilityMultiplier, float attackSpeed, float attackDamageModifier, float defaultSpeed, float sneakSpeed, Optional<Integer> range) {
-    public static final ToolConfigEntry DEFAULT = new ToolConfigEntry(3, -3, -4, -0.2F, 0f, Optional.empty());
+    public static final ToolConfigEntry DEFAULT = new ToolConfigEntry(3, -3, -4, 0f, -0.5f, Optional.empty());
     public static ToolConfigEntry createDefaultWithRange(int range) {
         return new ToolConfigEntry(
                 ToolConfigEntry.DEFAULT.durabilityMultiplier(),
