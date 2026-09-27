@@ -1,22 +1,31 @@
 package pw.smto.moretools.item;
 
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 import pw.smto.moretools.MoreTools;
+import pw.smto.moretools.util.MiningBlockBreakingDirection;
 import pw.smto.moretools.util.ToolConfigEntry;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
@@ -32,67 +41,99 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 public abstract class BaseToolItem extends Item {
+    private final float fastSpeed;
+    private final float slowSpeed;
 
-    public record BaseToolSettings(Identifier id, Item.Properties settings, ToolConfigEntry config) {}
-
-    private static Tool createComponent(ToolMaterial m, TagKey<Block> tag, float multiplier) {
-        HolderGetter<Block> registryEntryLookup = BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK);
-        float speed = m.speed() * multiplier;
-        return new Tool(
-                // 0.3F applies to all non-target blocks, e.g. grass for a hammer
-                java.util.List.of(
-                        Tool.Rule.deniesDrops(
-                                registryEntryLookup.getOrThrow(m.incorrectBlocksForDrops())
-                        ),
-                        Tool.Rule.minesAndDrops(
-                                registryEntryLookup.getOrThrow(tag), speed)
-                ), 1.0F, 1, true
-        );
+    protected BaseToolItem(Properties settings, float fastSpeed, float slowSpeed) {
+        super(settings);
+        this.fastSpeed = fastSpeed;
+        this.slowSpeed = slowSpeed;
     }
 
-    private final Tool fastComponent;
-    private final Tool slowComponent;
-
-    public final Identifier id;
-
-    protected BaseToolItem(BaseToolSettings ts, ToolMaterial baseMaterial, TagKey<Block> targetBlocks) {
-        super(ts.settings().setId(ResourceKey.create(Registries.ITEM, ts.id())).component(MoreTools.ACT_AS_BASE_TOOL, false));
-        this.id = ts.id();
-        this.fastComponent = BaseToolItem.createComponent(baseMaterial, targetBlocks, ts.config().defaultSpeed());
-        this.slowComponent = BaseToolItem.createComponent(baseMaterial, targetBlocks, ts.config().sneakSpeed());
-    }
-
-    public abstract List<Component> getLore();
+    public static Identifier attributeModifierID = MoreTools.id("sneak_dependent_speed");
 
     @Override
     public void inventoryTick(@NonNull ItemStack stack, @NonNull ServerLevel world, @NonNull Entity entity, @Nullable EquipmentSlot slot) {
-        if (slot != null)
-        {
+        if (slot != null) {
             if (entity instanceof ServerPlayer serverPlayerEntity) {
-                if (MoreTools.isBedrockPlayer(serverPlayerEntity)) {
-                    var list = new ArrayList<>(this.getLore());
-                    list.add(Component.translatable("tooltip.moretools.durability").withStyle(ChatFormatting.GRAY).append(Component.literal(": " + (stack.getMaxDamage() - stack.getDamageValue())).withStyle(ChatFormatting.GRAY)));
-                    stack.set(DataComponents.LORE, new ItemLore(list));
-                }
-                if (serverPlayerEntity.isShiftKeyDown())
-                {
-                    stack.set(DataComponents.TOOL, this.fastComponent);
-                    stack.set(MoreTools.ACT_AS_BASE_TOOL, true);
-                }
-                else {
-                    stack.set(DataComponents.TOOL, this.slowComponent);
-                    stack.set(MoreTools.ACT_AS_BASE_TOOL, false);
-                }
+                ArrayList<ItemAttributeModifiers.Entry> attributeModifiers = stack.get(DataComponents.ATTRIBUTE_MODIFIERS).modifiers()
+                    .stream()
+                    .filter(attributeModifier -> !attributeModifier.matches(Attributes.MINING_EFFICIENCY, attributeModifierID))
+                    .collect(ArrayList::new, List::add, List::addAll);
+                attributeModifiers.add(
+                    new ItemAttributeModifiers.Entry(
+                        Attributes.MINING_EFFICIENCY,
+                        new AttributeModifier(
+                            attributeModifierID,
+                            serverPlayerEntity.isShiftKeyDown() ? this.slowSpeed : this.fastSpeed,
+                            AttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                        ),
+                        EquipmentSlotGroup.MAINHAND,
+                        new ItemAttributeModifiers.Display.Hidden()
+                    )
+                );
+                stack.set(DataComponents.ATTRIBUTE_MODIFIERS, new ItemAttributeModifiers(attributeModifiers));
             }
         }
     }
 
-    public void doToolPowerIfAllowed(BlockState state, BlockPos pos, Direction d, ServerPlayer player, Level world, ItemStack stack) {
-        if (Boolean.TRUE.equals(stack.get(MoreTools.ACT_AS_BASE_TOOL))) return;
-        this.doToolPower(state, pos, d, player, world);
+    public abstract List<BlockPos> getAffectedArea(@Nullable Level world, BlockPos pos, BlockState state, @Nullable Direction d, @Nullable Block target, boolean isPlayerSneaking);
+
+    private final ThreadLocal<Boolean> stopUsePropigation = ThreadLocal.withInitial(() -> false);
+    private final ThreadLocal<Boolean> stopMinePropigation = ThreadLocal.withInitial(() -> false);
+
+    @Override
+    public @NonNull InteractionResult useOn(@NonNull UseOnContext context) {
+        var clickedPosState = context.getLevel().getBlockState(context.getClickedPos());
+        InteractionResult res = super.useOn(context);
+        if (!stopUsePropigation.get() && context.getPlayer() instanceof ServerPlayer serverPlayer) {
+            try {
+                stopUsePropigation.set(true);
+                for (var pos : this.getAffectedArea(
+                    context.getLevel(),
+                    context.getClickedPos(),
+                    clickedPosState,
+                    context.getClickedFace(),
+                    clickedPosState.getBlock(),
+                    serverPlayer.isShiftKeyDown()
+                )) {
+                    var out = serverPlayer.gameMode.useItemOn(serverPlayer, context.getLevel(), context.getItemInHand(), context.getHand(), new BlockHitResult(
+                        context.getClickLocation(),
+                        context.getClickedFace(),
+                        pos,
+                        context.isInside()
+                    ));
+                    if (out == InteractionResult.SUCCESS)
+                        res = InteractionResult.SUCCESS;
+                }
+            } finally {
+                stopUsePropigation.remove();
+            }
+        }
+        return res;
     }
 
-    public abstract List<BlockPos> getAffectedArea(@Nullable Level world, BlockPos pos, BlockState state, @Nullable Direction d, @Nullable Block target);
-
-    public abstract void doToolPower(BlockState state, BlockPos pos, Direction d, ServerPlayer player, Level world);
+    @Override
+    public boolean mineBlock(@NonNull ItemStack itemStack, @NonNull Level level, @NonNull BlockState state, @NonNull BlockPos pos, @NonNull LivingEntity owner) {
+        var res = super.mineBlock(itemStack, level, state, pos, owner);
+        var dir = MiningBlockBreakingDirection.direction.get();
+        if (!stopMinePropigation.get() && owner instanceof ServerPlayer serverPlayer && dir != null) {
+            try {
+                stopMinePropigation.set(true);
+                for (BlockPos blockPos : this.getAffectedArea(
+                    level,
+                    pos,
+                    state,
+                    dir,
+                    state.getBlock(),
+                    serverPlayer.isShiftKeyDown()
+                )) {
+                    res |= serverPlayer.gameMode.destroyBlock(blockPos);
+                }
+            } finally {
+                stopMinePropigation.remove();
+            }
+        }
+        return res;
+    }
 }

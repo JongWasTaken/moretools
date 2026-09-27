@@ -31,7 +31,7 @@ import net.minecraft.world.level.block.Block;
 import org.geysermc.geyser.api.GeyserApi;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.LoggerFactory;
-import pw.smto.moretools.item.*;
+import pw.smto.moretools.item.MoreToolsItems;
 import pw.smto.moretools.util.ConfigManager;
 
 import java.lang.reflect.Field;
@@ -49,6 +49,10 @@ public class MoreTools implements ModInitializer {
 
 	private static Function<UUID, Boolean> bedrockPlayerCheckFunction = _ -> false;
 
+    public static Identifier id(String path) {
+        return Identifier.fromNamespaceAndPath(MOD_ID, path);
+    }
+
 	@Override
 	public void onInitialize() {
 		ConfigManager.init();
@@ -56,58 +60,48 @@ public class MoreTools implements ModInitializer {
 		PolymerResourcePackUtils.addModAssets(MoreTools.MOD_ID);
 		PolymerResourcePackUtils.markAsRequired();
 
-		Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, Identifier.fromNamespaceAndPath(MoreTools.MOD_ID, "act_as_base_tool"), MoreTools.ACT_AS_BASE_TOOL);
-		PolymerComponent.registerDataComponent(MoreTools.ACT_AS_BASE_TOOL);
-
-		// Register all items
-		for (Field field : Items.class.getFields()) {
-            try {
-				Registry.register(BuiltInRegistries.ITEM, Identifier.fromNamespaceAndPath(MoreTools.MOD_ID, field.getName().toLowerCase(Locale.ROOT)), (Item)field.get(null));
-            } catch (Exception ignored) {
-                MoreTools.LOGGER.error("Failed to register item: {}", field.getName());
-			}
-        }
+		MoreToolsItems.register();
 
 		// Create an item group with all items
 		PolymerCreativeModeTabUtils.registerPolymerCreativeModeTab(Identifier.fromNamespaceAndPath(MoreTools.MOD_ID,"items"), PolymerCreativeModeTabUtils.builder()
-				.icon(() -> new ItemStack(Items.DIAMOND_HAMMER))
+				.icon(() -> new ItemStack(MoreToolsItems.DIAMOND_HAMMER))
 				.title(Component.nullToEmpty("More Tools"))
 				.displayItems((_, entries) -> {
-					entries.accept(Items.WOODEN_HAMMER);
-					entries.accept(Items.STONE_HAMMER);
-					entries.accept(Items.COPPER_HAMMER);
-					entries.accept(Items.IRON_HAMMER);
-					entries.accept(Items.GOLDEN_HAMMER);
-					entries.accept(Items.DIAMOND_HAMMER);
-					entries.accept(Items.NETHERITE_HAMMER);
-					entries.accept(Items.WOODEN_EXCAVATOR);
-					entries.accept(Items.STONE_EXCAVATOR);
-					entries.accept(Items.COPPER_EXCAVATOR);
-					entries.accept(Items.IRON_EXCAVATOR);
-					entries.accept(Items.GOLDEN_EXCAVATOR);
-					entries.accept(Items.DIAMOND_EXCAVATOR);
-					entries.accept(Items.NETHERITE_EXCAVATOR);
-					entries.accept(Items.WOODEN_SAW);
-					entries.accept(Items.STONE_SAW);
-					entries.accept(Items.COPPER_SAW);
-					entries.accept(Items.IRON_SAW);
-					entries.accept(Items.GOLDEN_SAW);
-					entries.accept(Items.DIAMOND_SAW);
-					entries.accept(Items.NETHERITE_SAW);
-					entries.accept(Items.WOODEN_VEIN_HAMMER);
-					entries.accept(Items.STONE_VEIN_HAMMER);
-					entries.accept(Items.COPPER_VEIN_HAMMER);
-					entries.accept(Items.IRON_VEIN_HAMMER);
-					entries.accept(Items.GOLDEN_VEIN_HAMMER);
-					entries.accept(Items.DIAMOND_VEIN_HAMMER);
-					entries.accept(Items.NETHERITE_VEIN_HAMMER);
-					entries.accept(Items.WOODEN_VEIN_EXCAVATOR);
-					entries.accept(Items.STONE_VEIN_EXCAVATOR);
-					entries.accept(Items.COPPER_VEIN_EXCAVATOR);
-					entries.accept(Items.IRON_VEIN_EXCAVATOR);
-					entries.accept(Items.GOLDEN_VEIN_EXCAVATOR);
-					entries.accept(Items.DIAMOND_VEIN_EXCAVATOR);
-					entries.accept(Items.NETHERITE_VEIN_EXCAVATOR);
+					entries.accept(MoreToolsItems.WOODEN_HAMMER);
+					entries.accept(MoreToolsItems.STONE_HAMMER);
+					entries.accept(MoreToolsItems.COPPER_HAMMER);
+					entries.accept(MoreToolsItems.IRON_HAMMER);
+					entries.accept(MoreToolsItems.GOLDEN_HAMMER);
+					entries.accept(MoreToolsItems.DIAMOND_HAMMER);
+					entries.accept(MoreToolsItems.NETHERITE_HAMMER);
+					entries.accept(MoreToolsItems.WOODEN_EXCAVATOR);
+					entries.accept(MoreToolsItems.STONE_EXCAVATOR);
+					entries.accept(MoreToolsItems.COPPER_EXCAVATOR);
+					entries.accept(MoreToolsItems.IRON_EXCAVATOR);
+					entries.accept(MoreToolsItems.GOLDEN_EXCAVATOR);
+					entries.accept(MoreToolsItems.DIAMOND_EXCAVATOR);
+					entries.accept(MoreToolsItems.NETHERITE_EXCAVATOR);
+					entries.accept(MoreToolsItems.WOODEN_SAW);
+					entries.accept(MoreToolsItems.STONE_SAW);
+					entries.accept(MoreToolsItems.COPPER_SAW);
+					entries.accept(MoreToolsItems.IRON_SAW);
+					entries.accept(MoreToolsItems.GOLDEN_SAW);
+					entries.accept(MoreToolsItems.DIAMOND_SAW);
+					entries.accept(MoreToolsItems.NETHERITE_SAW);
+					entries.accept(MoreToolsItems.WOODEN_VEIN_HAMMER);
+					entries.accept(MoreToolsItems.STONE_VEIN_HAMMER);
+					entries.accept(MoreToolsItems.COPPER_VEIN_HAMMER);
+					entries.accept(MoreToolsItems.IRON_VEIN_HAMMER);
+					entries.accept(MoreToolsItems.GOLDEN_VEIN_HAMMER);
+					entries.accept(MoreToolsItems.DIAMOND_VEIN_HAMMER);
+					entries.accept(MoreToolsItems.NETHERITE_VEIN_HAMMER);
+					entries.accept(MoreToolsItems.WOODEN_VEIN_EXCAVATOR);
+					entries.accept(MoreToolsItems.STONE_VEIN_EXCAVATOR);
+					entries.accept(MoreToolsItems.COPPER_VEIN_EXCAVATOR);
+					entries.accept(MoreToolsItems.IRON_VEIN_EXCAVATOR);
+					entries.accept(MoreToolsItems.GOLDEN_VEIN_EXCAVATOR);
+					entries.accept(MoreToolsItems.DIAMOND_VEIN_EXCAVATOR);
+					entries.accept(MoreToolsItems.NETHERITE_VEIN_EXCAVATOR);
 				}).build());
 
 		// Client compatibility stuff
@@ -141,46 +135,7 @@ public class MoreTools implements ModInitializer {
 		player.getInventory().setChanged();
 	}
 
-	public static class Items {
-		public static final Item WOODEN_HAMMER = new HammerToolItem(net.minecraft.world.item.Items.WOODEN_PICKAXE, ToolMaterial.WOOD);
-		public static final Item STONE_HAMMER = new HammerToolItem(net.minecraft.world.item.Items.STONE_PICKAXE, ToolMaterial.STONE);
-		public static final Item COPPER_HAMMER = new HammerToolItem(net.minecraft.world.item.Items.COPPER_PICKAXE, ToolMaterial.COPPER);
-		public static final Item IRON_HAMMER = new HammerToolItem(net.minecraft.world.item.Items.IRON_PICKAXE, ToolMaterial.IRON);
-		public static final Item GOLDEN_HAMMER = new HammerToolItem(net.minecraft.world.item.Items.GOLDEN_PICKAXE, ToolMaterial.GOLD);
-		public static final Item DIAMOND_HAMMER = new HammerToolItem(net.minecraft.world.item.Items.DIAMOND_PICKAXE, ToolMaterial.DIAMOND);
-		public static final Item NETHERITE_HAMMER = new HammerToolItem(net.minecraft.world.item.Items.NETHERITE_PICKAXE, ToolMaterial.NETHERITE);
-		public static final Item WOODEN_EXCAVATOR = new ExcavatorToolItem(net.minecraft.world.item.Items.WOODEN_SHOVEL, ToolMaterial.WOOD);
-		public static final Item STONE_EXCAVATOR = new ExcavatorToolItem(net.minecraft.world.item.Items.STONE_SHOVEL, ToolMaterial.STONE);
-		public static final Item COPPER_EXCAVATOR = new ExcavatorToolItem(net.minecraft.world.item.Items.COPPER_SHOVEL, ToolMaterial.COPPER);
-		public static final Item IRON_EXCAVATOR = new ExcavatorToolItem(net.minecraft.world.item.Items.IRON_SHOVEL, ToolMaterial.IRON);
-		public static final Item GOLDEN_EXCAVATOR = new ExcavatorToolItem(net.minecraft.world.item.Items.GOLDEN_SHOVEL, ToolMaterial.GOLD);
-		public static final Item DIAMOND_EXCAVATOR = new ExcavatorToolItem(net.minecraft.world.item.Items.DIAMOND_SHOVEL, ToolMaterial.DIAMOND);
-		public static final Item NETHERITE_EXCAVATOR = new ExcavatorToolItem(net.minecraft.world.item.Items.NETHERITE_SHOVEL, ToolMaterial.NETHERITE);
-		public static final Item WOODEN_SAW = new SawToolItem(net.minecraft.world.item.Items.WOODEN_AXE, ToolMaterial.WOOD);
-		public static final Item STONE_SAW = new SawToolItem(net.minecraft.world.item.Items.STONE_AXE, ToolMaterial.STONE);
-		public static final Item COPPER_SAW = new SawToolItem(net.minecraft.world.item.Items.COPPER_AXE, ToolMaterial.COPPER);
-		public static final Item IRON_SAW = new SawToolItem(net.minecraft.world.item.Items.IRON_AXE, ToolMaterial.IRON);
-		public static final Item GOLDEN_SAW = new SawToolItem(net.minecraft.world.item.Items.GOLDEN_AXE, ToolMaterial.GOLD);
-		public static final Item DIAMOND_SAW = new SawToolItem(net.minecraft.world.item.Items.DIAMOND_AXE, ToolMaterial.DIAMOND);
-		public static final Item NETHERITE_SAW = new SawToolItem(net.minecraft.world.item.Items.NETHERITE_AXE, ToolMaterial.NETHERITE);
-		public static final Item WOODEN_VEIN_HAMMER = new VeinHammerToolItem(net.minecraft.world.item.Items.WOODEN_PICKAXE, ToolMaterial.WOOD);
-		public static final Item STONE_VEIN_HAMMER = new VeinHammerToolItem(net.minecraft.world.item.Items.STONE_PICKAXE, ToolMaterial.STONE, 4);
-		public static final Item COPPER_VEIN_HAMMER = new VeinHammerToolItem(net.minecraft.world.item.Items.COPPER_PICKAXE, ToolMaterial.COPPER, 4);
-		public static final Item IRON_VEIN_HAMMER = new VeinHammerToolItem(net.minecraft.world.item.Items.IRON_PICKAXE, ToolMaterial.IRON, 5);
-		public static final Item GOLDEN_VEIN_HAMMER = new VeinHammerToolItem(net.minecraft.world.item.Items.GOLDEN_PICKAXE, ToolMaterial.GOLD, 6);
-		public static final Item DIAMOND_VEIN_HAMMER = new VeinHammerToolItem(net.minecraft.world.item.Items.DIAMOND_PICKAXE, ToolMaterial.DIAMOND, 6);
-		public static final Item NETHERITE_VEIN_HAMMER = new VeinHammerToolItem(net.minecraft.world.item.Items.NETHERITE_PICKAXE, ToolMaterial.NETHERITE, 7);
-		public static final Item WOODEN_VEIN_EXCAVATOR = new VeinExcavatorToolItem(net.minecraft.world.item.Items.WOODEN_SHOVEL, ToolMaterial.WOOD);
-		public static final Item STONE_VEIN_EXCAVATOR = new VeinExcavatorToolItem(net.minecraft.world.item.Items.STONE_SHOVEL, ToolMaterial.STONE, 4);
-		public static final Item COPPER_VEIN_EXCAVATOR = new VeinExcavatorToolItem(net.minecraft.world.item.Items.COPPER_SHOVEL, ToolMaterial.COPPER, 4);
-		public static final Item IRON_VEIN_EXCAVATOR = new VeinExcavatorToolItem(net.minecraft.world.item.Items.IRON_SHOVEL, ToolMaterial.IRON, 5);
-		public static final Item GOLDEN_VEIN_EXCAVATOR = new VeinExcavatorToolItem(net.minecraft.world.item.Items.GOLDEN_SHOVEL, ToolMaterial.GOLD, 6);
-		public static final Item DIAMOND_VEIN_EXCAVATOR = new VeinExcavatorToolItem(net.minecraft.world.item.Items.DIAMOND_SHOVEL, ToolMaterial.DIAMOND, 6);
-		public static final Item NETHERITE_VEIN_EXCAVATOR = new VeinExcavatorToolItem(net.minecraft.world.item.Items.NETHERITE_SHOVEL, ToolMaterial.NETHERITE, 7);
-	}
-
 	public static class BlockTags {
-		public static final TagKey<Block> SAW_MINEABLE = TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(MoreTools.MOD_ID, "saw_mineable"));
 		public static final TagKey<Block> SAW_APPLICABLE = TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(MoreTools.MOD_ID, "saw_applicable"));
 		public static final TagKey<Block> VEIN_HAMMER_APPLICABLE = TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(MoreTools.MOD_ID, "vein_hammer_applicable"));
 		public static final TagKey<Block> VEIN_EXCAVATOR_APPLICABLE = TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(MoreTools.MOD_ID, "vein_excavator_applicable"));
@@ -215,5 +170,8 @@ public class MoreTools implements ModInitializer {
 
 	public static boolean isBedrockPlayer(Player player) {
 		return MoreTools.bedrockPlayerCheckFunction.apply(player.getUUID());
+	}
+	public static boolean isBedrockPlayer(UUID id) {
+		return MoreTools.bedrockPlayerCheckFunction.apply(id);
 	}
 }
