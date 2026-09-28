@@ -1,5 +1,6 @@
 {
     "required": true,
+    "plugin": "pw.smto.moretools.MoreToolsMixinPlugin",
     "package": "pw.smto.moretools.mixin",
     "compatibilityLevel": "JAVA_25",
     "mixins": [
