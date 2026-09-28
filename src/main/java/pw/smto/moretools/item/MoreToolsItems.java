@@ -147,7 +147,7 @@ public class MoreToolsItems {
         "wooden_saw",
         Items.WOODEN_AXE,
         ToolMaterial.WOOD,
-        Item.Properties::axe,
+        SawToolItem::saw,
         SawToolItem::new,
         new Item.Properties()
     );
@@ -156,7 +156,7 @@ public class MoreToolsItems {
         "stone_saw",
         Items.STONE_AXE,
         ToolMaterial.STONE,
-        Item.Properties::axe,
+        SawToolItem::saw,
         SawToolItem::new,
         new Item.Properties()
     );
@@ -165,7 +165,7 @@ public class MoreToolsItems {
         "copper_saw",
         Items.COPPER_AXE,
         ToolMaterial.COPPER,
-        Item.Properties::axe,
+        SawToolItem::saw,
         SawToolItem::new,
         new Item.Properties()
     );
@@ -174,7 +174,7 @@ public class MoreToolsItems {
         "iron_saw",
         Items.IRON_AXE,
         ToolMaterial.IRON,
-        Item.Properties::axe,
+        SawToolItem::saw,
         SawToolItem::new,
         new Item.Properties()
     );
@@ -183,7 +183,7 @@ public class MoreToolsItems {
         "golden_saw",
         Items.GOLDEN_AXE,
         ToolMaterial.GOLD,
-        Item.Properties::axe,
+        SawToolItem::saw,
         SawToolItem::new,
         new Item.Properties()
     );
@@ -192,7 +192,7 @@ public class MoreToolsItems {
         "diamond_saw",
         Items.DIAMOND_AXE,
         ToolMaterial.DIAMOND,
-        Item.Properties::axe,
+        SawToolItem::saw,
         SawToolItem::new,
         new Item.Properties()
     );
@@ -201,7 +201,7 @@ public class MoreToolsItems {
         "netherite_saw",
         Items.NETHERITE_AXE,
         ToolMaterial.NETHERITE,
-        Item.Properties::axe,
+        SawToolItem::saw,
         SawToolItem::new,
         new Item.Properties().fireResistant()
     );

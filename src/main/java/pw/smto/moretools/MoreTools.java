@@ -136,6 +136,7 @@ public class MoreTools implements ModInitializer {
 	}
 
 	public static class BlockTags {
+		public static final TagKey<Block> SAW_MINEABLE = TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(MoreTools.MOD_ID, "saw_mineable"));
 		public static final TagKey<Block> SAW_APPLICABLE = TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(MoreTools.MOD_ID, "saw_applicable"));
 		public static final TagKey<Block> VEIN_HAMMER_APPLICABLE = TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(MoreTools.MOD_ID, "vein_hammer_applicable"));
 		public static final TagKey<Block> VEIN_EXCAVATOR_APPLICABLE = TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(MoreTools.MOD_ID, "vein_excavator_applicable"));

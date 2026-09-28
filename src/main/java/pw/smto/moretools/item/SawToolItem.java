@@ -3,9 +3,11 @@ package pw.smto.moretools.item;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.item.component.BlockTransformers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -22,6 +24,10 @@ public class SawToolItem extends PolyBaseToolItem {
 
     protected SawToolItem(Properties settings, float fastSpeed, float slowSpeed, Item baseItem) {
         super(settings, fastSpeed, slowSpeed, baseItem);
+    }
+
+    public static Properties saw(Properties properties, ToolMaterial material, float attackDamageBaseline, float attackSpeedBaseline) {
+        return properties.tool(material, MoreTools.BlockTags.SAW_MINEABLE, attackDamageBaseline, attackSpeedBaseline, 0).delayedComponent(DataComponents.BLOCK_TRANSFORMER, (context) -> context.getOrThrow(BlockTransformers.AXE));
     }
 
     @Override
