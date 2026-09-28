@@ -52,7 +52,7 @@ public class MoreToolsClient implements ClientModInitializer {
             ItemStack tool = MoreToolsClient.convertPolymerStack(player.getMainHandItem());
             if(tool.isEmpty()) return true;
             if (tool.getItem() instanceof BaseToolItem t) {
-                var blocks = t.getAffectedArea(player.level(), rtr.getBlockPos(), player.level().getBlockState(rtr.getBlockPos()), rtr.getDirection(), player.level().getBlockState(rtr.getBlockPos()).getBlock());
+                var blocks = t.getAffectedArea(player.level(), rtr.getBlockPos(), player.level().getBlockState(rtr.getBlockPos()), rtr.getDirection(), player.level().getBlockState(rtr.getBlockPos()).getBlock(), player.isShiftKeyDown());
                 if(blocks == null || blocks.isEmpty()) return true;
 
                 double d0 = player.xOld + (player.getX() - player.xOld) * tickCounter.getGameTimeDeltaPartialTick(true);

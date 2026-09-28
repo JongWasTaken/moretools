@@ -28,7 +28,6 @@ loom {
 			//sourceSet sourceSets.client
 		}
 	}
-
 }
 
 dependencies {
@@ -42,6 +41,8 @@ dependencies {
 	include(implementation("eu.pb4:polymer-blocks:${project.polymer_version}"))
 	include(implementation("eu.pb4:polymer-resource-pack:${project.polymer_version}"))
 	include(implementation("eu.pb4:polymer-autohost:${project.polymer_version}"))
+	localRuntime "eu.pb4:polymer-bundled:${project.polymer_version}"
+	localRuntime compileOnly("maven.modrinth:polyfactory:0.13.0+26.3-rc-1")
 	compileOnly('org.geysermc.geyser:api:2.10.1-SNAPSHOT')
 }
 
